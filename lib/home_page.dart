@@ -39,7 +39,7 @@ class HomePage extends StatelessWidget {
           onTap: () {
             print("Clicked Chemistry");
           },
-          title:const Text("Chemistry"),
+          title:const Text("Chemistry and computing "),
         ),
       ),
       Card(

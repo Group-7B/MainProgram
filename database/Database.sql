@@ -208,7 +208,7 @@ CREATE TABLE
     quiz_id SERIAL PRIMARY KEY,
     quiz_name VARCHAR(60),
     quiz_type quiz_type,
-    quiz_level quiz_level
+    quiz_level quiz_level,
     subject_id INT, --FOREIGN KEY
     FOREIGN KEY (subject_id) REFERENCES Subjects(subject_id)
   );
@@ -288,23 +288,25 @@ VALUES
 ---CREATE table for questions
 CREATE TABLE
   Questions(question_id SERIAL PRIMARY KEY,
-   question_text TEXT);
+   question_text TEXT,
+   topic_id INT,  --FOREIGN KEY
+   FOREIGN KEY (topic_id) REFERENCES Topics(topic_id));
 
 ---insert into questions
   --10 questions Math /Algebra /level easy 
 INSERT INTO
   Questions (question_text)
 VALUES
-  ('What is the value of x in the equation: x + 5 = 10?'),
-  ('Solve for x: 2x = 8'),
-  ('What is 5x - 3 = 7 when solved for x?'),
-  ('What is the next term in the pattern: 2, 4, 6, 8, __?'),
-  ('What is the simplified form of 3x + 4x?'),
-  ('If x = 3, what is the value of 2x + 5?'),
-  ('Which expression is equivalent to x * x?'),
-  ('If y = 10, what is y - 6?'),
-  ('Solve for x: x/2 = 6'),
-  ('What is the value of 3(x + 2) = 12?');
+  ('What is the value of x in the equation: x + 5 = 10?',1),
+  ('Solve for x: 2x = 8',1),
+  ('What is 5x - 3 = 7 when solved for x?',1),
+  ('What is the next term in the pattern: 2, 4, 6, 8, __?',1),
+  ('What is the simplified form of 3x + 4x?',1),
+  ('If x = 3, what is the value of 2x + 5?',1),
+  ('Which expression is equivalent to x * x?',1),
+  ('If y = 10, what is y - 6?',1),
+  ('Solve for x: x/2 = 6',1),
+  ('What is the value of 3(x + 2) = 12?',1);
   ----10 questions Math /Algebra /level easy (id 1-10)
 
 
@@ -314,7 +316,7 @@ VALUES
 CREATE TABLE Answers(
     answer_id SERIAL PRIMARY KEY,
     answer_text TEXT,
-    is_correct BOOLEAN
+    is_correct BOOLEAN,
     question_id INT,  --FOREIGN KEY
     FOREIGN KEY (question_id) REFERENCES Questions(question_id)    
 );

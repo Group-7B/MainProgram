@@ -1,6 +1,6 @@
 {
-    "name": "app_learning_cw",
-    "short_name": "app_learning_cw",
+    "name": "learning_app",
+    "short_name": "learning_app",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

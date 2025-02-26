@@ -32,12 +32,25 @@ class LearningApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Learning App testing',
+      title: 'Learning App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.grey[200],
       ),
       home: LoginPage(),
+      builder: (context, child) {
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            if (constraints.maxWidth > 800) {
+              // Web/Tablet Layout
+              return Row(children: [Expanded(child: child!)]);
+            } else {
+              // Mobile Layout
+              return child!;
+            }
+          },
+        );
+      },
     );
   }
 }
@@ -68,42 +81,45 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Login',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 20),
-              TextField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  labelText: 'Login ID',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(height: 10),
-              TextField(
-                controller: _passwordController,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(),
-                ),
-                obscureText: true,
-              ),
-              SizedBox(height: 10),
-              if (_errorMessage.isNotEmpty)
+      body: Center(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Container(
+            width: 400, // Adjust width to make input fields smaller
+            child: Column(
+              mainAxisSize: MainAxisSize.min, // Center elements vertically
+              children: [
                 Text(
-                  _errorMessage,
-                  style: TextStyle(color: Colors.red, fontSize: 14),
+                  'Login',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
-              SizedBox(height: 20),
-              ElevatedButton(onPressed: _login, child: Text('Login')),
-            ],
+                SizedBox(height: 20),
+                TextField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Login ID',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 10),
+                TextField(
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    border: OutlineInputBorder(),
+                  ),
+                  obscureText: true,
+                ),
+                SizedBox(height: 10),
+                if (_errorMessage.isNotEmpty)
+                  Text(
+                    _errorMessage,
+                    style: TextStyle(color: Colors.red, fontSize: 14),
+                  ),
+                SizedBox(height: 20),
+                ElevatedButton(onPressed: _login, child: Text('Login')),
+              ],
+            ),
           ),
         ),
       ),
@@ -236,3 +252,4 @@ class CourseDetailScreen extends StatelessWidget {
     );
   }
 }
+

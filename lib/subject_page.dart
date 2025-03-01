@@ -5,7 +5,7 @@ class SelectSubjectsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Center(child: Text('Select Subjects Page')),
+      body: Center(child: Text('Select the Subjects Page')),
     );
   }
 }

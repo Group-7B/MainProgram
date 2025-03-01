@@ -1,27 +1,6 @@
-/* import 'package:flutter/material.dart';
-import 'home_page.dart';
-
-void main() {
-  runApp(ScreenNavigations());
-}
-
-class ScreenNavigations extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      initialRoute: '/',
-      routes: {
-        '/': (context) => HomePage(),
-        '/testing': (context) => TestingPage(),
-      },
-    );
-  }
-} */
-
-// Parth's code below:
-
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 void main() {
   runApp(LearningApp());
@@ -127,97 +106,103 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-class HomeScreen extends StatelessWidget {
-  final List<String> categories = [
-    'Mathematics',
-    'Science',
-    'Physics',
-    'English',
-  ];
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  List<String> subjects = [];
+  late Future<void> subjectsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    subjectsFuture = fetchSubjects();
+  }
+
+  Future<void> fetchSubjects() async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://localhost:8000/subjects'),
+      );
+
+      if (response.statusCode == 200) {
+        print('Response body: ${response.body}');
+        setState(() {
+          subjects = List<String>.from(json.decode(response.body));
+          print(subjects);
+        });
+        print('Subjects: $subjects');
+      } else {
+        print('Failed to load subjects. Status code: ${response.statusCode}');
+        throw Exception('Failed to load subjects');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Select a Subject')),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: ListView.builder(
-          itemCount: categories.length,
-          itemBuilder: (context, index) {
-            return Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              elevation: 4,
-              margin: EdgeInsets.symmetric(vertical: 10),
-              child: ListTile(
-                contentPadding: EdgeInsets.all(16),
-                title: Text(
-                  categories[index],
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                trailing: Icon(Icons.arrow_forward_ios, color: Colors.blue),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder:
-                          (context) =>
-                              CourseListScreen(category: categories[index]),
+      body: FutureBuilder<void>(
+        future: subjectsFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // Added this so we can make it very clear if we are still waiting for the the data from the server side
+            return Center(
+              child: CircularProgressIndicator(),
+            ); // will continue to show as long as we are still waiting to fetch from the server
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            ); // tells us the error e.g. XMLHttpError
+          } else {
+            return Padding(
+              padding: EdgeInsets.all(16.0),
+              child: ListView.builder(
+                itemCount: subjects.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 4,
+                    color: Colors.purple,
+                    margin: EdgeInsets.symmetric(vertical: 10),
+                    child: ListTile(
+                      contentPadding: EdgeInsets.all(16),
+                      title: Text(
+                        subjects[index],
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios,
+                        color: Colors.blue,
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder:
+                                (context) => CourseDetailScreen(
+                                  courseName: subjects[index],
+                                ),
+                          ),
+                        );
+                      },
                     ),
                   );
                 },
               ),
             );
-          },
-        ),
-      ),
-    );
-  }
-}
-
-class CourseListScreen extends StatelessWidget {
-  final String category;
-  final List<String> courses = ['Course 1', 'Course 2', 'Course 3'];
-
-  CourseListScreen({required this.category});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('$category Courses')),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: ListView.builder(
-          itemCount: courses.length,
-          itemBuilder: (context, index) {
-            return Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              elevation: 4,
-              margin: EdgeInsets.symmetric(vertical: 10),
-              child: ListTile(
-                contentPadding: EdgeInsets.all(16),
-                title: Text(
-                  courses[index],
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                trailing: Icon(Icons.arrow_forward_ios, color: Colors.blue),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder:
-                          (context) =>
-                              CourseDetailScreen(courseName: courses[index]),
-                    ),
-                  );
-                },
-              ),
-            );
-          },
-        ),
+          }
+        },
       ),
     );
   }
@@ -252,4 +237,3 @@ class CourseDetailScreen extends StatelessWidget {
     );
   }
 }
-

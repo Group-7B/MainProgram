@@ -222,7 +222,7 @@ VALUES
 
   --Operating systems mock exam contain mixed questions from all topics
   (4,NULL,'Operating systems exam','MOCK Exam', 'Medium');  -- tested and work
-  
+
 
 
 
@@ -252,7 +252,21 @@ VALUES
   (1,'Which expression is equivalent to x * x?',1,'Easy'),
   (1,'If y = 10, what is y - 6?',1,'Easy'),
   (1,'Solve for x: x/2 = 6',1,'Easy'),
-  (1,'What is the value of 3(x + 2) = 12?',1,'Easy');
+  (1,'What is the value of 3(x + 2) = 12?',1,'Easy'),-- tested and working
+
+-- topic_id 1 Algebra level medium questions medium 
+--question_id 11 - 20
+  (1,'What is the value of x in the equation: 2x + 3 = 11?',2,'Medium'),
+  (1,'Solve for x: 3x - 5 = 10',2,'Medium'),
+  (1,'What is 4x - 3 = 13 when solved for x?',2,'Medium'),
+  (1,'What is the next term in the pattern: 3, 6, 9, 12, __?',2,'Medium'),
+  (1,'What is the simplified form of 4x + 5x?',2,'Medium'),
+  (1,'If x = 4, what is the value of 3x + 6?',2,'Medium'),
+  (1,'Which expression is equivalent to x * x * x?',2,'Medium'),
+  (1,'If y = 15, what is y - 8?',2,'Medium'),
+  (1,'Solve for x: x/3 = 7',2,'Medium'),
+  (1,'What is the value of 4(x + 3) = 28?',2,'Medium');-- tested and working
+
 
 
  ---CREATE table for quiz_questions
@@ -303,6 +317,42 @@ VALUES
   (9,'12', TRUE),  (9,'3', FALSE),  (9,'8', FALSE),         -- question_id 9
   (10,'3', FALSE),  (10,'2', TRUE),  (10,'4', FALSE);       -- question_id 10
 
+
+INSERT INTO
+  answers (question_id,answer_text, is_correct)
+VALUES
+---10 questions (id 11-20) Math /Algebra /level Medium answers (id 31-60) tested and working
+(11,'x = 4', TRUE),
+ (11,'x = 7', FALSE),
+  (11,'x = 12', TRUE),  -- for Q11
+(12,'(x - 6)(x - 3)', TRUE),
+ (12,'(x + 6)(x - 3)', FALSE), 
+ (12,'(x - 9)(x + 2)', FALSE),  -- for Q12
+(13,'x = -3, x = 2', TRUE),
+ (13,'x = 3, x = -2', FALSE), 
+ (13,'x = 3, x = 2', FALSE),  --  for Q13
+(14,'x + 2', TRUE),
+ (14,'x^2 + 4', FALSE),
+  (14,'2x + 2', FALSE),  --  for Q14
+(15,'f(2) = 6', FALSE),
+ (15,'f(2) = 4', FALSE), 
+ (15,'f(2) = 6', TRUE),  --  for Q15
+(16,'x = 7', FALSE),
+ (16,'x = 6', FALSE),
+  (16,'x = 5', TRUE),  --  for Q16
+(17,'x = 3, x = 2', TRUE), 
+(17,'x = -3, x = 2', FALSE),
+ (17,'x = -3, x = -2', FALSE),  --for Q17
+(18,'x = 9', TRUE), 
+(18,'x = 8', FALSE), 
+(18,'x = 7', FALSE),  -- for Q18
+(19,'a + b = 7', TRUE),
+ (19,'a + b = 10', FALSE), 
+ (19,'a + b = 5', FALSE),  --  for Q19
+(20,'x^2 + 3x - 10', TRUE), 
+(20,'x^2 + x - 10', FALSE), 
+(20,'x^2 + 7x - 10', FALSE);  -- for Q20
+-- tested 
 
 
 

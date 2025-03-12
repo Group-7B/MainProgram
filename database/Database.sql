@@ -23,7 +23,7 @@ CREATE TABLE  subjects(
 );
 
 INSERT INTO
-  Subjects(subject_name, subject_description)
+  subjects(subject_name, subject_description)
 VALUES
 
 ---id_1
@@ -174,11 +174,7 @@ CREATE TABLE
 INSERT INTO
   quizzes(subject_id, topic_id, quiz_name, quiz_type, quiz_level)
 VALUES
-  (1, 1, 'Algebra Quiz 1', 'quiz', 'Easy');
-  ---make inserts only for first quizz
-
-  /*
-    will uncomment this later
+  (1, 1, 'Algebra Quiz 1', 'quiz', 'Easy'),  
   (1, 1, 'Algebra Quiz 2', 'quiz', 'Medium'),
   (1, 1, 'Algebra Quiz 3', 'quiz', 'Hard'),
   (1, 2, 'Ratio and Proportion Quiz 1', 'quiz', 'Easy'),
@@ -199,7 +195,7 @@ VALUES
   (2, 5, 'Grammar Quiz 3', 'quiz', 'Hard'),
   
   --English mock exam contain mixed questions from all topics
-  (2,NULL,'English exam','Mock Exam', 'Medium'),
+  (2,NULL,'English exam','MOCK Exam', 'Medium'),
   
   (3, 6, 'Mechanics Quiz 1', 'quiz', 'Easy'),
   (3, 6, 'Mechanics Quiz 2', 'quiz', 'Medium'),
@@ -212,7 +208,7 @@ VALUES
   (3, 8, 'Electromagnetism Quiz 3', 'quiz', 'Hard'),
 
     --Physics mock exam contain mixed questions from all topics
-    (3,NULL,'Physics exam','Mock Exam', 'Medium'),
+    (3,NULL,'Physics exam','MOCK Exam', 'Medium'),
 
   (4, 9, 'Memory management Quiz 1', 'quiz', 'Easy'),
   (4, 9, 'Memory management Quiz 2', 'quiz', 'Medium'),
@@ -222,11 +218,11 @@ VALUES
   (4, 10, 'Process management Quiz 3', 'quiz', 'Hard'),
   (4, 11, 'File management Quiz 1', 'quiz', 'Easy'),
   (4, 11, 'File management Quiz 2', 'quiz', 'Medium'),
-  (4, 11, 'File management Quiz 3', 'quiz', 'Hard')
+  (4, 11, 'File management Quiz 3', 'quiz', 'Hard'),
 
   --Operating systems mock exam contain mixed questions from all topics
-  (4,NULL,'Operating systems exam','Mock Exam', 'Medium');
-*/
+  (4,NULL,'Operating systems exam','MOCK Exam', 'Medium');  -- tested and work
+  
 
 
 

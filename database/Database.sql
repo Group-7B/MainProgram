@@ -280,6 +280,55 @@ VALUES
 (1, 'Find the sum of the first 10 terms of the arithmetic sequence with first term 7 and common difference 3', 3, 'Hard'); -- tested and working
 
 
+--10 questions Math /Ratio and Proportion /level Easy (id 31-40)
+--10 questions Math /Ratio and Proportion /level Medium (id 41-50)
+--10 questions Math /Ratio and Proportion /level Hard (id 51-60)
+--10 questions Math /Percentage /level Easy (id 61-70)
+--10 questions Math /Percentage /level Medium (id 71-80)
+--10 questions Math /Percentage /level Hard (id 81-90)
+
+-- mock exam will be dynamic generated
+--20 questions MOCK Exam /Medium 
+
+--10 questions English /Vocabulary /level Easy (id 91-100)
+--10 questions English /Vocabulary /level Medium  (id 101-110)
+--10 questions English /Vocabulary /level Hard  (id 111-120)
+--10 questions English /Grammar /level Easy   (id 121-130)
+--10 questions English /Grammar /level Medium (id 131-140)
+--10 questions English /Grammar /level Hard   (id 141-150)
+
+--mock exam will be dynamic generated
+---20 questions  english /MOCK Exam /Medium 
+
+--10 questions Physics /Mechanics /level Easy (id 151-160)
+--10 questions Physics /Mechanics /level Medium (id 161-170)
+--10 questions Physics /Mechanics /level Hard   (id 171-180)
+--10 questions Physics /Thermodynamics /level Easy  (id 181-190)
+--10 questions Physics /Thermodynamics /level Medium  (id 191-200)
+--10 questions Physics /Thermodynamics /level Hard  (id 201-210)
+--10 questions Physics /Electromagnetism /level Easy  (id 211-220)
+--10 questions Physics /Electromagnetism /level Medium  (id 221-230)
+--10 questions Physics /Electromagnetism /level Hard  (id 231-240)
+
+
+---20 questions Physics /MOCK Exam /Medium 
+
+
+--10 questions  Operating systems /Memory management /level Easy  (id 241-250)
+--10 questions Operating systems /Memory management /level Medium   (id 251-260)
+--10 questions Operating systems /Memory management /level Hard   (id 261-270)
+--10 questions Operating systems /Process management /level Easy    (id 271-280)
+--10 questions Operating systems /Process management /level Medium  (id 281-290)
+--10 questions Operating systems /Process management /level Hard  (id 291-300)
+--10 questions Operating systems /File management /level Easy     (id 301-310)
+--10 questions Operating systems /File management /level Medium (id 311-320)
+--10 questions Operating systems /File management /level Hard (id 321-330)
+
+
+---20 questions Operating systems /MOCK Exam /Medium 
+
+
+
  ---CREATE table for quiz_questions
 CREATE TABLE
   quiz_questions
@@ -322,6 +371,42 @@ VALUES
     (3, 25),  (3, 26),
     (3, 27),  (3, 28),  
     (3, 29),  (3, 30); --tested
+
+
+--Ratio and Proportion Quiz 1
+--- Ratio and Proportion Quiz 2
+---Ratio and Proportion Quiz 3
+ ---Percentage Quiz 1
+--- Percentage Quiz 2
+---Percentage Quiz 3
+--- Math exam
+ ---Vocabulary Quiz 1
+--- Vocabulary Quiz 2
+--- Vocabulary Quiz 3
+ ---Grammar Quiz 1
+---Grammar Quiz 2
+--- ---Grammar Quiz 3
+---English exam
+ --Mechanics Quiz 1
+ --Mechanics Quiz 2
+-- Mechanics Quiz 3
+--Thermodynamics Quiz 1
+ --Thermodynamics Quiz 2
+ --Thermodynamics Quiz 3
+ --Electromagnetism Quiz 1
+ --Electromagnetism Quiz 2
+ --Electromagnetism Quiz 3
+ --Physics exam
+-- Memory management Quiz 1
+-- Memory management Quiz 2
+ --Memory management Quiz 3
+ --Process management Quiz 1
+ --Process management Quiz 2
+ --Process management Quiz 3
+-- File management Quiz 1
+-- File management Quiz 2
+--File management Quiz 3
+ --Operating systems exam
 
 
 
@@ -429,6 +514,52 @@ VALUES
 (30, '147', FALSE),
 (30, '167', FALSE); -- for q30
 
+
+---10 questions (id 31-40) Math /Ratio and Proportion /level Easy answers (id 91-120) 
+---10 questions (id 41-50) Math /Ratio and Proportion /level Medium answers (id 121-150) 
+---10 questions (id 51-60) Math /Ratio and Proportion /level Hard answers (id 151-180) 
+---10 questions (id 61-70) Math /Percentage /level Easy answers (id 181-210) 
+---10 questions (id 71-80) Math /Percentage /level Medium answers (id 211-240) 
+---10 questions (id 81-90) Math /Percentage /level Hard answers (id 241-270) 
+
+        
+---20 questions MOCK Exam /Medium answers  
+
+---10 questions (id 91-100) English /Vocabulary /level Easy answers (id 271-300)
+---10 questions ( id 101-110) English /Vocabulary /level Medium answers     (id 301-330)
+---10 questions (id 111-120) English /Vocabulary /level Hard answers   (id 331-360)
+---10 questions (id 121-130) English /Grammar /level Easy answers  (id 361-390)
+---10 questions (id 131-140)English /Grammar /level Medium answers  (id 391-420)
+---10 questions (id 141-150) English /Grammar /level Hard answers  (id 421-450)
+    
+---20 questions  english /MOCK Exam /Medium answers 
+
+---10 questions (id 151-160)  Physics /Mechanics /level Easy answers    
+---10 questions (id 161-170) Physics /Mechanics /level Medium answers    
+---10 questions (id 171-180) Physics /Mechanics /level Hard answers  
+---10 questions (id 181-190) Physics  /Thermodynamics /level Easy answers   
+---10 questions(id 191-200) Physics /Thermodynamics /level Medium answers   
+---10 questions (id 201-210) Physics /Thermodynamics /level Hard answers   
+---10 questions (id 211-220) Physics /Electromagnetism /level Easy answers   
+---10 questions (id 221-230) Physics /Electromagnetism /level Medium answers  
+---10 questions (id 231-240) Physics /Electromagnetism /level Hard answers 
+
+    
+---20 questions Physics /MOCK Exam /Medium answers 
+
+
+---10 questions (id 241-250) Operating systems /Memory management /level Easy answers  
+---10 questions (id 251-260) Operating systems /Memory management /level Medium answers 
+---10 questions (id 261-270) Operating systems /Memory management /level Hard answers 
+---10 questions (271-280) Operating systems /Process management /level Easy answers 
+---10 questions (281-290) Operating systems /Process management /level Medium answers 
+---10 questions (291-300) Operating systems /Process management /level Hard answers 
+---10 questions(301-310) Operating systems /File management /level Easy answers 
+---10 questions (311-320) Operating systems /File management /level Medium answers 
+---10 questions (321-330) Operating systems /File management /level Hard answers 
+    
+
+---20 questions Operating systems /MOCK Exam /Medium answers 
 
 
 

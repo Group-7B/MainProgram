@@ -1,4 +1,5 @@
 select * from quizzes;
+select quiz_name  from quizzes;
 /* quiz_id | subject_id | topic_id |          quiz_name          | quiz_type | quiz_level 
 ---------+------------+----------+-----------------------------+-----------+------------
        1 |          1 |        1 | Algebra Quiz 1              | quiz      | Easy

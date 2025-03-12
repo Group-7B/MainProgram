@@ -265,8 +265,19 @@ VALUES
   (1,'Which expression is equivalent to x * x * x?',2,'Medium'),
   (1,'If y = 15, what is y - 8?',2,'Medium'),
   (1,'Solve for x: x/3 = 7',2,'Medium'),
-  (1,'What is the value of 4(x + 3) = 28?',2,'Medium');-- tested and working
+  (1,'What is the value of 4(x + 3) = 28?',2,'Medium'),-- tested and working
 
+--topic_id =1,10 questions Math /Algebra /level Hard (id 21-30)
+(1, 'Solve for x: 3x - 7 = 2x + 5', 3, 'Hard'),
+(1, 'Factor completely: x^3 - 6x^2 + 11x - 6', 3, 'Hard'),
+(1, 'Find the roots of the equation: 2x^2 - 5x - 3 = 0', 3, 'Hard'),
+(1, 'Simplify: (2x - 3)(x + 4) - (x - 2)(x + 1)', 3, 'Hard'),
+(1, 'Solve for x: (x + 2)/(x - 1) = (x - 3)/(x + 4)', 3, 'Hard'),
+(1, 'Find the inverse function of f(x) = (3x - 4)/5', 3, 'Hard'),
+(1, 'Determine the value of x in the system: 2x + 3y = 7 and 4x - y = 5', 3, 'Hard'),
+(1, 'Solve the inequality: (x - 2)(x + 5) < 0', 3, 'Hard'),
+(1, 'Evaluate the determinant of the matrix: | 2  -1 | | 3  4 |', 3, 'Hard'),
+(1, 'Find the sum of the first 10 terms of the arithmetic sequence with first term 7 and common difference 3', 3, 'Hard'); -- tested and working
 
 
  ---CREATE table for quiz_questions
@@ -300,6 +311,22 @@ VALUES
   (2, 17),  (2, 18),  
   (2, 19),  (2, 20);-- tested and working
 
+--Algebra Quiz 3 level hard questions hard
+--question_id 21 - 30
+  INSERT INTO
+  quiz_questions(
+    quiz_id, question_id)
+VALUES
+    (3, 21),  (3, 22), 
+    (3, 23),  (3, 24),
+    (3, 25),  (3, 26),
+    (3, 27),  (3, 28),  
+    (3, 29),  (3, 30); --tested
+
+
+
+
+
 ---CREATE table for answers tested
 CREATE TABLE
   answers(
@@ -313,7 +340,7 @@ CREATE TABLE
   INSERT INTO
   answers (question_id,answer_text, is_correct)
 VALUES
-  --10 questions Math /Algebra /level Easy answers (id 1-30) 
+  --10 questions Math /Algebra 1 /level Easy answers (id 1-30) 
   (1,'3', FALSE),  (1,'5', FALSE),  (1,'10', TRUE),         --question_id-1
   (2,'2', FALSE),  (2,'4', TRUE),  (2,'6', FALSE),      -- question_id 2
   (3,'3', FALSE),  (3,'2', TRUE),  (3,'6', FALSE),      --question_id 3
@@ -323,13 +350,9 @@ VALUES
   (7,'x²', TRUE),  (7,'2x', FALSE),  (7,'x+1', FALSE),      --question_id 7
   (8,'4', TRUE),  (8,'6', FALSE),  (8,'8', FALSE),      --- question_id 8
   (9,'12', TRUE),  (9,'3', FALSE),  (9,'8', FALSE),         -- question_id 9
-  (10,'3', FALSE),  (10,'2', TRUE),  (10,'4', FALSE);       -- question_id 10
+  (10,'3', FALSE),  (10,'2', TRUE),  (10,'4', FALSE),       -- question_id 10
 
-
-INSERT INTO
-  answers (question_id,answer_text, is_correct)
-VALUES
----10 questions (id 11-20) Math /Algebra /level Medium answers (id 31-60) tested and working
+---10 questions (id 11-20) Math /Algebra 2 /level Medium answers (id 31-60) tested and working
 (11,'x = 4', TRUE),
  (11,'x = 7', FALSE),
   (11,'x = 12', TRUE),  -- for Q11
@@ -361,6 +384,52 @@ VALUES
 (20,'x^2 + x - 10', FALSE), 
 (20,'x^2 + 7x - 10', FALSE);  -- for Q20
 -- tested 
+
+---10 questions (id 21-30) Math /Algebra 3 /level Hard answers (id 61-90) tested and working
+INSERT INTO
+  answers (question_id,answer_text, is_correct)
+VALUES
+(21, 'x = 12', TRUE),
+(21, 'x = -12', FALSE),
+(21, 'x = 8', FALSE),  -- for Q21
+
+(22,'(x - 1)(x - 2)(x - 3)', TRUE), 
+(22,'(x + 1)(x - 2)(x - 3)', FALSE), 
+(22,'(x - 1)(x + 2)(x - 3)', FALSE),  -- for Q22
+
+(23, 'x = 3, x = -0.5', TRUE),
+(23, 'x = -3, x = 0.5', FALSE),
+(23, 'x = 1, x = -3', FALSE),
+
+(24, 'x^2 + 3x - 10', TRUE),
+(24, '2x^2 - x + 5', FALSE),
+(24, 'x^2 - 3x + 10', FALSE), --- for q24
+
+(25, 'x = -1', TRUE),
+(25, 'x = 5', FALSE),
+(25, 'x = 2', FALSE), --for quest 25
+
+(26, 'f^(-1)(x) = (5x + 4)/3', TRUE),
+(26, 'f^(-1)(x) = (3x - 4)/5', FALSE),
+(26, 'f^(-1)(x) = (5x - 4)/3', FALSE),
+
+(27, 'x = 2', TRUE),
+(27, 'x = -2', FALSE),
+(27, 'x = 3', FALSE),-- q 27
+
+(28, '-5 < x < 2', TRUE),
+(28, 'x > 5 or x < -2', FALSE),
+(28, 'x > 2 and x < -5', FALSE),
+
+(29, '11', TRUE),
+(29, '10', FALSE),
+(29, '12', FALSE),
+
+(30, '157', TRUE),
+(30, '147', FALSE),
+(30, '167', FALSE); -- for q30
+
+
 
 
 

@@ -88,7 +88,7 @@ FROM questions q
 JOIN answers a ON q.question_id = a.question_id
 JOIN quiz_questions qq ON q.question_id = qq.question_id
 JOIN quizzes ON qq.quiz_id = quizzes.quiz_id
-where quiz_name = 'Algebra Quiz 2' -- just change the name of the quiz to get the questions and answers for that quiz
+where quiz_name = 'Algebra Quiz 3' -- just change the name of the quiz to get the questions and answers for that quiz
 GROUP BY q.question_id, q.question_text, quizzes.quiz_name, quizzes.quiz_level
 ORDER BY q.question_id;
 
@@ -109,3 +109,71 @@ ORDER BY q.question_id;
 
 
 
+select* from questions where question_id between 21 and 30;
+/*
+ question_id | topic_id |                                              question_text                                              | points | question_level
+-------------+----------+---------------------------------------------------------------------------------------------------------+--------+----------------
+          21 |        1 | Solve for x: 3x - 7 = 2x + 5                                                                            |      3 | Hard
+          22 |        1 | Factor completely: x^3 - 6x^2 + 11x - 6                                                                 |      3 | Hard
+          23 |        1 | Find the roots of the equation: 2x^2 - 5x - 3 = 0                                                       |      3 | Hard
+          24 |        1 | Simplify: (2x - 3)(x + 4) - (x - 2)(x + 1)                                                              |      3 | Hard
+          25 |        1 | Solve for x: (x + 2)/(x - 1) = (x - 3)/(x + 4)                                                          |      3 | Hard
+          26 |        1 | Find the inverse function of f(x) = (3x - 4)/5                                                          |      3 | Hard
+          27 |        1 | Determine the value of x in the system: 2x + 3y = 7 and 4x - y = 5                                      |      3 | Hard
+          28 |        1 | Solve the inequality: (x - 2)(x + 5) < 0                                                                |      3 | Hard
+          29 |        1 | Evaluate the determinant of the matrix: | 2  -1 | | 3  4 |                                              |      3 | Hard
+          30 |        1 | Find the sum of the first 10 terms of the arithmetic sequence with first term 7 and common difference 3 |      3 | Hard
+(10 rows)
+*/
+
+select * from quiz_questions where quiz_id =3;
+/*
+ quiz_id | question_id
+---------+-------------
+       3 |          21
+       3 |          22
+       3 |          23
+       3 |          24
+       3 |          25
+       3 |          26
+       3 |          27
+       3 |          28
+       3 |          29
+       3 |          30
+(10 rows)*/
+
+select * from answers where question_id between 21 and 30;
+/*
+ answer_id | question_id |      answer_text       | is_correct
+-----------+-------------+------------------------+------------
+        61 |          21 | x = 12                 | t
+        62 |          21 | x = -12                | f
+        63 |          21 | x = 8                  | f
+        64 |          22 | (x - 1)(x - 2)(x - 3)  | t
+        65 |          22 | (x + 1)(x - 2)(x - 3)  | f
+        66 |          22 | (x - 1)(x + 2)(x - 3)  | f
+        67 |          23 | x = 3, x = -0.5        | t
+        68 |          23 | x = -3, x = 0.5        | f
+        69 |          23 | x = 1, x = -3          | f
+        70 |          24 | x^2 + 3x - 10          | t
+        71 |          24 | 2x^2 - x + 5           | f
+        72 |          24 | x^2 - 3x + 10          | f
+        73 |          25 | x = -1                 | t
+        74 |          25 | x = 5                  | f
+        75 |          25 | x = 2                  | f
+        76 |          26 | f^(-1)(x) = (5x + 4)/3 | t
+        77 |          26 | f^(-1)(x) = (3x - 4)/5 | f
+        78 |          26 | f^(-1)(x) = (5x - 4)/3 | f
+        79 |          27 | x = 2                  | t
+        80 |          27 | x = -2                 | f
+        81 |          27 | x = 3                  | f
+        82 |          28 | -5 < x < 2             | t
+        83 |          28 | x > 5 or x < -2        | f
+        84 |          28 | x > 2 and x < -5       | f
+        85 |          29 | 11                     | t
+        86 |          29 | 10                     | f
+        87 |          29 | 12                     | f
+        88 |          30 | 157                    | t
+        89 |          30 | 147                    | f
+        90 |          30 | 167                    | f
+(30 rows)*/

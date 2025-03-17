@@ -178,3 +178,16 @@ select * from answers where question_id between 21 and 30;
         89 |          30 | 147                    | f
         90 |          30 | 167                    | f
 (30 rows)*/
+
+
+
+
+--- list question id, quiz_question_id, and answer _id for all questions in the quiz Ratio and Proportion Quiz 3
+select q.question_id, qq.quiz_id, a.answer_id
+from questions q
+join quiz_questions qq on q.question_id = qq.question_id
+join answers a on q.question_id = a.question_id
+join quizzes on qq.quiz_id = quizzes.quiz_id
+where qq.quiz_id=7
+order by q.question_id;
+

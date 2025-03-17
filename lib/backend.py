@@ -21,7 +21,7 @@ def fetchSubjects():
         
         cur.execute('SELECT subject_name FROM subjects')
         rows = cur.fetchall()
-        subjects = [row[0] for row in rows]  # array of the subjects fetched from the database
+        subjects = [row[0] for row in rows]  # array jfjdsjfjdjdjkof the subjects fetched from the database
         
     except Exception as error:
         print(error)

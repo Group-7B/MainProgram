@@ -66,7 +66,7 @@ class CourseDetailScreen extends StatelessWidget {
             ),
             SizedBox(height: 10),
             Text(
-              'Course description goes here...',
+              'Course descrihhhjhption goes here...',
               style: TextStyle(fontSize: 16),
             ),
           ],

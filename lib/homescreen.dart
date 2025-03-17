@@ -14,7 +14,7 @@ class LearningAppHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Learning App',
+      title: 'Learningdsjdsjdjsd App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.grey[200],
@@ -61,8 +61,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text('Select a Subject')),
       body: SingleChildScrollView(
-        child: 
-        Padding(
+        child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(children: [
             SizedBox(

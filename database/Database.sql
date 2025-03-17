@@ -1328,7 +1328,7 @@ INSERT INTO answers (question_id, answer_text, is_correct) VALUES
 (150, 'Loud', FALSE);-- tested and working
     
 ---20 questions  english /MOCK Exam /Medium answers 
-
+--- start from here 
 ---10 questions (id 151-160)  Physics /Mechanics /level Easy answers    
 ---10 questions (id 161-170) Physics /Mechanics /level Medium answers    
 ---10 questions (id 171-180) Physics /Mechanics /level Hard answers  

@@ -112,7 +112,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<String> subjects = [];
+  List<Map<String, dynamic>> subjects = [];
+  //List<String> subjects = [];
   late Future<void> subjectsFuture;
 
   @override
@@ -128,14 +129,17 @@ class _HomeScreenState extends State<HomeScreen> {
       );
 
       if (response.statusCode == 200) {
-        print('Response body: ${response.body}');
+        final List<dynamic> data = json.decode(response.body);
         setState(() {
-          subjects = List<String>.from(json.decode(response.body));
-          print(subjects);
+          subjects =
+              data
+                  .map<Map<String, dynamic>>(
+                    (subject) => subject as Map<String, dynamic>,
+                  )
+                  .toList();
+          //subjects = data.map<String>((subject) => subject.toString()).toList();
         });
-        print('Subjects: $subjects');
       } else {
-        print('Failed to load subjects. Status code: ${response.statusCode}');
         throw Exception('Failed to load subjects');
       }
     } catch (e) {
@@ -151,20 +155,16 @@ class _HomeScreenState extends State<HomeScreen> {
         future: subjectsFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            // Added this so we can make it very clear if we are still waiting for the the data from the server side
-            return Center(
-              child: CircularProgressIndicator(),
-            ); // will continue to show as long as we are still waiting to fetch from the server
+            return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            ); // tells us the error e.g. XMLHttpError
+            return Center(child: Text('Error: ${snapshot.error}'));
           } else {
             return Padding(
               padding: EdgeInsets.all(16.0),
               child: ListView.builder(
                 itemCount: subjects.length,
                 itemBuilder: (context, index) {
+                  final subject = subjects[index];
                   return Card(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -175,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: ListTile(
                       contentPadding: EdgeInsets.all(16),
                       title: Text(
-                        subjects[index],
+                        subject['subject_name'] ?? 'No Name',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -191,7 +191,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           MaterialPageRoute(
                             builder:
                                 (context) => CourseDetailScreen(
-                                  courseName: subjects[index],
+                                  courseName:
+                                      subject['subject_name'] ?? 'No Name',
+                                  subjectId: subject['subject_id'],
+                                  topicID: 0, // Add appropriate topicID value
                                 ),
                           ),
                         );
@@ -210,30 +213,169 @@ class _HomeScreenState extends State<HomeScreen> {
 
 class CourseDetailScreen extends StatelessWidget {
   final String courseName;
+  final int subjectId;
+  final int topicID;
 
-  CourseDetailScreen({required this.courseName});
+  CourseDetailScreen({
+    required this.courseName,
+    required this.subjectId,
+    required this.topicID,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(courseName)),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              courseName,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Text(
-              'Course description goes here...',
-              style: TextStyle(fontSize: 16),
-            ),
-          ],
-        ),
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: fetchTopics(subjectId),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text("Error: ${snapshot.error}"));
+          } else {
+            final topics = snapshot.data ?? [];
+            return ListView.builder(
+              itemCount: topics.length,
+              itemBuilder: (context, index) {
+                final topic = topics[index];
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8.0,
+                    horizontal: 16.0,
+                  ),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) => Quiz(
+                                quizName: topic['topic_name'],
+                                subjectID: subjectId,
+                                topicID: topic['topic_id'],
+                              ),
+                        ),
+                      );
+                      // Add your onPressed code here!
+                    },
+                    child: Text(topic['topic_name']),
+                  ),
+                );
+                // return ListTile(title: Text(topics[index]));
+              },
+            );
+          }
+        },
       ),
     );
+  }
+
+  Future<List<Map<String, dynamic>>> fetchTopics(int subjectId) async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://localhost:8000/topics?subject_id=$subjectId'),
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        //return data.map<String>((topic) => topic as String).toList();
+        return data
+            .map<Map<String, dynamic>>((topic) => topic as Map<String, dynamic>)
+            .toList();
+      } else {
+        throw Exception('Failed to load topics');
+      }
+    } catch (e) {
+      print('Error: $e');
+      return [];
+    }
+  }
+}
+
+class Quiz extends StatefulWidget {
+  final String quizName;
+  final int subjectID;
+  final int topicID;
+
+  Quiz({
+    required this.quizName,
+    required this.subjectID,
+    required this.topicID,
+  });
+
+  _QuizGeneration createState() => _QuizGeneration(
+    quizName: quizName,
+    subjectID: subjectID,
+    topicID: topicID,
+  );
+}
+
+class _QuizGeneration extends State<Quiz> {
+  final String quizName;
+  final int subjectID;
+  final int topicID;
+
+  _QuizGeneration({
+    required this.quizName,
+    required this.subjectID,
+    required this.topicID,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(quizName)),
+      body: FutureBuilder<List<String>>(
+        future: fetchQuiz(subjectID, topicID),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text("Error: ${snapshot.error}"));
+          } else {
+            final quizzes = snapshot.data ?? [];
+            return ListView.builder(
+              itemCount: quizzes.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8.0,
+                    horizontal: 16.0,
+                  ),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Add your onPressed code here!
+                    },
+                    child: Text(quizzes[index]),
+                  ),
+                );
+                // return ListTile(title: Text(topics[index]));
+              },
+            );
+          }
+        },
+      ),
+    );
+  }
+}
+
+Future<List<String>> fetchQuiz(int subjectID, int topicID) async {
+  try {
+    final response = await http.get(
+      Uri.parse(
+        'http://localhost:8000/quiz?subject_id=$subjectID&topic_id=$topicID',
+      ),
+    );
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      print('Quiz data: $data');
+      return data.map<String>((quiz) => quiz['quiz_name'] as String).toList();
+    } else {
+      throw Exception('Failed to load quiz');
+    }
+  } catch (e) {
+    print('Error: $e');
+    return [];
   }
 }

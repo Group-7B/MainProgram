@@ -86,7 +86,26 @@ def generateQuiz(subject_id,topic_id):
         if conn is not None:
             connection_pool.putconn(conn)
     return quiz
-    
+
+
+def fetchQuestions(quiz_id):
+    conn = None
+    cur = None 
+    questions = []
+    try:
+        conn = connection_pool.getconn()
+        cur = conn.cursor()
+        cur.execute('SELECT q.question_id, q.question_text, q.points, q.question_level FROM quiz_questions qu INNER JOIN questions q ON qu.question_id = q.question_id WHERE qu.quiz_id = %s',(quiz_id,))
+        rows = cur.fetchall()
+        questions =[{'question_id':row[0],'question_text':row[1],'points':row[2],'question_level':row[3]} for row in rows]
+    except Exception as error:
+        print("Error fetching the quiz questions",error)
+    finally:
+        if cur is not None:
+            cur.close()
+        if conn is not None:
+            connection_pool.putconn(conn)
+    return questions
 
 class RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
@@ -120,7 +139,7 @@ class RequestHandler(BaseHTTPRequestHandler):
             topic_id = query_components.get('topic_id', [None])[0]
             print("checking subject_id and topic_id:")
             print(subject_id,topic_id)
-            if topic_id is not None and topic_id is not None:
+            if topic_id is not None:
                 quiz = generateQuiz(subject_id,topic_id)
                 self.send_response(200)
                 self.send_header('Content-type','application/json')
@@ -129,10 +148,25 @@ class RequestHandler(BaseHTTPRequestHandler):
                 print("****************")
                 print(quiz)
                 self.wfile.write(json.dumps(quiz).encode())
+        elif parsed_path.path == '/quiz_questions':
+            query_components = parse_qs(parsed_path.query)
+            quiz_id = query_components.get('quiz_id',[None])[0]
+            print("Checking quiz id:")
+            print(quiz_id)
+            if quiz_id is not None:
+                questions = fetchQuestions(quiz_id)
+                self.send_response(200)
+                self.send_header('Content-type','application/json')
+                self.send_header('Access-Control-Allow-Origin','*')
+                self.end_headers()
+                print("*****************")
+                print(questions)
+                self.wfile.write(json.dumps(questions).encode())
             else:
                 self.send_response(400)
+                self.send_header('Access-Control-Allow-Origin','*')
                 self.end_headers()
-                self.wfile.write(b'Missing topic_id parameter')
+                self.wfile.write(b'Missing quiz_id parameter')
                 
 
                 

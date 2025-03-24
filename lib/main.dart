@@ -326,7 +326,7 @@ class _QuizGeneration extends State<Quiz> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(quizName)),
-      body: FutureBuilder<List<String>>(
+      body: FutureBuilder<List<Map<String, dynamic>>>(
         future: fetchQuiz(subjectID, topicID),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -338,6 +338,7 @@ class _QuizGeneration extends State<Quiz> {
             return ListView.builder(
               itemCount: quizzes.length,
               itemBuilder: (context, index) {
+                final quiz = quizzes[index];
                 return Padding(
                   padding: const EdgeInsets.symmetric(
                     vertical: 8.0,
@@ -345,9 +346,16 @@ class _QuizGeneration extends State<Quiz> {
                   ),
                   child: ElevatedButton(
                     onPressed: () {
-                      // Add your onPressed code here!
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) =>
+                                  QuizQuestionScreen(quizID: quiz['quiz_id']),
+                        ),
+                      );
                     },
-                    child: Text(quizzes[index]),
+                    child: Text(quiz['quiz_name']),
                   ),
                 );
                 // return ListTile(title: Text(topics[index]));
@@ -360,7 +368,7 @@ class _QuizGeneration extends State<Quiz> {
   }
 }
 
-Future<List<String>> fetchQuiz(int subjectID, int topicID) async {
+Future<List<Map<String, dynamic>>> fetchQuiz(int subjectID, int topicID) async {
   try {
     final response = await http.get(
       Uri.parse(
@@ -370,9 +378,63 @@ Future<List<String>> fetchQuiz(int subjectID, int topicID) async {
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
       print('Quiz data: $data');
-      return data.map<String>((quiz) => quiz['quiz_name'] as String).toList();
+      return data
+          .map<Map<String, dynamic>>((quiz) => quiz as Map<String, dynamic>)
+          .toList();
     } else {
       throw Exception('Failed to load quiz');
+    }
+  } catch (e) {
+    print('Error: $e');
+    return [];
+  }
+}
+
+class QuizQuestionScreen extends StatelessWidget {
+  final int quizID;
+  QuizQuestionScreen({required this.quizID});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Quiz Questions')),
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: fetchQuestions(quizID),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text("Error: ${snapshot.error}"));
+          } else {
+            final questions = snapshot.data ?? [];
+            return ListView.builder(
+              itemCount: questions.length,
+              itemBuilder: (context, index) {
+                final question = questions[index];
+                return ListTile(title: Text(question['question_text']));
+              },
+            );
+          }
+        },
+      ),
+    );
+  }
+}
+
+Future<List<Map<String, dynamic>>> fetchQuestions(int quizID) async {
+  try {
+    final response = await http.get(
+      Uri.parse('http://localhost:8000/quiz_questions?quiz_id=$quizID'),
+    );
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      return data
+          .map<Map<String, dynamic>>(
+            (question) => question as Map<String, dynamic>,
+          )
+          .toList();
+    } else {
+      throw Exception('Failed to load questions');
     }
   } catch (e) {
     print('Error: $e');

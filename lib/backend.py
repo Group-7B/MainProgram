@@ -107,6 +107,63 @@ def fetchQuestions(quiz_id):
             connection_pool.putconn(conn)
     return questions
 
+def fetchAnswers(answer_id):
+    conn = None
+    cur = None
+    answers = []
+    try:
+        conn = connection_pool.getconn() # establish/get a connection from the pool of connections
+        cur = conn.cursor() # need cursor to execute SQL queries
+        cur.execute('SELECT a.answer_id, a.question_id, a.answer_text, a.is_correct FROM answers a INNER JOIN questions q ON a.question_id = q.question_id WHERE a.question_id = %s',(answer_id))
+        rows = cur.fetchall()
+        answers = [{'answer_id':row[0],'question_id':row[1],'answer_text':row[2],'is_correct':row[3]} for row in rows]
+    except Exception as error:
+        print("Error fetching the answers",error)
+    finally:
+        if cur is not None:
+            cur.close()
+        if conn is not None:
+            connection_pool.putconn(conn)
+    return answers
+
+def fetchQuestionsDisplayAnswers(quiz_id):
+    conn = None
+    cur = None
+    questions_and_answers = []
+    try:
+        conn = connection_pool.getconn()
+        cur = conn.cursor()
+        cur.execute('SELECT q.question_id, q.question_text, q.points, q.question_level FROM quiz_questions qu INNER JOIN questions q ON qu.question_id = q.question_id WHERE qu.quiz_id = %s',(quiz_id,))
+        questions = cur.fetchall()
+        
+        for question in questions:
+            question_id = question[0]
+            cur.execute('SELECT a.answer_id, a.question_id, a.answer_text, a.is_correct FROM answers a INNER JOIN questions q ON a.question_id = q.question_id WHERE a.question_id = %s', (question_id,))
+            answers = cur.fetchall()
+         
+        questions_and_answers.append({
+                'question_id': question[0],
+                'question_text': question[1],
+                'points': question[2],
+                'question_level': question[3],
+                'answers': [
+                    {
+                        'answer_id': answer[0],
+                        'answer_text': answer[1],
+                        'is_correct': answer[2]
+                    }
+                    for answer in answers
+                ]
+            })
+    except Exception as error:
+        print("Problem with fetching questions and its answers", error)
+    finally:
+        if cur is not None:
+            cur.close()
+        if conn is not None:
+            connection_pool.putconn(conn)
+    return questions_and_answers
+      
 class RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         parsed_path = urlparse(self.path)
@@ -127,7 +184,7 @@ class RequestHandler(BaseHTTPRequestHandler):
                 topics = fetchTopics(subject_id)
                 self.send_response(200)
                 self.send_header('Content-type', 'application/json')
-                self.send_header('Access-Control-Allow-Origin','*') # Enabled CORS
+                self.send_header('Access-Control-Allow-Origin','*')
                 self.end_headers()
                 print("*******")
                 print(topics)
@@ -151,17 +208,17 @@ class RequestHandler(BaseHTTPRequestHandler):
         elif parsed_path.path == '/quiz_questions':
             query_components = parse_qs(parsed_path.query)
             quiz_id = query_components.get('quiz_id',[None])[0]
-            print("Checking quiz id:")
+            print("Checking quiz id for questions and answers:")
             print(quiz_id)
             if quiz_id is not None:
-                questions = fetchQuestions(quiz_id)
+                questions_and_answers = fetchQuestionsDisplayAnswers(quiz_id) #I changed this to fetchQuestionDisplayAnswers. Originally it was using fetchQuestions function. I decided to create a function that has both the questions and answers rather than having 2 seperate functions.
                 self.send_response(200)
                 self.send_header('Content-type','application/json')
                 self.send_header('Access-Control-Allow-Origin','*')
                 self.end_headers()
                 print("*****************")
-                print(questions)
-                self.wfile.write(json.dumps(questions).encode())
+                print(questions_and_answers)
+                self.wfile.write(json.dumps(questions_and_answers).encode()) #if you want to see the questions only from the previous push to the branch, please change questions_and_answers to questions. Otherwise, the frontend will need to be using fetchQuestionsDisplayAnswers and questions_and_answers list. 
             else:
                 self.send_response(400)
                 self.send_header('Access-Control-Allow-Origin','*')

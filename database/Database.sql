@@ -600,7 +600,7 @@ VALUES
   (9, 89),  (9, 90);-- tested and working
 
 
---- Math exam
+
  ---Vocabulary Quiz 1
  INSERT INTO
   quiz_questions(
@@ -667,7 +667,7 @@ VALUES
   (15, 147),  (15, 148),  
   (15, 149),  (15, 150);-- tested and working 17/03
 
----English exam
+
  --Mechanics Quiz 1
  --Mechanics Quiz 2
 -- Mechanics Quiz 3
@@ -677,7 +677,7 @@ VALUES
  --Electromagnetism Quiz 1
  --Electromagnetism Quiz 2
  --Electromagnetism Quiz 3
- --Physics exam
+ 
 -- Memory management Quiz 1
 -- Memory management Quiz 2
  --Memory management Quiz 3
@@ -687,6 +687,14 @@ VALUES
 -- File management Quiz 1
 -- File management Quiz 2
 --File management Quiz 3
+
+
+
+--- we need a function to mix the questions for the mock exams
+
+--- Math exam
+---English exam
+--Physics exam
  --Operating systems exam
 
 

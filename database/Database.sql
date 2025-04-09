@@ -174,54 +174,63 @@ CREATE TABLE
 INSERT INTO
   quizzes(subject_id, topic_id, quiz_name, quiz_type, quiz_level)
 VALUES
-  (1, 1, 'Algebra Quiz 1', 'quiz', 'Easy'),  
-  (1, 1, 'Algebra Quiz 2', 'quiz', 'Medium'),
-  (1, 1, 'Algebra Quiz 3', 'quiz', 'Hard'),
-  (1, 2, 'Ratio and Proportion Quiz 1', 'quiz', 'Easy'),
-  (1, 2, 'Ratio and Proportion Quiz 2', 'quiz', 'Medium'),
-  (1, 2, 'Ratio and Proportion Quiz 3', 'quiz', 'Hard'),
-  (1, 3, 'Percentage Quiz 1', 'quiz', 'Easy'),
-  (1, 3, 'Percentage Quiz 2', 'quiz', 'Medium'),
-  (1, 3, 'Percentage Quiz 3', 'quiz', 'Hard'),
+  (1, 1, 'Algebra Quiz 1', 'quiz', 'Easy'),  --quiz_id=1
+  (1, 1, 'Algebra Quiz 2', 'quiz', 'Medium'),--- quiz_id=2
+  (1, 1, 'Algebra Quiz 3', 'quiz', 'Hard'),---quiz_id=3
+  (1, 2, 'Ratio and Proportion Quiz 1', 'quiz', 'Easy'),-- quiz_id=4
+  (1, 2, 'Ratio and Proportion Quiz 2', 'quiz', 'Medium'),--- quiz_id=5
+  (1, 2, 'Ratio and Proportion Quiz 3', 'quiz', 'Hard'),---quiz_id=6
+  (1, 3, 'Percentage Quiz 1', 'quiz', 'Easy'),--- quiz_id =7
+  (1, 3, 'Percentage Quiz 2', 'quiz', 'Medium'),--- quiz_id=8
+  (1, 3, 'Percentage Quiz 3', 'quiz', 'Hard'),--- quiz_id=9
 
-  --Math mock exam contain mixed questions from all topics
-(1,NULL,'Math exam', 'MOCK Exam', 'Medium'),
+ 
 
-  (2, 4, 'Vocabulary Quiz 1', 'quiz', 'Easy'),
-  (2, 4, 'Vocabulary Quiz 2', 'quiz', 'Medium'),
-  (2, 4, 'Vocabulary Quiz 3', 'quiz', 'Hard'),
-  (2, 5, 'Grammar Quiz 1', 'quiz', 'Easy'),
-  (2, 5, 'Grammar Quiz 2', 'quiz', 'Medium'),
-  (2, 5, 'Grammar Quiz 3', 'quiz', 'Hard'),
+  (2, 4, 'Vocabulary Quiz 1', 'quiz', 'Easy'),-- quiz_id =10
+  (2, 4, 'Vocabulary Quiz 2', 'quiz', 'Medium'),---quiz_id=11
+  (2, 4, 'Vocabulary Quiz 3', 'quiz', 'Hard'),--- quiz_id=12
+  (2, 5, 'Grammar Quiz 1', 'quiz', 'Easy'), --- quiz_id=13
+  (2, 5, 'Grammar Quiz 2', 'quiz', 'Medium'),---quiz_id = 14
+  (2, 5, 'Grammar Quiz 3', 'quiz', 'Hard'),--- quiz_id =15
   
-  --English mock exam contain mixed questions from all topics
-  (2,NULL,'English exam','MOCK Exam', 'Medium'),
+ 
   
-  (3, 6, 'Mechanics Quiz 1', 'quiz', 'Easy'),
-  (3, 6, 'Mechanics Quiz 2', 'quiz', 'Medium'),
-  (3, 6, 'Mechanics Quiz 3', 'quiz', 'Hard'),
-  (3, 7, 'Thermodynamics Quiz 1', 'quiz', 'Easy'),
-  (3, 7, 'Thermodynamics Quiz 2', 'quiz', 'Medium'),
-  (3, 7, 'Thermodynamics Quiz 3', 'quiz', 'Hard'),
-  (3, 8, 'Electromagnetism Quiz 1', 'quiz', 'Easy'),
-  (3, 8, 'Electromagnetism Quiz 2', 'quiz', 'Medium'),
-  (3, 8, 'Electromagnetism Quiz 3', 'quiz', 'Hard'),
+  (3, 6, 'Mechanics Quiz 1', 'quiz', 'Easy'),--- quiz_id =16
+  (3, 6, 'Mechanics Quiz 2', 'quiz', 'Medium'),--- quiz_id =17 
+  (3, 6, 'Mechanics Quiz 3', 'quiz', 'Hard'), ---quiz_id=18
+  (3, 7, 'Thermodynamics Quiz 1', 'quiz', 'Easy'), --- quiz_id =19
+  (3, 7, 'Thermodynamics Quiz 2', 'quiz', 'Medium'),--- quiz_id=20
+  (3, 7, 'Thermodynamics Quiz 3', 'quiz', 'Hard'),--- quiz_id=21
+  (3, 8, 'Electromagnetism Quiz 1', 'quiz', 'Easy'),--- quiz_id =22
+  (3, 8, 'Electromagnetism Quiz 2', 'quiz', 'Medium'),--- quiz_id =23
+  (3, 8, 'Electromagnetism Quiz 3', 'quiz', 'Hard'),--- quiz_id=24
 
-    --Physics mock exam contain mixed questions from all topics
-    (3,NULL,'Physics exam','MOCK Exam', 'Medium'),
+   
 
-  (4, 9, 'Memory management Quiz 1', 'quiz', 'Easy'),
-  (4, 9, 'Memory management Quiz 2', 'quiz', 'Medium'),
-  (4, 9, 'Memory management Quiz 3', 'quiz', 'Hard'),
-  (4, 10, 'Process management Quiz 1', 'quiz', 'Easy'),
-  (4, 10, 'Process management Quiz 2', 'quiz', 'Medium'),
-  (4, 10, 'Process management Quiz 3', 'quiz', 'Hard'),
-  (4, 11, 'File management Quiz 1', 'quiz', 'Easy'),
-  (4, 11, 'File management Quiz 2', 'quiz', 'Medium'),
-  (4, 11, 'File management Quiz 3', 'quiz', 'Hard'),
+  (4, 9, 'Memory management Quiz 1', 'quiz', 'Easy'),--- quiz_id =25  
+  (4, 9, 'Memory management Quiz 2', 'quiz', 'Medium'), --- quiz_id =26 
+  (4, 9, 'Memory management Quiz 3', 'quiz', 'Hard'), --- quiz_id =27 
+  (4, 10, 'Process management Quiz 1', 'quiz', 'Easy'),--- quiz_id =28
+  (4, 10, 'Process management Quiz 2', 'quiz', 'Medium'), --- quiz_id=29
+  (4, 10, 'Process management Quiz 3', 'quiz', 'Hard'),--- quiz_id =30
+  (4, 11, 'File management Quiz 1', 'quiz', 'Easy'),--- quiz_id =31
+  (4, 11, 'File management Quiz 2', 'quiz', 'Medium'),--- quiz_id =32
+  (4, 11, 'File management Quiz 3', 'quiz', 'Hard'),--- quiz_id =33
 
+-- quiz_id 1-33 are quizzes
+
+
+
+ --Math mock exam contain mixed questions from all topics
+(1,NULL,'Math exam', 'MOCK Exam', 'Medium'),--- quiz_id 34
+ --English mock exam contain mixed questions from all topics
+  (2,NULL,'English exam','MOCK Exam', 'Medium'), --- quiz_id 35
+   --Physics mock exam contain mixed questions from all topics
+    (3,NULL,'Physics exam','MOCK Exam', 'Medium'),--- quiz_id 36
   --Operating systems mock exam contain mixed questions from all topics
-  (4,NULL,'Operating systems exam','MOCK Exam', 'Medium');  -- tested and work
+  (4,NULL,'Operating systems exam','MOCK Exam', 'Medium');  --- quiz_id 37
+-- quiz_id 34,35,36,37 are mock exams
+
 
 
 

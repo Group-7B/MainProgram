@@ -369,7 +369,7 @@ INSERT INTO questions (topic_id, question_text, points, question_level) VALUES
 (3, 'A product is marked up by 35% and then discounted by 15%. What is the net percentage change from the original price?', 3, 'Hard'),
 (3, 'A car worth £24,000 depreciates by 18% in the first year and 12% in the second year. What is its value after two years?', 3, 'Hard'); --tested and working
 
--- mock exam will be dynamic generated
+
 --20 questions MOCK Exam /Medium 
 
 --10 questions English /Vocabulary /level Easy (id 91-100)
@@ -456,8 +456,7 @@ INSERT INTO questions (topic_id, question_text, points, question_level) VALUES
 (5, 'What is the synonym of "Surreptitious"?', 3, 'Hard');  --tested and working
 
 
---mock exam will be dynamic generated
----20 questions  english /MOCK Exam /Medium 
+
 
 --10 questions Physics /Mechanics /level Easy (id 151-160)
 --10 questions Physics /Mechanics /level Medium (id 161-170)
@@ -470,7 +469,8 @@ INSERT INTO questions (topic_id, question_text, points, question_level) VALUES
 --10 questions Physics /Electromagnetism /level Hard  (id 231-240)
 
 
----20 questions Physics /MOCK Exam /Medium 
+
+
 
 
 --10 questions  Operating systems /Memory management /level Easy  (id 241-250)
@@ -484,7 +484,6 @@ INSERT INTO questions (topic_id, question_text, points, question_level) VALUES
 --10 questions Operating systems /File management /level Hard (id 321-330)
 
 
----20 questions Operating systems /MOCK Exam /Medium 
 
 
 
@@ -1065,7 +1064,7 @@ INSERT INTO answers (question_id, answer_text, is_correct) VALUES
 (90, '£16,800', FALSE); --90 tested and working
 
         
----20 questions MOCK Exam /Medium answers  dynamic generation
+
 
 ---10 questions (id 91-100) English /Vocabulary /level Easy answers (id 271-300)
 INSERT INTO answers (question_id, answer_text, is_correct) VALUES
@@ -1344,7 +1343,7 @@ INSERT INTO answers (question_id, answer_text, is_correct) VALUES
 (150, 'Obvious', FALSE),
 (150, 'Loud', FALSE);-- tested and working
     
----20 questions  english /MOCK Exam /Medium answers 
+
 --- start from here 
 ---10 questions (id 151-160)  Physics /Mechanics /level Easy answers    
 ---10 questions (id 161-170) Physics /Mechanics /level Medium answers    
@@ -1356,8 +1355,7 @@ INSERT INTO answers (question_id, answer_text, is_correct) VALUES
 ---10 questions (id 221-230) Physics /Electromagnetism /level Medium answers  
 ---10 questions (id 231-240) Physics /Electromagnetism /level Hard answers 
 
-    
----20 questions Physics /MOCK Exam /Medium answers 
+
 
 
 ---10 questions (id 241-250) Operating systems /Memory management /level Easy answers  
@@ -1369,8 +1367,14 @@ INSERT INTO answers (question_id, answer_text, is_correct) VALUES
 ---10 questions(301-310) Operating systems /File management /level Easy answers 
 ---10 questions (311-320) Operating systems /File management /level Medium answers 
 ---10 questions (321-330) Operating systems /File management /level Hard answers 
-    
 
+
+
+
+---dynamic generation
+---20 questions Math MOCK Exam /Medium answers  
+---20 questions  english /MOCK Exam /Medium answers    
+---20 questions Physics /MOCK Exam /Medium answers 
 ---20 questions Operating systems /MOCK Exam /Medium answers 
 
 

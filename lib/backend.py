@@ -14,14 +14,6 @@ connection_pool = pool.SimpleConnectionPool(
     port=db_config['port']
 )
 
-#class subjectManager:
-    # fetch subjects -- fetchSubjects method
-    # load mock exams  -- 
-    
-# class topicManager:
-    # fetch topics -- fetchTopics method
-    # load quizzes   -- 
-
 def fetchSubjects():
     conn = None
     cur = None
@@ -30,12 +22,14 @@ def fetchSubjects():
         conn = connection_pool.getconn()
         cur = conn.cursor()
         
-        cur.execute('SELECT subject_id, subject_name, subject_description FROM subjects')
+        cur.execute('SELECT subject_id, subject_name FROM subjects')
         
         rows = cur.fetchall()
+        conn.commit()
+        conn.close()
         
-        return [{'subject_id': row[0], 'subject_name': row[1], 'subject_description': row[2]} for row in rows] # array of the subjects fetched from the database
-     
+        return [{"subject_id": row[0], "subject_name": row[1]} for row in rows] # array of the subjects fetched from the database
+        #return json.dump([dict(ix)  for ix in rows])
     except Exception as error:
         print(error)
     finally: 
@@ -56,7 +50,7 @@ def fetchTopics(subject_id):
         cur.execute('SELECT topic_id, topic_name FROM topics WHERE subject_id = %s', (subject_id,))
         rows = cur.fetchall()
         #topics = [row[0] for row in rows]
-        topics = [{'topic_id': row[0], 'topic_name': row[1]} for row in rows]
+        topics = [{"topic_id": row[0], "topic_name": row[1]} for row in rows]
     except Exception as error:
         print(error)
     finally:
@@ -76,7 +70,7 @@ def generateQuiz(subject_id,topic_id):
         print(f"Fetching quizzes for subject_id: {subject_id}, topic_id: {topic_id}")
         cur.execute('SELECT quiz_id, quiz_name FROM quizzes WHERE subject_id = %s AND topic_id = %s',(subject_id,topic_id))
         rows = cur.fetchall()
-        quiz = [{'quiz_id': row[0], 'quiz_name': row[1]} for row in rows]
+        quiz = [{"quiz_id": row[0], "quiz_name": row[1]} for row in rows]
         print("Fetched quizzes:", quiz)
     except Exception as error:
         print('Error fetching quizzes:',error)
@@ -87,150 +81,390 @@ def generateQuiz(subject_id,topic_id):
             connection_pool.putconn(conn)
     return quiz
 
-
-def fetchQuestions(quiz_id):
+'''def fetchQuestionsAndAnswers(quiz_id):
     conn = None
-    cur = None 
-    questions = []
+    cur = None
+    questionsNAnswers = []
+    
     try:
         conn = connection_pool.getconn()
         cur = conn.cursor()
-        cur.execute('SELECT q.question_id, q.question_text, q.points, q.question_level FROM quiz_questions qu INNER JOIN questions q ON qu.question_id = q.question_id WHERE qu.quiz_id = %s',(quiz_id,))
+        #cur.execute('SELECT * FROM question_answer_view')
+        cur.execute('SELECT question_text, points, question_level, answer_text, quiz_name, topic_id '
+                    'FROM question_answers_view WHERE quiz_id = %s', (quiz_id,))
         rows = cur.fetchall()
-        questions =[{'question_id':row[0],'question_text':row[1],'points':row[2],'question_level':row[3]} for row in rows]
+        
+        for row in rows:
+            print(row)
     except Exception as error:
-        print("Error fetching the quiz questions",error)
+        print("Error querying the view", error)
     finally:
         if cur is not None:
             cur.close()
         if conn is not None:
-            connection_pool.putconn(conn)
-    return questions
-
-def fetchAnswers(answer_id):
+            connection_pool.putconn(conn) '''
+            
+            
+def fetchQuestionsAndAnswers(quiz_id):
     conn = None
     cur = None
-    answers = []
+    question_and_answers = []
     try:
-        conn = connection_pool.getconn() # establish/get a connection from the pool of connections
-        cur = conn.cursor() # need cursor to execute SQL queries
-        cur.execute('SELECT a.answer_id, a.question_id, a.answer_text, a.is_correct FROM answers a INNER JOIN questions q ON a.question_id = q.question_id WHERE a.question_id = %s',(answer_id))
+        conn = connection_pool.getconn()
+        cur = conn.cursor()
+        cur.execute('SELECT question_id, question_text, points, question_level, answer_text, answer_id, is_correct, quiz_name, topic_id '
+                    'FROM question_answers_view WHERE quiz_id = %s', (quiz_id,))
         rows = cur.fetchall()
-        answers = [{'answer_id':row[0],'question_id':row[1],'answer_text':row[2],'is_correct':row[3]} for row in rows]
+        
+        print(f"Rows fetched for quiz_id {quiz_id}: {rows}")
+        
+        question_map = {}        
+        
+        for row in rows:
+            question_id = row[0]
+            question_text = row[1]
+            points = row[2]
+            question_level = row[3]
+            answer_text = row[4]
+            answer_id = row[5]
+            is_correct = row[6]
+            quiz_name = row[7]
+                        
+            if question_id not in question_map:
+                question_map[question_id] = {
+                    "question_id" : question_id,
+                    "question_text" : question_text,
+                    "points" : points,
+                    "question_level" : question_level,
+                    "answers" : []
+                }
+            question_map[question_id]["answers"].append({
+                "answer_text" : answer_text,
+                "is_correct" : is_correct,
+                "answer_id": answer_id
+            })
+            
+        question_and_answers = []
+        for x in question_map.values():
+            question_and_answers.append(x) # I am now appending each value of the question_map to the question_and_answers array which will later be returned in this function
     except Exception as error:
-        print("Error fetching the answers",error)
+        print("Error querying question_and_answers view from database",error)
     finally:
         if cur is not None:
             cur.close()
         if conn is not None:
             connection_pool.putconn(conn)
-    return answers
+    return question_and_answers
+        
 
-def fetchQuestionsDisplayAnswers(quiz_id):
+def fetchQuestionsAndAnswers2(quiz_id):
     conn = None
     cur = None
     questions_and_answers = []
     try:
         conn = connection_pool.getconn()
         cur = conn.cursor()
-        cur.execute('SELECT q.question_id, q.question_text, q.points, q.question_level FROM quiz_questions qu INNER JOIN questions q ON qu.question_id = q.question_id WHERE qu.quiz_id = %s',(quiz_id,))
-        questions = cur.fetchall()
-        
-        for question in questions:
-            question_id = question[0]
-            cur.execute('SELECT a.answer_id, a.question_id, a.answer_text, a.is_correct FROM answers a INNER JOIN questions q ON a.question_id = q.question_id WHERE a.question_id = %s', (question_id,))
-            answers = cur.fetchall()
-         
-        questions_and_answers.append({
-                'question_id': question[0],
-                'question_text': question[1],
-                'points': question[2],
-                'question_level': question[3],
-                'answers': [
-                    {
-                        'answer_id': answer[0],
-                        'answer_text': answer[1],
-                        'is_correct': answer[2]
-                    }
-                    for answer in answers
-                ]
+        # Query the view for the given quiz_id
+        cur.execute('SELECT question_text, points, question_level, answer_text, quiz_name, topic_id '
+                    'FROM question_answers_view WHERE quiz_id = %s', (quiz_id,))
+        rows = cur.fetchall()
+
+        # Group answers by question
+        question_map = {}
+        for row in rows:
+            question_text = row[0]
+            if question_text not in question_map:
+                question_map[question_text] = {
+                    "question_text": question_text,
+                    "points": row[1],
+                    "question_level": row[2],
+                    "answers": []
+                }
+            question_map[question_text]["answers"].append({
+                "answer_text": row[3]
             })
+
+        # Convert the map to a list
+        questions_and_answers = list(question_map.values())
     except Exception as error:
-        print("Problem with fetching questions and its answers", error)
+        print("Error querying the view:", error)
     finally:
         if cur is not None:
             cur.close()
         if conn is not None:
             connection_pool.putconn(conn)
     return questions_and_answers
-      
-class RequestHandler(BaseHTTPRequestHandler):
+
+def createAccount(user_name, user_last_name, user_email, user_password):
+    conn = None
+    cur = None
+    try:
+        conn = connection_pool.getconn()
+        cur = conn.cursor()
+        cur.execute(
+            'INSERT INTO users (user_name, user_last_name, user_email, user_password, join_date) '
+            'VALUES (%s, %s, %s, %s, NOW()) RETURNING user_id;',
+            (user_name, user_last_name, user_email, user_password)
+        )
+        user_id = cur.fetchone()[0]
+        
+        cur.execute(
+            'INSERT INTO student_progress (user_id, total_points, user_level) '
+            'VALUES (%s, %s, %s);',
+            (user_id, 0, 0)  # Default total_points and user_level are 0
+        )
+        
+        conn.commit()
+        
+        print(f"User created with ID {user_id} and progress initialized.")
+        return {"user_id": user_id, "message": "Account created successfully."}
+    except Exception as error:
+        if conn:
+            conn.rollback()
+        print('There is an error with creating an account and initalising progress:',error)        
+        return {"error": "Failed to create account."}
+    finally:
+        if cur is not None:
+            cur.close()
+        if conn is not None:
+            connection_pool.putconn(conn)
+
+def loginUser(email,password):
+    conn = None
+    cur = None
+    try:
+        conn = connection_pool.getconn()
+        cur = conn.cursor()
+        cur.execute('SELECT user_id FROM users WHERE user_email = %s AND user_password = %s',(email,password))
+        user = cur.fetchone()
+        if user:
+            return {"success": True, "user_id":user[0]}
+        else:
+            return {"success": False, "message":"Invalid email or password"}
+    except Exception as error:
+        print("Error validating user:",error)
+        return {"success": False, "message": "An error occured"}
+    finally:
+        if cur:
+            cur.close()
+        if conn:
+            connection_pool.putconn(conn)
+
+
+    
+        
+class S (BaseHTTPRequestHandler):
+    
+    def do_OPTIONS(self):
+        #preflight requests
+        self.send_response(200)
+        self.send_header('Access-Control-Allow-Origin', '*')  # Allow all origins
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')  # Allowed methods
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type, Origin, Accept, X-Requested-With')  # Allowed headers
+        self.end_headers()
+    
     def do_GET(self):
         parsed_path = urlparse(self.path)
-        print('processing GET')
         if self.path == '/subjects':
             subjects = fetchSubjects()
             self.send_response(200)
-            self.send_header('Content-type', 'application/json')
-            self.send_header('Access-Control-Allow-Origin','*') # Enabled CORS
+            self.send_header('Access-Control-Allow-Origin', '*')  # Allow all origins
+            self.send_header('Content-type','application/json')
             self.end_headers()
-            print(subjects)
-            self.wfile.write(json.dumps(subjects).encode())
+            #self.wfile.write(b'<html><body>test</body></html>')
+            self.wfile.write(json.dumps(subjects, indent = 2).encode('utf-8'))
         elif parsed_path.path == '/topics':
-            query_components = parse_qs(parsed_path.query)
-            subject_id = query_components.get('subject_id', [None])[0]
-            print(subject_id)
+            query_params = parse_qs(parsed_path.query)
+            subject_id = query_params.get('subject_id',[None])[0]
             if subject_id is not None:
-                topics = fetchTopics(subject_id)
-                self.send_response(200)
-                self.send_header('Content-type', 'application/json')
-                self.send_header('Access-Control-Allow-Origin','*')
-                self.end_headers()
-                print("*******")
-                print(topics)
-                print("Ok")
-                self.wfile.write(json.dumps(topics).encode())
-        elif parsed_path.path == '/quiz':
-            query_components = parse_qs(parsed_path.query)
-            subject_id = query_components.get('subject_id',[None])[0]
-            topic_id = query_components.get('topic_id', [None])[0]
-            print("checking subject_id and topic_id:")
-            print(subject_id,topic_id)
-            if topic_id is not None:
-                quiz = generateQuiz(subject_id,topic_id)
-                self.send_response(200)
-                self.send_header('Content-type','application/json')
-                self.send_header('Access-Control-Allow-Origin','*')
-                self.end_headers()
-                print("****************")
-                print(quiz)
-                self.wfile.write(json.dumps(quiz).encode())
-        elif parsed_path.path == '/quiz_questions':
-            query_components = parse_qs(parsed_path.query)
-            quiz_id = query_components.get('quiz_id',[None])[0]
-            print("Checking quiz id for questions and answers:")
-            print(quiz_id)
-            if quiz_id is not None:
-                questions_and_answers = fetchQuestionsDisplayAnswers(quiz_id) #I changed this to fetchQuestionDisplayAnswers. Originally it was using fetchQuestions function. I decided to create a function that has both the questions and answers rather than having 2 seperate functions.
-                self.send_response(200)
-                self.send_header('Content-type','application/json')
-                self.send_header('Access-Control-Allow-Origin','*')
-                self.end_headers()
-                print("*****************")
-                print(questions_and_answers)
-                self.wfile.write(json.dumps(questions_and_answers).encode()) #if you want to see the questions only from the previous push to the branch, please change questions_and_answers to questions. Otherwise, the frontend will need to be using fetchQuestionsDisplayAnswers and questions_and_answers list. 
+                try:
+                    subject_id = int(subject_id)  
+                    topics = fetchTopics(subject_id)  
+                    self.send_response(200)
+                    self.send_header('Access-Control-Allow-Origin', '*')  # Allow all origins
+                    self.send_header('Content-type', 'application/json')  # JSON response
+                    self.end_headers()
+                    self.wfile.write(json.dumps(topics, indent=2).encode('utf-8'))
+                except ValueError:
+                    self.send_response(400)  # Bad Request if subject_id is not a valid integer
+                    self.end_headers()
+                    self.wfile.write(b'{"error": "Invalid subject_id"}')
             else:
-                self.send_response(400)
+                self.send_response(400)  # Bad Request if subject_id is missing
+                self.end_headers()
+                self.wfile.write(b'{"error": "subject_id is required"}')
+        elif parsed_path.path == '/quiz':
+            # Parse query parameters
+            query_params = parse_qs(parsed_path.query)
+            subject_id = query_params.get('subject_id', [None])[0]
+            topic_id = query_params.get('topic_id', [None])[0]
+
+            if subject_id is not None and topic_id is not None:
+                try:
+                    # Convert subject_id and topic_id to integers
+                    subject_id = int(subject_id)
+                    topic_id = int(topic_id)
+
+                    # Fetch quizzes for the given subject_id and topic_id
+                    quiz = generateQuiz(subject_id, topic_id)
+
+                    # Send response
+                    self.send_response(200)
+                    self.send_header('Access-Control-Allow-Origin', '*')  # Allow all origins
+                    self.send_header('Content-Type', 'application/json')  # JSON response
+                    self.end_headers()
+                    self.wfile.write(json.dumps(quiz, indent=2).encode('utf-8'))
+                except ValueError:
+                    # Handle invalid subject_id or topic_id
+                    self.send_response(400)  # Bad Request
+                    self.end_headers()
+                    self.wfile.write(b'{"error": "Invalid subject_id or topic_id"}')
+            else:
+                # Handle missing subject_id or topic_id
+                self.send_response(400)  # Bad Request
+                self.end_headers()
+                self.wfile.write(b'{"error": "subject_id and topic_id are required"}')
+        elif parsed_path.path == '/quiz_questions':
+            # Parse query parameters
+            query_params = parse_qs(parsed_path.query)
+            quiz_id = query_params.get('quiz_id', [None])[0]
+            if quiz_id is not None:
+                try:
+                    quiz_id = int(quiz_id)
+                    question_and_answers = fetchQuestionsAndAnswers(quiz_id)
+
+                    self.send_response(200)
+                    self.send_header('Access-Control-Allow-Origin', '*')  # Allow all origins
+                    self.send_header('Content-Type', 'application/json')  # JSON response
+                    self.end_headers()
+                    self.wfile.write(json.dumps(question_and_answers, indent=2).encode('utf-8'))
+                except ValueError:
+                    self.send_response(400)  # Bad Request
+                    self.end_headers()
+                    self.wfile.write(b'{"error": "Invalid quiz_id"}')
+            else:
+                # Handle missing quiz_id
+                self.send_response(400)  # Bad Request
+                self.end_headers()
+                self.wfile.write(b'{"error": "quiz_id is required"}')
+            
+        else:
+            self.send_response(404)  # Not Found for other paths (can't find the endpoint; invalid endpoint)
+            self.end_headers()
+            self.wfile.write(b'{"error": "Endpoint not found"}')
+        
+        
+    '''def do_POST(self):
+        #parsed_path = urlparse(self.path)
+        #if parsed_path.path == '/create_account':
+        self.send_response(200)
+        self.send_header('Access-Control-Allow-Origin', '*')  # Allow all origins
+        self.send_header('Location','http://localhost:8000/subjects')
+        self.end_headers()
+        self.wfile.write(b'<html><body>test</body></html>')''' 
+       
+            
+    def do_POST(self):
+        parsed_path = urlparse(self.path)
+        if parsed_path.path == '/create_account':
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length)
+            data = json.loads(post_data)
+            print(data)
+            
+            #user_name = data.get('user_name')
+            #user_last_name = data.get('user_last_name')
+            #user_email = data.get('user_email')
+            #user_password = data.get('user_password')
+            user_name = data.get("firstName")
+            user_last_name = data.get("lastName")
+            user_email = data.get("email")
+            user_password = data.get("password")
+           
+            
+            result = createAccount(user_name,user_last_name,user_email,user_password)
+            if result.get("error")=="Failed to create account":
+                self.send_error(400)
+                self.send_header('Access-Control-Allow-Origin','*')
+                self.send_header('Content-Type','application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({"error": "Failed to create account."}).encode('utf-8'))
+            
+            else:
+                self.send_response(200) #Bad request
+                self.send_header('Access-Control-Allow-Origin','*')
+                #self.send_header('Location','http://localhost:8000/subjects')
+                self.end_headers()
+                #self.wfile.write(b'<html><body>test</body></html>')
+                self.wfile.write(json.dumps({"Success":"Account created"}).encode('utf-8'))
+        
+        if self.path == '/login':
+            print('IN LOGIN')
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length)
+            data = json.loads(post_data)
+            email = data.get('email')
+            password = data.get('password')
+            #user = loginUser(email,password)
+            result = loginUser(email,password)
+            print(result)
+            self.send_response(200)
+            self.send_header('Content-Type','application/json')
+            self.send_header('Access-Control-Allow-Origin','*')
+            self.end_headers()
+            self.wfile.write(json.dumps(result).encode('utf-8'))
+        if parsed_path.path == '/submit_attempts':
+            try:
+                content_length = int(self.headers['Content-Length'])
+                post_data = self.rfile.read(content_length)
+                data = json.loads(post_data)
+                
+                user_id = data.get('user_id')
+                attempts = data.get('attempts')
+                
+                if not user_id or not attempts:
+                    self.send_response(400)
+                    self.send_header('Access-Control-Allow-Origin','*')
+                    self.end_headers()
+                    self.wfile.write(b'{"error": "Missing required fields"}')
+                    return
+                conn = connection_pool.getconn()
+                cur = conn.cursor()
+                
+                for a in attempts:
+                    question_id = a['question_id']
+                    answer_id = a['answer_id']
+                    is_correct = a['is_correct']
+                    cur.execute('INSERT INTO user_attempts (user_id, question_id, answer_id, is_correct) VALUES (%s, %s, %s, %s)',(user_id, question_id, answer_id, is_correct))
+                
+                conn.commit()
+                    
+                self.send_response(200)
+                self.send_header('Access-Control-Allow-Origin','*')
+                self.send_header('Content-Type','application/json')
+                self.end_headers()
+                self.wfile.write(b'{"success": true, "message": "Attempts submitted successfully"}')
+            except Exception as error:
+                print(f'Insertion error of attempts: {error}')
+                if conn:
+                    conn.rollback()
+                self.send_response(200)
                 self.send_header('Access-Control-Allow-Origin','*')
                 self.end_headers()
-                self.wfile.write(b'Missing quiz_id parameter')
-                
+                self.wfile.write(b'{"error": "Failed to submit attempts"}')
+            finally:
+                if cur is not None:
+                    cur.close()
+                if conn is not None:
+                    connection_pool.putconn(conn)
+        
 
-                
-def run(server_class=HTTPServer, handler_class=RequestHandler, port=8000):
+def run(server_class=HTTPServer, handler_class=S, port=8000):
     server_address = ('', port)
     httpd = server_class(server_address, handler_class)
     fetchSubjects()
     print(f'Starting server on port {port}...')
     httpd.serve_forever()
-run()
+if __name__ == '__main__':
+    run()
+            

@@ -1,40 +1,43 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:learning_app/screens/home_screen.dart';
+import 'package:learning_app/screens/lesson_screen.dart';
+import 'package:learning_app/screens/quiz_screen.dart';
+import 'package:learning_app/screens/subject_screen.dart';
+import 'package:learning_app/theme/app_theme.dart';
+import 'package:learning_app/screens/setting_screen.dart';
 
 void main() {
-  runApp(LearningApp());
+  runApp(const LearningApp());
 }
 
 class LearningApp extends StatelessWidget {
+  const LearningApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       title: 'Learning App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: Colors.grey[200],
-      ),
-      home: LoginPage(),
-      builder: (context, child) {
-        return LayoutBuilder(
-          builder: (context, constraints) {
-            if (constraints.maxWidth > 800) {
-              // Web/Tablet Layout
-              return Row(children: [Expanded(child: child!)]);
-            } else {
-              // Mobile Layout
-              return child!;
-            }
-          },
-        );
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      home: const LoginPage(),
+      routes: {
+        '/login': (context) => const LoginPage(),
+        '/subject': (context) => const SubjectScreen(),
+        '/lesson': (context) => const LessonScreen(),
+        '/quiz': (context) => const QuizScreen(),
+        '/profile': (context) => const SettingsScreen(),
+        '/setting': (context) => const SettingsScreen(),
       },
     );
   }
 }
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -48,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
     if (_emailController.text == 'user' && _passwordController.text == '0000') {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
       );
     } else {
       setState(() {
@@ -62,176 +65,95 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Center(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(24.0),
           child: Container(
-            width: 400, // Adjust width to make input fields smaller
-            child: Column(
-              mainAxisSize: MainAxisSize.min, // Center elements vertically
-              children: [
-                Text(
-                  'Login',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            width: 400,
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 12,
+                  offset: const Offset(0, 5),
                 ),
-                SizedBox(height: 20),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'Login to Learning App',
+                    style: TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
                 TextField(
                   controller: _emailController,
                   decoration: InputDecoration(
                     labelText: 'Login ID',
-                    border: OutlineInputBorder(),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    prefixIcon: Icon(Icons.email,
+                        color: Theme.of(context).primaryColor),
+                    filled: true,
+                    fillColor: Colors.grey[100],
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 16),
                 TextField(
                   controller: _passwordController,
                   decoration: InputDecoration(
                     labelText: 'Password',
-                    border: OutlineInputBorder(),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    prefixIcon:
+                        Icon(Icons.lock, color: Theme.of(context).primaryColor),
+                    filled: true,
+                    fillColor: Colors.grey[100],
                   ),
                   obscureText: true,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 16),
                 if (_errorMessage.isNotEmpty)
-                  Text(
-                    _errorMessage,
-                    style: TextStyle(color: Colors.red, fontSize: 14),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      _errorMessage,
+                      style: const TextStyle(color: Colors.red, fontSize: 14),
+                    ),
                   ),
-                SizedBox(height: 20),
-                ElevatedButton(onPressed: _login, child: Text('Login')),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class HomeScreen extends StatefulWidget {
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  List<String> subjects = [];
-  late Future<void> subjectsFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    subjectsFuture = fetchSubjects();
-  }
-
-  Future<void> fetchSubjects() async {
-    try {
-      final response = await http.get(
-        Uri.parse('http://localhost:8000/subjects'),
-      );
-
-      if (response.statusCode == 200) {
-        print('Response body: ${response.body}');
-        setState(() {
-          subjects = List<String>.from(json.decode(response.body));
-          print(subjects);
-        });
-        print('Subjects: $subjects');
-      } else {
-        print('Failed to load subjects. Status code: ${response.statusCode}');
-        throw Exception('Failed to load subjects');
-      }
-    } catch (e) {
-      print('Error: $e');
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Select a Subject')),
-      body: FutureBuilder<void>(
-        future: subjectsFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // Added this so we can make it very clear if we are still waiting for the the data from the server side
-            return Center(
-              child: CircularProgressIndicator(),
-            ); // will continue to show as long as we are still waiting to fetch from the server
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            ); // tells us the error e.g. XMLHttpError
-          } else {
-            return Padding(
-              padding: EdgeInsets.all(16.0),
-              child: ListView.builder(
-                itemCount: subjects.length,
-                itemBuilder: (context, index) {
-                  return Card(
+                const SizedBox(height: 24),
+                ElevatedButton(
+                  onPressed: _login,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).primaryColor,
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 14, horizontal: 32),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    elevation: 4,
-                    color: Colors.purple,
-                    margin: EdgeInsets.symmetric(vertical: 10),
-                    child: ListTile(
-                      contentPadding: EdgeInsets.all(16),
-                      title: Text(
-                        subjects[index],
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios,
-                        color: Colors.blue,
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder:
-                                (context) => CourseDetailScreen(
-                                  courseName: subjects[index],
-                                ),
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                },
-              ),
-            );
-          }
-        },
-      ),
-    );
-  }
-}
-
-class CourseDetailScreen extends StatelessWidget {
-  final String courseName;
-
-  CourseDetailScreen({required this.courseName});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(courseName)),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              courseName,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  child: const Text(
+                    'Login',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
             ),
-            SizedBox(height: 10),
-            Text(
-              'Course description goes here...',
-              style: TextStyle(fontSize: 16),
-            ),
-          ],
+          ),
         ),
       ),
     );

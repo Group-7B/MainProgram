@@ -17,23 +17,31 @@ CREATE TABLE student_progress (
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
--- Update points when a correct answer is given
+-- Update points when a correct answer is given with error handling
 CREATE OR REPLACE FUNCTION update_student_progress()
 RETURNS TRIGGER AS $$
 BEGIN
-    UPDATE student_progress
-    SET total_points = total_points + 5,
-        user_level = (total_points + 5) / 100
-    WHERE user_id = NEW.user_id;
-    
-    -- Ensure user_level is an integer by using FLOOR()
-    UPDATE student_progress
-    SET user_level = FLOOR(total_points / 100)
-    WHERE user_id = NEW.user_id;
+    BEGIN
+        -- First update: add points
+        UPDATE student_progress
+        SET total_points = total_points + 5
+        WHERE user_id = NEW.user_id;
+
+        -- Second update: set user level based on updated points
+        UPDATE student_progress
+        SET user_level = FLOOR(total_points / 100)
+        WHERE user_id = NEW.user_id;
+
+    EXCEPTION
+        WHEN OTHERS THEN
+            RAISE WARNING 'Failed to update student progress for user_id=% due to: %',
+                          NEW.user_id, SQLERRM;
+    END;
 
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
+
 
 
 -- Trigger to call the function whenever a correct answer is recorded in user_attempts
@@ -47,28 +55,28 @@ EXECUTE FUNCTION update_student_progress();
 
 
 -- testing
-INSERT INTO users (user_name, user_last_name, user_email, user_password, join_date)
-VALUES ('John', 'Doe', 'john.doe@example.com', 'password123', NOW()) RETURNING user_id;
+-- INSERT INTO users (user_name, user_last_name, user_email, user_password, join_date)
+-- VALUES ('John', 'Doe', 'john.doe@example.com', 'password123', NOW()) RETURNING user_id;
 
-INSERT INTO student_progress (user_id, total_points, user_level) 
-VALUES (1, 0, 0); 
+-- INSERT INTO student_progress (user_id, total_points, user_level) 
+-- VALUES (1, 0, 0); 
 
 --when a new user logs into app, a insert needs to be made into these tables, we can keep points and level 0 for every new user insert. 
 
-INSERT INTO user_attempts (user_id, question_id, answer_id, is_correct)
-VALUES (1, 1, 3, TRUE);
-INSERT INTO user_attempts (user_id, question_id, answer_id, is_correct)
-VALUES (1, 2, 3, TRUE);
-INSERT INTO user_attempts (user_id, question_id, answer_id, is_correct)
-VALUES (1, 3, 3, TRUE);
-INSERT INTO user_attempts (user_id, question_id, answer_id, is_correct)
-VALUES (1, 4, 3, TRUE);
-INSERT INTO user_attempts (user_id, question_id, answer_id, is_correct)
-VALUES (1, 5, 3 TRUE);
-INSERT INTO user_attempts (user_id, question_id, answer_id, is_correct)
-VALUES (1, 6, 3, TRUE);
-INSERT INTO user_attempts (user_id, question_id, answer_id, is_correct)
-VALUES (1, 7, 3, TRUE);
+-- INSERT INTO user_attempts (user_id, question_id, answer_id, is_correct)
+-- VALUES (1, 1, 3, TRUE);
+-- INSERT INTO user_attempts (user_id, question_id, answer_id, is_correct)
+-- VALUES (1, 2, 3, TRUE);
+-- INSERT INTO user_attempts (user_id, question_id, answer_id, is_correct)
+-- VALUES (1, 3, 3, TRUE);
+-- INSERT INTO user_attempts (user_id, question_id, answer_id, is_correct)
+-- VALUES (1, 4, 3, TRUE);
+-- INSERT INTO user_attempts (user_id, question_id, answer_id, is_correct)
+-- VALUES (1, 5, 3 TRUE);
+-- INSERT INTO user_attempts (user_id, question_id, answer_id, is_correct)
+-- VALUES (1, 6, 3, TRUE);
+-- INSERT INTO user_attempts (user_id, question_id, answer_id, is_correct)
+-- VALUES (1, 7, 3, TRUE);
 -- After user attempts a question in a quiz/mock test. The user inputs are recorded (inserted) into user_attempts.
 -- So that the update_student_progress function can check from the database whether the user answer is TRUE or FALSE
 -- Then the function calculates the total_points/level into student_progress

@@ -1446,20 +1446,20 @@ EXECUTE FUNCTION update_student_progress();
 
 
 -- testing
-INSERT INTO users (user_name, user_last_name, user_email, user_password, join_date)
-VALUES ('John', 'Doe', 'john.doe@example.com', 'password123', NOW()) RETURNING user_id;
+-- INSERT INTO users (user_name, user_last_name, user_email, user_password, join_date)
+-- VALUES ('John', 'Doe', 'john.doe@example.com', 'password123', NOW()) RETURNING user_id;
 
-INSERT INTO student_progress (user_id, total_points, user_level) 
-VALUES (1, 0, 0); 
+-- INSERT INTO student_progress (user_id, total_points, user_level) 
+-- VALUES (1, 0, 0); 
 
 --when a new user logs into app, a insert needs to be made into these tables, we can keep points and level 0 for every new user insert. 
 
-INSERT INTO user_attempts (user_id, question_id, answer_id, is_correct)
-VALUES (1, 1, 3, TRUE);
-INSERT INTO user_attempts (user_id, question_id, answer_id, is_correct)
-VALUES (1, 2, 3, TRUE);
-INSERT INTO user_attempts (user_id, question_id, answer_id, is_correct)
-VALUES (1, 3, 3, TRUE);
+-- INSERT INTO user_attempts (user_id, question_id, answer_id, is_correct)
+-- VALUES (1, 1, 3, TRUE);
+-- INSERT INTO user_attempts (user_id, question_id, answer_id, is_correct)
+-- VALUES (1, 2, 3, TRUE);
+-- INSERT INTO user_attempts (user_id, question_id, answer_id, is_correct)
+-- VALUES (1, 3, 3, TRUE);
 
 -- After user attempts a question in a quiz/mock test. The user inputs are recorded (inserted) into user_attempts.
 -- So that the update_student_progress function can check from the database whether the user answer is TRUE or FALSE

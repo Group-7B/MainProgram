@@ -21,3 +21,6 @@ flutter:
 
   assets:
     - database/leaderboard.json
+    - assets/bronzemedal.png
+    - assets/silvermedal.png
+    - assets/goldmedal.png

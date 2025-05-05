@@ -23,16 +23,16 @@ class Leaderboard extends StatefulWidget {
 }
 
 class _LeaderboardState extends State<Leaderboard> {
-  late Future<List<LeaderboardEntry>> _leaderboardDataFuture;
+  late Future<List<LeaderboardEntry>> _leaderboardData;
 
   @override
   void initState() {
     super.initState();
     // Start loading the JSON data when the widget is first created
-    _leaderboardDataFuture = _loadLeaderboardData();
+    _leaderboardData = _loadLeaderboard();
   }
 
-  Future<List<LeaderboardEntry>> _loadLeaderboardData() async {
+  Future<List<LeaderboardEntry>> _loadLeaderboard() async {
     try {
       final String jsonString =
           await rootBundle.loadString('assets/data/leaderboard_data.json');
@@ -45,7 +45,7 @@ class _LeaderboardState extends State<Leaderboard> {
       entries.sort((a, b) => b.score.compareTo(a.score));
       return entries;
     } catch (e) {
-      print('Error loading or parsing leaderboard data: $e');
+      print('Error loading leaderboard data: $e');
       return [];
     }
   }
@@ -59,7 +59,7 @@ class _LeaderboardState extends State<Leaderboard> {
       ),
       body: Center(
         child: FutureBuilder<List<LeaderboardEntry>>(
-          future: _leaderboardDataFuture,
+          future: _leaderboardData,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -76,34 +76,81 @@ class _LeaderboardState extends State<Leaderboard> {
                 itemCount: leaderboardEntries.length,
                 itemBuilder: (context, index) {
                   final entry = leaderboardEntries[index];
+                  // create a new widget seperately to get images or number positions, works as a function within the listbuilder
+                  Widget positionWidget;
+                  const double medalSize = 28.0;
+                  final TextStyle rankTextStyle = const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Colors.white);
+                  final fallbackEmojiStyle =
+                      TextStyle(fontSize: medalSize * 0.8);
+                  // Check for ranks 4+ first for efficiency
+                  if (index >= 3) {
+                    positionWidget = Text(
+                      '${index + 1}',
+                      style: rankTextStyle,
+                      textAlign: TextAlign.center,
+                    );
+                  } else if (index == 0) {
+                    positionWidget = Image.asset(
+                      'assets/goldmedal.png',
+                      height: medalSize,
+                      width: medalSize,
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) =>
+                          Text('🥇', style: fallbackEmojiStyle),
+                    );
+                  } else if (index == 1) {
+                    positionWidget = Image.asset(
+                      'assets/silvermedal.png',
+                      height: medalSize,
+                      width: medalSize,
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) =>
+                          Text('🥈', style: fallbackEmojiStyle),
+                    );
+                  } else {
+                    positionWidget = Image.asset(
+                      'assets/bronzemedal.png',
+                      height: medalSize,
+                      width: medalSize,
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) =>
+                          Text('🥉', style: fallbackEmojiStyle),
+                    );
+                  }
                   return Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16.0, vertical: 12.0),
                     margin: const EdgeInsets.symmetric(
                         horizontal: 16.0, vertical: 4.0),
-                    color: const Color.fromARGB(255, 49, 107, 51),
+                    decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 49, 107, 51),
+                        borderRadius: BorderRadius.circular(8.0)),
                     child: Row(
                       children: <Widget>[
-                        SizedBox(
+                        Container(
                           width: 40,
-                          child: Text(
-                            '${index + 1}.',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                            textAlign: TextAlign.left,
-                          ),
+                          alignment: Alignment.center,
+                          child: positionWidget,
                         ),
+                        const SizedBox(width: 12),
                         Expanded(
                           child: Text(
                             entry.name,
-                            style: TextStyle(fontSize: 16, color: Colors.white),
+                            style: const TextStyle(
+                                fontSize: 16, color: Colors.white),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
+                        const SizedBox(width: 8),
                         Text(
                           '${entry.score} pts',
-                          style: TextStyle(fontSize: 16, color: Colors.white),
+                          style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500),
                           textAlign: TextAlign.right,
                         ),
                       ],
@@ -112,7 +159,7 @@ class _LeaderboardState extends State<Leaderboard> {
                 },
               );
             } else {
-              return const Center(child: Text('No data available.'));
+              return const Center(child: Text('No data available'));
             }
           },
         ),

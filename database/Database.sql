@@ -1011,7 +1011,124 @@ VALUES
       (28, 273),  (28, 274),
       (28, 275),  (28, 276),
       (28, 277),  (28, 278),  
-      (28, 279),  (28, 280);-- tested and working 17/03*/
+      (28, 279),  (28, 280);
+
+      --Process management Quiz 2 / 281-290 not yet created
+    INSERT INTO quiz_questions(
+        quiz_id, question_id)
+    VALUES
+      (29, 281),  (29, 282), 
+      (29, 283),  (29, 284),
+      (29, 285),  (29, 286),
+      (29, 287),  (29, 288),  
+      (29, 289),  (29, 290);
+
+ --Process management Quiz 3 / 291-300 not yet created
+    INSERT INTO quiz_questions(
+        quiz_id, question_id)
+    VALUES
+      (30, 291),  (30, 292), 
+      (30, 293),  (30, 294),
+      (30, 295),  (30, 296),
+      (30, 297),  (30, 298),  
+      (30, 299),  (30, 300);
+
+
+
+-- File management Quiz 1 / 301-310 not yet created
+    INSERT INTO quiz_questions(
+        quiz_id, question_id)
+    VALUES
+      (31, 301),  (31, 302), 
+      (31, 303),  (31, 304),
+      (31, 305),  (31, 306),
+      (31, 307),  (31, 308),  
+      (31, 309),  (31, 310);
+
+-- File management Quiz 2 / 311-320 not yet created
+    INSERT INTO quiz_questions(
+        quiz_id, question_id)
+    VALUES
+      (32, 311),  (32, 312), 
+      (32, 313),  (32, 314),
+      (32, 315),  (32, 316),
+      (32, 317),  (32, 318),  
+      (32, 319),  (32, 320);
+
+--File management Quiz 3 / 321-330 not yet created
+    INSERT INTO quiz_questions(
+        quiz_id, question_id)
+    VALUES
+      (33, 321),  (33, 322), 
+      (33, 323),  (33, 324),
+      (33, 325),  (33, 326),
+      (33, 327),  (33, 328),  
+      (33, 329),  (33, 330);
+
+
+
+---math exam contain mixed questions from all topics / quiz_id 34 
+--topic_1-algebra/ question_id 1-30 , topic_2-ratio and proportion / question_id 31-60, topic_3-percentage / question_id 61-90
+  
+INSERT INTO quiz_questions(
+        quiz_id, question_id)
+    VALUES 
+(34, 3), (34, 8),   
+(34, 12), (34, 27),  
+(34, 33),  (34, 36),  
+(34, 40), (34, 45),  
+(34, 50),  (34, 61),  
+(34, 66),  (34, 70),  
+(34, 75), (34, 82),  
+(34, 89);  
+
+      
+
+--- english exam - quiz_id 35, contain mixed questions from all topics
+--topic_4-english / question_id 91-120, topic_5-grammar / question_id 121-150,
+
+INSERT INTO quiz_questions (quiz_id, question_id)
+VALUES 
+(35, 92), (35, 97),   
+(35, 101), (35, 108),  
+(35, 115),  (35, 121),  
+(35, 125), (35, 128),  
+(35, 132),  (35, 137),  
+(35, 141),  (35, 144),  
+(35, 147),  (35, 118),  
+(35, 110);  
+
+--- physics exam quiz_id 36 contain mixed questions from all topics
+---topic_6-mechanics / question_id 151-180, topic_7-thermodynamics / question_id 181-210, topic_8-electromagnetism / question_id 211-240,
+
+INSERT INTO quiz_questions (quiz_id, question_id)
+VALUES 
+(36, 153),(36, 159),
+(36, 165),(36, 172),
+(36, 178),(36, 183),
+(36, 187),(36, 192),
+(36, 198),(36, 209),
+(36, 215),(36, 221),
+(36, 228),(36, 234),
+(36, 239);
+
+--- operating systems exam contain mixed questions from all topics
+---topic_9-memory management / question_id 241-270, topic_10-process management / question_id 271-300, topic_11-file management / question_id 301-330
+
+INSERT INTO quiz_questions (quiz_id, question_id)
+VALUES 
+(37, 243),(37, 248),
+(37, 255),(37, 262),
+(37, 269),(37, 273),
+(37, 278),(37, 284),
+(37, 291),(37, 299),
+(37, 305),(37, 312),
+(37, 318),(37, 324),
+(37, 330);
+      
+      
+      
+      */
 
 ---CREATE table for answers tested
 CREATE TABLE

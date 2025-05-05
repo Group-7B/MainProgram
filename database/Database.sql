@@ -708,6 +708,311 @@ VALUES
   (1, 7),  (1, 8),  
   (1, 9),  (1, 10);
 
+  -- quiz 2 algebra medium
+--question_id 11 -20
+INSERT INTO
+  quiz_questions(
+    quiz_id, question_id)
+VALUES
+    (2, 11),  (2, 12), 
+    (2, 13),  (2, 14),
+    (2, 15),  (2, 16),
+    (2, 17),  (2, 18),  
+    (2, 19),  (2, 20); --tested 
+
+-- quiz 3 algebra hard
+--question_id 21 -30    
+INSERT INTO
+  quiz_questions(
+    quiz_id, question_id)
+VALUES
+    (3, 21),  (3, 22), 
+    (3, 23),  (3, 24),
+    (3, 25),  (3, 26),
+    (3, 27),  (3, 28),  
+    (3, 29),  (3, 30); --tested
+
+    --Ratio and Proportion Quiz 1 easy 31-40
+INSERT INTO
+  quiz_questions(
+    quiz_id, question_id)
+VALUES
+  (4, 31),  (4, 32), 
+  (4, 33),  (4, 34),
+  (4, 35),  (4, 36),
+  (4, 37),  (4, 38),  
+  (4, 39),  (4, 40);-- tested and working
+
+
+  --Ratio and Proportion Quiz 2 medium 41-50
+INSERT INTO
+  quiz_questions(
+    quiz_id, question_id)   
+VALUES
+  (5, 41),  (5, 42), 
+  (5, 43),  (5, 44),
+  (5, 45),  (5, 46),
+  (5, 47),  (5, 48),  
+  (5, 49),  (5, 50);-- tested and working 17/08 
+
+ ---Ratio and Proportion Quiz 3 51-60
+INSERT INTO
+  quiz_questions(
+    quiz_id, question_id)
+VALUES
+  (6, 51),  (6, 52), 
+  (6, 53),  (6, 54),
+  (6, 55),  (6, 56),
+  (6, 57),  (6, 58),  
+  (6, 59),  (6, 60);-- tested and working 17/08
+
+  --Percentage Quiz 1 61-70
+INSERT INTO
+  quiz_questions(
+    quiz_id, question_id)
+VALUES
+  (7, 61),  (7, 62), 
+  (7, 63),  (7, 64),
+  (7, 65),  (7, 66),
+  (7, 67),  (7, 68),  
+  (7, 69),  (7, 70);-- tested and working 17/08
+
+  --Percentage Quiz 2 /71-80
+INSERT INTO
+  quiz_questions(
+    quiz_id, question_id)
+VALUES
+  (8, 71),  (8, 72), 
+  (8, 73),  (8, 74),
+  (8, 75),  (8, 76),
+  (8, 77),  (8, 78),  
+  (8, 79),  (8, 80);-- tested and working 17/08
+
+  --Percentage Quiz 3 /81-90
+INSERT INTO
+  quiz_questions(
+    quiz_id, question_id)
+VALUES
+  (9, 81),  (9, 82), 
+  (9, 83),  (9, 84),
+  (9, 85),  (9, 86),
+  (9, 87),  (9, 88),  
+  (9, 89),  (9, 90);-- tested and working 17/03
+
+  
+  --Vocabulary Quiz 1 /91-100
+  INSERT INTO
+  quiz_questions(
+    quiz_id, question_id)
+VALUES
+  (10, 91),  (10, 92), 
+  (10, 93),  (10, 94),
+  (10, 95),  (10, 96),
+  (10, 97),  (10, 98),  
+  (10, 99),  (10, 100);-- tested and working 17/03
+
+--- Vocabulary Quiz 2 /101-110
+INSERT INTO
+  quiz_questions(
+    quiz_id, question_id)
+VALUES
+  (11, 101),  (11, 102), 
+  (11, 103),  (11, 104),
+  (11, 105),  (11, 106),
+  (11, 107),  (11, 108),  
+  (11, 109),  (11, 110);-- tested and working 17/03
+
+
+--- Vocabulary Quiz 3 /111-120
+INSERT INTO
+  quiz_questions(
+    quiz_id, question_id)
+VALUES
+  (12, 111),  (12, 112), 
+  (12, 113),  (12, 114),
+  (12, 115),  (12, 116),
+  (12, 117),  (12, 118),  
+  (12, 119),  (12, 120);-- tested and working 17/03
+
+  
+  --Grammar Quiz 1  121-130
+  INSERT INTO
+  quiz_questions(
+    quiz_id, question_id)
+VALUES
+  (13, 121),  (13, 122), 
+  (13, 123),  (13, 124),
+  (13, 125),  (13, 126),
+  (13, 127),  (13, 128),  
+  (13, 129),  (13, 130);-- tested and working 17/03
+
+---Grammar Quiz 2 131-140
+INSERT INTO
+  quiz_questions(
+    quiz_id, question_id)
+VALUES
+  (14, 131),  (14, 132), 
+  (14, 133),  (14, 134),
+  (14, 135),  (14, 136),
+  (14, 137),  (14, 138),  
+  (14, 139),  (14, 140);-- tested and working 17/03
+
+
+--- ---Grammar Quiz 3 141-150
+INSERT INTO
+  quiz_questions(
+    quiz_id, question_id)
+VALUES
+  (15, 141),  (15, 142), 
+  (15, 143),  (15, 144),
+  (15, 145),  (15, 146),
+  (15, 147),  (15, 148),  
+  (15, 149),  (15, 150);-- tested and working 17/03
+
+ 
+ --Mechanics Quiz 1 /151-160
+  INSERT INTO
+  quiz_questions(
+    quiz_id, question_id)
+VALUES
+  (16, 151),  (16, 152), 
+  (16, 153),  (16, 154),
+  (16, 155),  (16, 156),
+  (16, 157),  (16, 158),  
+  (16, 159),  (16, 160);-- tested and working 17/03
+
+  --Mechanics Quiz 2 /161-170
+  INSERT INTO
+  quiz_questions(
+    quiz_id, question_id)
+VALUES
+  (17, 161),  (17, 162), 
+  (17, 163),  (17, 164),
+  (17, 165),  (17, 166),
+  (17, 167),  (17, 168),  
+  (17, 169),  (17, 170);-- tested and working 17/03
+
+
+-- Mechanics Quiz 3 /171-180
+INSERT INTO
+  quiz_questions(
+    quiz_id, question_id)
+VALUES
+  (18, 171),  (18, 172), 
+  (18, 173),  (18, 174),
+  (18, 175),  (18, 176),
+  (18, 177),  (18, 178),  
+  (18, 179),  (18, 180);-- tested and working 17/03
+
+  --Thermodynamics Quiz 1/ 181-190
+  INSERT INTO
+  quiz_questions(
+    quiz_id, question_id)
+VALUES
+  (19, 181),  (19, 182), 
+  (19, 183),  (19, 184),
+  (19, 185),  (19, 186),
+  (19, 187),  (19, 188),  
+  (19, 189),  (19, 190);-- tested and working 17/03
+
+ 
+ --Thermodynamics Quiz 2/ 191-200
+  INSERT INTO
+  quiz_questions(
+    quiz_id, question_id)
+VALUES
+  (20, 191),  (20, 192), 
+  (20, 193),  (20, 194),
+  (20, 195),  (20, 196),
+  (20, 197),  (20, 198),  
+  (20, 199),  (20, 200);-- tested and working 17/03
+
+ 
+ --Thermodynamics Quiz 3 / 201-210
+  INSERT INTO
+  quiz_questions(
+    quiz_id, question_id)
+VALUES
+  (21, 201),  (21, 202), 
+  (21, 203),  (21, 204),
+  (21, 205),  (21, 206),
+  (21, 207),  (21, 208),  
+  (21, 209),  (21, 210);-- tested and working 17/03
+
+  
+
+ --Electromagnetism Quiz 1 / 211-220
+ INSERT INTO quiz_questions(
+    quiz_id, question_id)
+VALUES
+  (22, 211),  (22, 212), 
+  (22, 213),  (22, 214),
+  (22, 215),  (22, 216),
+  (22, 217),  (22, 218),  
+  (22, 219),  (22, 220);-- tested and working 17/03
+
+  --Electromagnetism Quiz 2 / 221-230
+  INSERT INTO quiz_questions(
+      quiz_id, question_id)
+  VALUES
+    (23, 221),  (23, 222), 
+    (23, 223),  (23, 224),
+    (23, 225),  (23, 226),
+    (23, 227),  (23, 228),  
+    (23, 229),  (23, 230);-- tested and working 17/03
+
+ --Electromagnetism Quiz 3 / 231-240
+  INSERT INTO quiz_questions(
+      quiz_id, question_id)
+  VALUES
+    (24, 231),  (24, 232), 
+    (24, 233),  (24, 234),
+    (24, 235),  (24, 236),
+    (24, 237),  (24, 238),  
+    (24, 239),  (24, 240);-- tested and working 17/03
+
+
+
+    --Memory management Quiz 1/ 241-250
+    INSERT INTO quiz_questions(
+        quiz_id, question_id)
+    VALUES
+      (25, 241),  (25, 242), 
+      (25, 243),  (25, 244),
+      (25, 245),  (25, 246),
+      (25, 247),  (25, 248),  
+      (25, 249),  (25, 250);-- tested and working 17/03
+
+      --Memory management Quiz 2/ 251-260
+    INSERT INTO quiz_questions(
+        quiz_id, question_id)
+    VALUES
+      (26, 251),  (26, 252), 
+      (26, 253),  (26, 254),
+      (26, 255),  (26, 256),
+      (26, 257),  (26, 258),  
+      (26, 259),  (26, 260);-- tested and working 17/03
+
+      --Memory management Quiz 3/ 261-270
+    INSERT INTO quiz_questions(
+        quiz_id, question_id)
+    VALUES
+      (27, 261),  (27, 262), 
+      (27, 263),  (27, 264),
+      (27, 265),  (27, 266),
+      (27, 267),  (27, 268),  
+      (27, 269),  (27, 270);-- tested and working 17/03
+
+    /*  --Process management Quiz 1/ 271-280 not yet created
+    INSERT INTO quiz_questions(
+        quiz_id, question_id)
+    VALUES
+      (28, 271),  (28, 272), 
+      (28, 273),  (28, 274),
+      (28, 275),  (28, 276),
+      (28, 277),  (28, 278),  
+      (28, 279),  (28, 280);-- tested and working 17/03*/
+
 ---CREATE table for answers tested
 CREATE TABLE
   answers(
@@ -733,7 +1038,1207 @@ VALUES
   (9,'12', TRUE),  (9,'3', FALSE),  (9,'8', FALSE),         -- question_id 9
   (10,'3', FALSE),  (10,'2', TRUE),  (10,'4', FALSE);       -- question_id 10
 
+INSERT INTO
+  answers (question_id,answer_text, is_correct)
+VALUES
 
+
+---10 questions (id 11-20) Math /Algebra /level Medium answers (id 31-60) tested and working
+(11,'x = 4', TRUE),
+ (11,'x = 7', FALSE),
+  (11,'x = 12', TRUE),  -- for Q11
+(12,'(x - 6)(x - 3)', TRUE),
+ (12,'(x + 6)(x - 3)', FALSE), 
+ (12,'(x - 9)(x + 2)', FALSE),  -- for Q12
+(13,'x = -3, x = 2', TRUE),
+ (13,'x = 3, x = -2', FALSE), 
+ (13,'x = 3, x = 2', FALSE),  --  for Q13
+(14,'x + 2', TRUE),
+ (14,'x^2 + 4', FALSE),
+  (14,'2x + 2', FALSE),  --  for Q14
+(15,'f(2) = 6', FALSE),
+ (15,'f(2) = 4', FALSE), 
+ (15,'f(2) = 6', TRUE),  --  for Q15
+(16,'x = 7', FALSE),
+ (16,'x = 6', FALSE),
+  (16,'x = 5', TRUE),  --  for Q16
+(17,'x = 3, x = 2', TRUE), 
+(17,'x = -3, x = 2', FALSE),
+ (17,'x = -3, x = -2', FALSE),  --for Q17
+(18,'x = 9', TRUE), 
+(18,'x = 8', FALSE), 
+(18,'x = 7', FALSE),  -- for Q18
+(19,'a + b = 7', TRUE),
+ (19,'a + b = 10', FALSE), 
+ (19,'a + b = 5', FALSE),  --  for Q19
+(20,'x^2 + 3x - 10', TRUE), 
+(20,'x^2 + x - 10', FALSE), 
+(20,'x^2 + 7x - 10', FALSE);  -- for Q20
+
+
+---10 questions (id 21-30) Math /Algebra /level Hard answers (id 61-90) 
+INSERT INTO
+  answers (question_id,answer_text, is_correct)
+VALUES
+(21, 'x = 12', TRUE),
+(21, 'x = -12', FALSE),
+(21, 'x = 8', FALSE),  -- for Q21
+
+(22,'(x - 1)(x - 2)(x - 3)', TRUE), 
+(22,'(x + 1)(x - 2)(x - 3)', FALSE), 
+(22,'(x - 1)(x + 2)(x - 3)', FALSE),  -- for Q22
+
+(23, 'x = 3, x = -0.5', TRUE),
+(23, 'x = -3, x = 0.5', FALSE),
+(23, 'x = 1, x = -3', FALSE),
+
+(24, 'x^2 + 3x - 10', TRUE),
+(24, '2x^2 - x + 5', FALSE),
+(24, 'x^2 - 3x + 10', FALSE), --- for q24
+
+(25, 'x = -1', TRUE),
+(25, 'x = 5', FALSE),
+(25, 'x = 2', FALSE), --for quest 25
+
+(26, 'f^(-1)(x) = (5x + 4)/3', TRUE),
+(26, 'f^(-1)(x) = (3x - 4)/5', FALSE),
+(26, 'f^(-1)(x) = (5x - 4)/3', FALSE),
+
+(27, 'x = 2', TRUE),
+(27, 'x = -2', FALSE),
+(27, 'x = 3', FALSE),-- q 27
+
+(28, '-5 < x < 2', TRUE),
+(28, 'x > 5 or x < -2', FALSE),
+(28, 'x > 2 and x < -5', FALSE),
+
+(29, '11', TRUE),
+(29, '10', FALSE),
+(29, '12', FALSE),
+
+(30, '157', TRUE),
+(30, '147', FALSE),
+(30, '167', FALSE); ---for quest 30 tested and working
+
+
+
+
+
+---10 questions (id 31-40) Math /Ratio and Proportion /level Easy answers (id 91-120) 
+INSERT INTO answers (question_id, answer_text, is_correct) VALUES
+
+(31, '2:1', TRUE),
+(31, '1:4', FALSE)
+,(31, '4:8', FALSE),  -- Que 31
+
+(32, '3:1', TRUE),
+(32, '5:3', FALSE),
+(32, '15:1', FALSE), -- Qq 32
+
+(33, '£12', TRUE),
+(33, '£9', FALSE),
+(33, '£18', FALSE), --33
+
+(34, '10', TRUE),
+(34, '8', FALSE),
+(34, '6', FALSE), --- Q 34
+
+(35, '£4', TRUE),
+(35, '£5', FALSE),
+(35, '£6', FALSE), -- 35
+
+(36, '1:3', TRUE),
+(36, '3:1', FALSE),
+(36, '2:1', FALSE), -- 36
+
+(37, '4 cups', TRUE),
+(37, '5 cups', FALSE),
+(37, '2 cups', FALSE), -- Q37
+
+(38, '12', TRUE),
+(38, '14', FALSE),
+(38, '10', FALSE), -- Q 38
+
+(39, '£24 and £36', TRUE),
+(39, '£30 and £30', FALSE),
+(39, '£20 and £40', FALSE), -- Q39
+
+(40, '£3', TRUE),
+(40, '£4', FALSE),
+(40, '£2', FALSE); -- Q 40  tested and working 17/08
+
+
+
+
+---10 questions (id 41-50) Math /Ratio and Proportion /level Medium answers (id 121-150) 
+
+INSERT INTO answers (question_id, answer_text, is_correct) VALUES
+
+(41, '6 days', TRUE),
+(41, '10 days', FALSE),
+(41, '12 days', FALSE), -- Q 41
+
+(42, '£450 and £750', TRUE),
+(42, '£400 and £800', FALSE),
+(42, '£500 and £700', FALSE),--  42
+(43, '81', TRUE),
+(43, '72', FALSE),
+(43, '90', FALSE),----43
+
+(44, '6', TRUE),
+(44, '8', FALSE),
+(44, '9', FALSE),--44
+
+(45, '£27', TRUE),
+(45, '£30', FALSE),
+(45, '£24', FALSE),--45
+
+(46, '50 liters', TRUE),
+(46, '40 liters', FALSE),
+(46, '60 liters', FALSE),--46
+
+(47, '35', TRUE),
+(47, '30', FALSE),
+(47, '28', FALSE),--47
+
+(48, '3:4', TRUE),
+(48, '4:5', FALSE),
+(48, '5:6', FALSE),--48
+
+(49, '£100', TRUE),
+(49, '£150', FALSE),
+(49, '£200', FALSE),--49
+
+(50, '2 km', TRUE),(
+  50, '4 km', FALSE),
+  (50, '5 km', FALSE);---50 tested and working
+
+
+
+---10 questions (id 51-60) Math /Ratio and Proportion /level Hard answers (id 151-180) 
+
+INSERT INTO answers (question_id, answer_text, is_correct) VALUES
+--  51
+(51, '£4000', TRUE),
+(51, '£3800', FALSE),
+(51, '£4200', FALSE),
+--  52
+(52, '30 liters', TRUE),
+(52, '25 liters', FALSE),
+(52, '35 liters', FALSE),
+-- 53
+(53, '36', TRUE),
+(53, '32', FALSE),
+(53, '40', FALSE),
+--  54
+(54, '£396', TRUE),
+(54, '£360', FALSE),
+(54, '£420', FALSE),
+--  55
+(55, '24 and 30 years', TRUE),
+(55, '20 and 25 years', FALSE),
+(55, '18 and 24 years', FALSE),
+--  56
+(56, '29:16', TRUE),
+(56, '31:19', FALSE),
+(56, '27:14', FALSE),
+-- 57
+(57, '864 cm²', TRUE),
+(57, '756 cm²', FALSE),
+(57, '912 cm²', FALSE),
+-- 58
+(58, '£1800 and £1400', TRUE),
+(58, '£1600 and £1200', FALSE),
+(58, '£2000 and £1500', FALSE),
+--  59
+(59, '28:45', TRUE),
+(59, '30:43', FALSE),
+(59, '32:47', FALSE),
+--  60
+(60, '5:9', TRUE),
+(60, '4:7', FALSE),
+(60, '6:11', FALSE);  -- tested and working
+
+
+
+
+---10 questions (id 61-70) Math /Percentage /level Easy answers (id 181-210) 
+INSERT INTO answers (question_id, answer_text, is_correct) VALUES
+
+(61, '50', TRUE),
+(61, '40', FALSE),
+(61, '60', FALSE),--61
+(62, '£72', TRUE),
+(62, '£75', FALSE),
+(62, '£70', FALSE),
+(63, '20%', TRUE),
+(63, '25%', FALSE),
+(63, '15%', FALSE),
+(64, '£138', TRUE),
+(64, '£140', FALSE),
+(64, '£135', FALSE),
+(65, '50', TRUE),
+(65, '40', FALSE),
+(65, '60', FALSE),
+(66, '50', TRUE),
+(66, '40', FALSE),
+(66, '60', FALSE),
+(67, '£150', TRUE),
+(67, '£160', FALSE),
+(67, '£155', FALSE),
+(68, '50%', TRUE),
+(68, '45%', FALSE),
+(68, '40%', FALSE),
+(69, '20%', TRUE),
+(69, '15%', FALSE),
+(69, '25%', FALSE),
+(70, '£120', TRUE),
+(70, '£130', FALSE),
+(70, '£110', FALSE); --70 tested and working
+
+
+
+---10 questions (id 71-80) Math /Percentage /level Medium answers (id 211-240) 
+
+INSERT INTO answers (question_id, answer_text, is_correct) VALUES
+--71
+(71, '20%', TRUE),
+(71, '15%', FALSE),
+(71, '25%', FALSE),
+--72
+(72, '£150', TRUE),
+(72, '£120', FALSE),
+(72, '£180', FALSE),
+--73
+(73, '80', TRUE),
+(73, '75', FALSE),
+(73, '85', FALSE),
+--74
+(74, '1,700', TRUE),
+(74, '1,800', FALSE),
+(74, '1,750', FALSE),
+--75
+(75, '30%', TRUE),
+(75, '25%', FALSE),
+(75, '35%', FALSE),
+--76
+(76, '150', TRUE),
+(76, '135', FALSE),
+(76, '165', FALSE),
+--77
+(77, '£200', TRUE),
+(77, '£190', FALSE),
+(77, '£210', FALSE),
+--78
+(78, '£340', TRUE),
+(78, '£350', FALSE),
+(78, '£330', FALSE),
+--79
+(79, '90%', TRUE),
+(79, '85%', FALSE),
+(79, '95%', FALSE),
+--80
+(80, '£405', TRUE),
+(80, '£410', FALSE),
+(80, '£400', FALSE);
+
+
+---10 questions (id 81-90) Math /Percentage /level Hard answers (id 241-270) 
+INSERT INTO answers (question_id, answer_text, is_correct) VALUES
+-- Question 81
+(81, '30%', TRUE),
+(81, '25%', FALSE),
+(81, '28%', FALSE),
+
+-- Question 82
+(82, '20%', TRUE),
+(82, '18%', FALSE),
+(82, '22%', FALSE),
+
+-- Question 83
+(83, '£300', TRUE),
+(83, '£320', FALSE),
+(83, '£280', FALSE),
+
+-- Question 84
+(84, '£1,000', TRUE),
+(84, '£950', FALSE),
+(84, '£1,050', FALSE),
+
+-- Question 85
+(85, '£700', TRUE),
+(85, '£680', FALSE),
+(85, '£720', FALSE),
+
+-- Question 86
+(86, '180', TRUE),
+(86, '175', FALSE),
+(86, '185', FALSE),
+
+-- Question 87
+(87, '0%', TRUE),
+(87, '5%', FALSE),
+(87, '-5%', FALSE),
+
+-- Question 88
+(88, '£56,925', TRUE),
+(88, '£55,000', FALSE),
+(88, '£54,750', FALSE),
+
+-- Question 89
+(89, '14.75%', TRUE),
+(89, '10%', FALSE),
+(89, '12.5%', FALSE),
+
+-- Question 90
+(90, '£17,107.20', TRUE),
+(90, '£18,000', FALSE),
+(90, '£16,800', FALSE); -- tested and working
+        
+---20 questions MOCK Exam /Medium answers  
+
+---10 questions (id 91-100) English /Vocabulary /level Easy answers (id 271-300)
+
+INSERT INTO answers (question_id, answer_text, is_correct) VALUES
+-- Question 91
+(91, 'Joyful', TRUE),
+(91, 'Sad', FALSE)
+,(91, 'Angry', FALSE),
+-- Q 92
+(92, 'Small', TRUE),
+(92, 'Tall', FALSE),
+(92, 'Wide', FALSE),
+-- Q 93
+(93, 'Quick', TRUE),
+(93, 'Slow', FALSE),
+(93, 'Lazy', FALSE),
+-- Q 94
+(94, 'Chilly', TRUE),
+(94, 'Hot', FALSE),
+(94, 'Bright', FALSE),
+-- Q 95
+(95, 'Late', TRUE),
+(95, 'Soon', FALSE),
+(95, 'Fast', FALSE),
+-- Q 96
+(96, 'Attractive', TRUE),
+(96, 'Ugly', FALSE),
+(96, 'Heavy', FALSE),
+-- Q 97
+(97, 'Rapid', TRUE),
+(97, 'Lazy', FALSE),
+(97, 'Dull', FALSE),
+-- Q 98
+(98, 'Difficult', TRUE),
+(98, 'Simple', FALSE),
+(98, 'Quick', FALSE),
+-- Q 99
+(99, 'Powerful', TRUE),
+(99, 'Weak', FALSE),
+(99, 'Tired', FALSE),
+-- Q 100
+(100, 'Clever', TRUE),
+(100, 'Slow', FALSE),
+(100, 'Sad', FALSE); --tested and working
+
+
+---10 questions ( id 101-110) English /Vocabulary /level Medium answers     (id 301-330)
+-- Question 101
+INSERT INTO answers (question_id, answer_text, is_correct) 
+VALUES
+(101, 'Sociable', TRUE),
+(101, 'Shy', FALSE),
+(101, 'Energetic', FALSE),
+
+-- Q 102
+(102, 'Careful and precise', TRUE),
+(102, 'Fast and lazy', FALSE),
+(102, 'Generous and kind', FALSE),
+
+-- Q 103
+(103, 'Difficult to find or catch', TRUE),
+(103, 'Easy to capture', FALSE),
+(103, 'Old and faded', FALSE),
+
+-- Q 104
+(104, 'Clarify', TRUE),
+(104, 'Complicate', FALSE),
+(104, 'Ignore', FALSE),
+-- Q 105
+(105, 'Clear and logical', TRUE),
+(105, 'Confusing', FALSE),
+(105, 'Random', FALSE),
+
+-- Q 106
+(106, 'Improve', TRUE),
+(106, 'Destroy', FALSE),
+(106, 'Make worse', FALSE),
+
+-- Question 107
+(107, 'Productive and creative', TRUE),
+(107, 'Lazy and unproductive', FALSE),
+(107, 'Slow and steady', FALSE),
+
+-- Q 108
+(108, 'Pungent', TRUE),
+(108, 'Sweet', FALSE),
+(108, 'Bitter', FALSE),
+
+-- Q 109
+(109, 'Short-lived', TRUE),
+(109, 'Everlasting', FALSE),
+(109, 'Slow', FALSE),
+-- Q 110
+(110, 'Uncertainty', TRUE),
+(110, 'Confidence', FALSE),
+(110, 'Excitement', FALSE); --tested and working
+
+
+---10 questions (id 111-120) English /Vocabulary /level Hard answers   (id 331-360)
+-- Question 111
+INSERT INTO answers (question_id, answer_text, is_correct) 
+VALUES
+(111, 'Beauty', TRUE),
+(111, 'Strength', FALSE),
+(111, 'Happiness', FALSE),
+
+(112, 'Stubborn and resistant to authority', TRUE),
+(112, 'Submissive and obedient', FALSE),
+(112, 'Confused and uncertain', FALSE),
+
+(113, 'A person who uses long words', TRUE),
+(113, 'A type of insect', FALSE),
+(113, 'A food-related term', FALSE),
+
+(114, 'Before the biblical flood', TRUE),
+(114, 'A modern concept', FALSE),
+(114, 'A type of animal', FALSE),
+
+(115, 'The realization that others have lives as vivid and complex as your own', TRUE),
+(115, 'A fear of the unknown', FALSE),
+(115, 'The process of dreaming', FALSE),
+
+(116, 'Strolling aimlessly', TRUE),
+(116, 'Running quickly', FALSE),
+(116, 'Dancing energetically', FALSE),
+
+(117, 'The joy of anticipating something', TRUE),
+(117, 'The sadness after an event', FALSE),
+(117, 'The fear of new experiences', FALSE),
+
+(118, 'Fear of long words', TRUE),
+(118, 'Fear of spiders', FALSE),
+(118, 'Fear of heights', FALSE),
+
+(119, 'The study of mythical animals', TRUE),
+(119, 'The study of ancient civilizations', FALSE),
+(119, 'The study of languages', FALSE),
+
+(120, 'A situation in which one is forced to make a difficult choice', TRUE),
+(120, 'A game with no winners', FALSE),
+(120, 'A type of strategic move in chess', FALSE);--- tested and working
+
+
+
+---10 questions (id 121-130) English /Grammar /level Easy answers  (id 361-390)
+-- Insert Answers
+INSERT INTO answers (question_id, answer_text, is_correct) VALUES
+(121, 'goes', TRUE),
+(121, 'going', FALSE),
+(121, 'gone', FALSE),
+
+(122, 'He don’t like apples.', FALSE),
+(122, 'He doesn’t like apples.', TRUE),
+(122, 'He don’t likes apples.', FALSE),
+
+(123, 'few', FALSE),
+(123, 'much', FALSE),
+(123, 'many', TRUE),
+
+(124, 'It’s John book.', FALSE),
+(124, 'It’s Johns book.', FALSE),
+(124, 'It’s John’s book.', TRUE),
+
+(125, 'She eat lunch.', FALSE),
+(125, 'She ate lunch.', TRUE),
+(125, 'She eaten lunch.', FALSE),
+
+(126, 'yours', TRUE),
+(126, 'you', FALSE),
+(126, 'your', FALSE),
+
+
+(127, 'She has an apple.', TRUE),
+(127, 'She apple has.', FALSE),
+(127, 'Apple has she an.', FALSE),
+
+(128, 'their', TRUE),
+(128, 'there', FALSE),
+(128, 'they’re', FALSE),
+
+(129, 'on', FALSE),
+(129, 'under', FALSE),
+(129, 'at', TRUE),
+
+(130, 'I like coffee and she likes tea.', TRUE),
+(130, 'I like coffee, but she likes tea.', TRUE),
+(130, 'I like coffee because she likes tea.', FALSE);-- tested and working
+
+---10 questions (id 131-140) English /Grammar /level Medium answers  (id 391-420)
+
+INSERT INTO answers (question_id, answer_text, is_correct) VALUES
+-- Q 131
+(131, 'Huge', TRUE),
+(131, 'Tiny', FALSE),
+(131, 'Weak', FALSE),
+-- Q 132
+(132, 'Malevolent', TRUE),
+(132, 'Kind', FALSE),
+(132, 'Gentle', FALSE),
+-- Q 133
+(133, 'Precise', TRUE),
+(133, 'Careless', FALSE),
+(133, 'Clumsy', FALSE),
+-- Q 134
+(134, 'Brief', TRUE),
+(134, 'Permanent', FALSE),
+(134, 'Slow', FALSE),
+-- Q 135
+(135, 'Chaotic', TRUE),
+(135, 'Peaceful', FALSE),
+(135, 'Bright', FALSE),
+-- Q 136
+(136, 'Examine closely', TRUE),
+(136, 'Ignore', FALSE),
+(136, 'Relax', FALSE),
+-- Q 137
+(137, 'Stubborn', TRUE),
+(137, 'Flexible', FALSE),
+(137, 'Gentle', FALSE),
+-- Q138
+(138, 'Lazy', TRUE),
+(138, 'Hardworking', FALSE),
+(138, 'Smart', FALSE),
+-- Q 139
+(139, 'Unclear', TRUE),
+(139, 'Obvious', FALSE),
+(139, 'Simple', FALSE),
+-- Q 140
+(140, 'Energetic', TRUE),
+(140, 'Weak', FALSE),
+(140, 'Slow', FALSE);
+
+
+
+---10 questions (id 141-150) English /Grammar /level Hard answers  (id 421-450)
+INSERT INTO answers (question_id, answer_text, is_correct) VALUES
+-- Q 141
+(141, 'Confuse', TRUE),
+(141, 'Clarify', FALSE),
+(141, 'Reduce', FALSE),
+
+-- Q 142
+(142, 'Mild', TRUE),
+(142, 'Harsh', FALSE),
+(142, 'Irritating', FALSE),
+
+-- Q 143
+(143, 'Inclination', TRUE),
+(143, 'Dislike', FALSE),
+(143, 'Avoidance', FALSE),
+
+-- Q 144
+(144, 'Defiant', TRUE),
+(144, 'Obedient', FALSE),
+(144, 'Passive', FALSE),
+
+-- Q 145
+(145, 'Stimulating', TRUE),
+(145, 'Sleep-inducing', FALSE),
+(145, 'Boring', FALSE),
+
+-- Q 146
+(146, 'Everywhere', TRUE),
+(146, 'Rare', FALSE),
+(146, 'Limited', FALSE),
+
+-- Q 147
+(147, 'Uncompromising', TRUE),
+(147, 'Flexible', FALSE),
+(147, 'Easygoing', FALSE),
+
+-- Q 148
+(148, 'Long-lasting', TRUE),
+(148, 'Temporary', FALSE),
+(148, 'Short-lived', FALSE),
+
+-- Q149
+(149, 'Harmful', TRUE),
+(149, 'Harmless', FALSE),
+(149, 'Helpful', FALSE),
+
+-- Q150
+(150, 'Secretive', TRUE),
+(150, 'Obvious', FALSE),
+(150, 'Loud', FALSE);
+
+   
+
+---10 questions (id 151-160)  Physics /Mechanics /level Easy answers  (id 451-480)
+INSERT INTO answers (question_id, answer_text, is_correct) VALUES
+(151, 'Time', FALSE), 
+(151, 'Speed', FALSE), 
+(151, 'Weight', TRUE),
+
+(152, 'Joule', FALSE), 
+(152, 'Watt', FALSE), 
+(152, 'Newton', TRUE),
+
+(153, '2 m/s²', TRUE), 
+(153, '5 m/s²', FALSE), 
+(153, '10 m/s²', FALSE),
+
+(154, 'For every action, there is an equal and opposite reaction', FALSE), 
+(154, 'An object in motion will stay in motion unless acted upon by a force.', TRUE), 
+(154, 'Force equals mass times acceleration.', FALSE),
+
+(155, 'The rate of change of displacement with direction', TRUE), 
+(155, 'The speed of an object', FALSE), 
+(155, 'The force exerted on an object', FALSE),
+
+(156, 'Zero', TRUE), 
+(156, 'Equal to its mass', FALSE), 
+(156, 'Equal to its weight', FALSE),
+
+(157, 'A car moving on a highway', FALSE), 
+(157, 'A book resting on a shelf', TRUE), 
+(157, 'A ball rolling down a hill', FALSE),
+
+(158, 'Work = Force × Time', FALSE), 
+(158, 'Work = Force × Displacement', TRUE), 
+(158, 'Work = Energy × Distance', FALSE),
+
+(159, 'The speed of an object', FALSE), 
+(159, 'The energy required to stop an object', FALSE), 
+(159, 'The product of mass and velocity', TRUE),
+
+(160, 'A rock thrown upward', FALSE), 
+(160, 'A car accelerating on a flat road', FALSE), 
+(160, 'A stone dropped from a height', TRUE);
+
+---10 questions (id 161-170) Physics /Mechanics /level Medium answers  (id 481-510)
+
+INSERT INTO answers (question_id, answer_text, is_correct) VALUES
+(161, '6 m/s²', FALSE),
+ (161, '5 m/s²', FALSE), 
+ (161, '4 m/s²', TRUE),
+
+(162, '2 m/s²', FALSE), 
+(162, '10 m/s²', FALSE),
+ (162, '5 m/s²', TRUE),
+
+(163, '5 m/s²', FALSE),
+ (163, '1 m/s²', FALSE), 
+ (163, '10 m/s²', TRUE),
+
+(164, '200 J', FALSE),
+ (164, '20 J', FALSE),
+  (164, '100 J', TRUE),
+
+(165, '10 m', FALSE), 
+(165, '40 m', FALSE),
+ (165, '20 m', TRUE),
+
+(166, '30 J', FALSE),
+ (166, '15 J', FALSE),
+ (166, '45 J', TRUE),
+
+(167, '50 J', FALSE), 
+(167, '400 J', FALSE),
+ (167, '200 J', TRUE),
+(168, '25 kg·m/s', FALSE),
+ (168, '100 kg·m/s', FALSE),
+  (168, '50 kg·m/s', TRUE),
+
+(169, '30 J', FALSE), 
+(169, '120 J', FALSE), 
+(169, '60 J', TRUE),
+
+(170, '100 N', FALSE), 
+(170, '25 N', FALSE), 
+(170, '50 N', TRUE); -- tested and works 
+
+---10 questions (id 171-180) Physics /Mechanics /level Hard answers  (id 511-540)
+
+INSERT INTO answers (question_id, answer_text, is_correct) VALUES
+(171, '5 m/s', FALSE), 
+(171, '2 m/s', FALSE), 
+(171, '4 m/s', TRUE),
+
+(172, '10 kg·m/s', FALSE),
+ (172, '-20 kg·m/s', FALSE),
+  (172, '20 kg·m/s', TRUE),
+
+(173, '4 J', FALSE),
+ (173, '2 J', FALSE), 
+ (173, '1 J', TRUE),
+
+(174, '3 m/s', FALSE),
+ (174, '4 m/s', FALSE),
+  (174, '2 m/s', TRUE),
+
+(175, '10 seconds', FALSE), 
+(175, '25 seconds', FALSE), 
+(175, '20 seconds', TRUE),
+
+(176, '36 N', FALSE), 
+(176, '16 N', FALSE), 
+(176, '18 N', TRUE),
+
+(177, '70 m/s', FALSE),
+ (177, '60 m/s', FALSE), 
+ (177, '30 m/s', TRUE),
+
+(178, '2.0 s', FALSE), 
+(178, '2.5 s', FALSE), 
+(178, '1.0 s', TRUE),
+
+(179, '2 rad/s', FALSE),
+ (179, '8 rad/s', FALSE), 
+ (179, '4 rad/s', TRUE),
+
+(180, '400 N', FALSE),
+ (180, '700 N', FALSE), 
+ (180, '600 N', TRUE); -- tested and working
+
+
+
+
+
+---10 questions (id 181-190) Physics  /Thermodynamics /level Easy answers  (id 541-570)
+INSERT INTO answers (question_id, answer_text, is_correct) 
+VALUES 
+(181, 'Geothermal heat', FALSE),
+(181, 'Fossil fuels', FALSE),
+(181, 'The Sun', TRUE),
+
+(182, 'Celsius (°C)', FALSE),
+(182, 'Fahrenheit (°F)', FALSE),
+(182, 'Kelvin (K)', TRUE),
+
+(183, 'Zeroth Law', FALSE),
+(183, 'Second Law', FALSE),
+(183, 'First Law', TRUE),
+
+(184, 'Isothermal expansion', FALSE),
+(184, 'Isobaric compression', FALSE),
+(184, 'Adiabatic expansion', TRUE),
+
+(185, 'Energy', FALSE),
+(185, 'Enthalpy', FALSE),
+(185, 'Entropy', TRUE),
+
+(186, 'Isothermal process', FALSE),
+(186, 'Adiabatic process', FALSE),
+(186, 'Isobaric process', TRUE),
+
+(187, 'Work done', FALSE),
+(187, 'Q_out', FALSE),
+(187, 'Q_in', TRUE),
+
+(188, 'The total energy of a system is always constant.', FALSE),
+(188, 'Heat always flows from colder bodies to hotter bodies.', FALSE),
+(188, 'In any energy transfer, some energy is lost as waste heat.', TRUE),
+
+(189, 'The temperature increases.', FALSE),
+(189, 'The temperature decreases.', FALSE),
+(189, 'The temperature remains constant.', TRUE),
+
+(190, 'The amount of heat required to melt a substance', FALSE),
+(190, 'The temperature at which a substance changes state', FALSE),
+(190, 'The amount of heat required to raise the temperature of a substance by 1°C', TRUE); -- tested and working
+
+
+---10 questions(id 191-200) Physics /Thermodynamics /level Medium answers ( id 571-600)
+INSERT INTO answers (question_id, answer_text, is_correct) 
+VALUES 
+(191, 'Internal energy', FALSE),
+(191, 'Pressure', FALSE),
+(191, 'Temperature', TRUE),
+
+(192, 'The temperature of the system increases.', FALSE),
+(192, 'The pressure remains constant.', FALSE),
+(192, 'The system does not exchange heat with its surroundings.', TRUE),
+
+(193, '75%', FALSE),
+(193, '100%', FALSE),
+(193, '50%', TRUE),
+
+(194, 'Equal to the work done by the gas', FALSE),
+(194, 'Zero', FALSE),
+(194, 'Equal to the heat absorbed by the gas', TRUE),
+
+(195, 'The temperature of the substance changes.', FALSE),
+(195, 'The pressure must remain constant.', FALSE),
+(195, 'The internal energy increases due to heat absorption.', TRUE),
+
+(196, 'Heat flows from hot to cold objects.', FALSE),
+(196, 'Energy is always conserved.', FALSE),
+(196, 'The entropy of an isolated system always increases.', TRUE),
+
+(197, '57.6%', FALSE),
+(197, '60%', FALSE),
+(197, '66.67%', TRUE),
+
+(198, 'The temperature of the gas increases.', FALSE),
+(198, 'The volume of the gas decreases.', FALSE),
+(198, 'The work done by the gas is equal to the heat absorbed by the gas.', TRUE),
+
+(199, 'The temperature of the cold reservoir', FALSE),
+(199, 'The temperature of the hot reservoir', FALSE),
+(199, 'The type of fuel used', TRUE),
+
+(200, 'It remains the same.', FALSE),
+(200, 'It halves.', FALSE),
+(200, 'It doubles.', TRUE); -- tested and working
+
+---10 questions (id 201-210) Physics /Thermodynamics /level Hard answers   (id 601-630)
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES 
+(201, '30%', FALSE),
+(201, '25%', FALSE),
+(201, '40%', TRUE),
+(202, '7000 J', FALSE),
+(202, '6000 J', FALSE),
+(202, '5000 J', TRUE),
+(203, '3500 J', FALSE),
+(203, '5000 J', FALSE),
+(203, '4200 J', TRUE),
+(204, '100 J', FALSE),
+(204, '150 J', FALSE),
+(204, '150 J', TRUE),
+(205, 'The system absorbs heat.', FALSE),
+(205, 'The internal energy of the system increases.', FALSE),
+(205, 'The system does work on its surroundings.', TRUE),
+(206, '600 K', FALSE),
+(206, '400 K', FALSE),
+(206, '500 K', TRUE),
+(207, 'ΔS=T/Q', FALSE),
+(207, 'ΔS=QxT', FALSE),
+(207, 'ΔS=Q/T', TRUE),
+(208, '600 J', FALSE),
+(208, '180 J', FALSE),
+(208, '400 J', TRUE),
+(209, 'It increases', FALSE),
+(209, 'It decreases', FALSE),
+(209, 'It remains the same', TRUE),
+(210, '226000', FALSE),
+(210, '2260', FALSE),
+(210, '22600 J', TRUE); -- tested and working
+
+
+---10 questions (id 211-220) Physics /Electromagnetism /level Easy answers   (id 631-660)
+INSERT INTO  answers (question_id, answer_text, is_correct)
+VALUES 
+(211, 'Ohm (Ω)', FALSE),
+ (211, 'Volt (V)', FALSE), 
+ (211, 'Ampere (A)', TRUE), 
+
+(212, 'Electric potential', FALSE), 
+(212, 'Electric charge', FALSE), 
+(212, 'Electric field', TRUE),  
+
+(213, 'Ampere (A)', FALSE), 
+(213, 'Coulomb (C)', FALSE), 
+(213, 'Ohm (Ω)', TRUE),  
+
+(214, '10 Ω', FALSE),
+ (214, '20 Ω', FALSE), 
+ (214, '5 Ω', TRUE),  
+
+(215, '1.62 N', FALSE),
+ (215, '3.24 N', FALSE), 
+ (215, '2.88 N', TRUE),  
+
+(216, 'It is parallel to the current.', FALSE), 
+(216, 'It is perpendicular to the wire.', FALSE), 
+(216, 'It forms concentric circles around the wire.', TRUE), 
+
+(217, 'Rubber', FALSE),
+ (217, 'Wood', FALSE), 
+ (217, 'Copper', TRUE),  
+
+(218, 'Volt (V)', FALSE), 
+(218, 'Ohm (Ω)', FALSE), 
+(218, 'Coulomb (C)', TRUE), 
+
+(219, 'Longitudinal wave', FALSE), 
+(219, 'Matter wave', FALSE), 
+(219, 'Transverse wave', TRUE), 
+
+(220, 'It decreases', FALSE),
+ (220, 'It stays the same', FALSE),
+  (220, 'It increases', TRUE);  --tested and working
+
+
+
+---10 questions (id 221-230) Physics /Electromagnetism /level Medium answers  (id 661-690)
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+(221, '48 W', FALSE), 
+(221, '12 W', FALSE),
+ (221, '24 W', TRUE),
+
+(222, '3.14 × 10⁻⁵ N/m', FALSE),
+ (222, '4.71 × 10⁻⁵ N/m', FALSE), 
+ (222, '1.57 × 10⁻⁵ N/m', TRUE),
+
+(223, '100 V', FALSE),
+ (223, '500 V', FALSE), 
+ (223, '1000 V', TRUE),
+
+(224, '1 A', FALSE),
+ (224, '2 A', FALSE), 
+ (224, '3 A', TRUE),
+
+(225, '0.25 J', FALSE), 
+(225, '0.05 J', FALSE), 
+(225, '0.05 J', TRUE),
+
+(226, '2.5 N', FALSE), 
+(226, '2 N', FALSE), 
+(226, '1.5 N', TRUE),
+
+(227, '1.5 Wb', FALSE), 
+(227, '0.5 Wb', FALSE), 
+(227, '1.0 Wb', TRUE),
+
+(228, '20 Hz', FALSE), 
+(228, '15 Hz', FALSE), 
+(228, '10 Hz', TRUE),
+
+(229, '4 V', FALSE),
+ (229, '3 V', FALSE),
+  (229, '5 V', TRUE),
+
+(230, '0.25 H', FALSE), 
+(230, '0.5 H', FALSE), 
+(230, '0.05 H', TRUE);
+--tested and working
+
+
+
+---10 questions (id 231-240) Physics /Electromagnetism /level Hard answers (id 691-720)
+
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES 
+(231, '2.2 V', FALSE), (231, '0.2 V', FALSE), (231, '2.0 V', TRUE),
+(232, '0.1 Wb', FALSE), (232, '0.4 Wb', FALSE), (232, '0.2 Wb', TRUE),
+(233, '180 V', FALSE), (233, '120 V', FALSE), (233, '60 V', TRUE),
+(234, '1.8 N', FALSE), (234, '2.4 N', FALSE), (234, '1.2 N', TRUE),
+(235, '0.5 m', FALSE), (235, '1.5 m', FALSE), (235, '1.0 m', TRUE),
+(236, '180 μC', FALSE), (236, '240 μC', FALSE), (236, '120 μC', TRUE),
+(237, '60 V', FALSE), (237, '20 V', FALSE), (237, '40 V', TRUE),
+(238, '0.06 cm', FALSE), (238, '6 cm', FALSE), (238, '0.06 m', TRUE),
+(239, '60°', FALSE), (239, '30°', FALSE), (239, '90°', TRUE),
+(240, '5.4 × 10⁻¹³ N', FALSE), (240, '3.0 × 10⁻¹³ N', FALSE), (240, '1.8 × 10⁻¹³ N', TRUE);
+--tested and working
+
+
+---10 questions (id 241-250) Operating systems /Memory management /level Easy answers  (id 721-750)
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (241, 'To allocate and manage the system’s RAM effectively', TRUE),
+  (241, 'To manage the user interface and graphical displays', FALSE),
+  (241, 'To allocate CPU time for processes', FALSE);
+
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (242, 'Swapping', FALSE),
+  (242, 'Segmentation', FALSE),
+  (242, 'Paging', TRUE);
+
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (243, 'Virtual memory stores data permanently in a file system.', FALSE),
+  (243, 'Virtual memory allows a computer to compensate for physical memory shortages by temporarily transferring data to disk storage.', TRUE),
+  (243, 'Virtual memory is the total RAM available on the system.', FALSE);
+
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (244, 'When memory is allocated but not used, causing fragmentation', TRUE),
+  (244, 'When memory is fragmented and has holes between allocations', FALSE),
+  (244, 'When memory is continuously cleared and reset', FALSE);
+
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (245, 'Central Processing Unit (CPU)', FALSE),
+  (245, 'Memory management unit (MMU)', TRUE),
+  (245, 'Disk Controller', FALSE);
+
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (246, 'Physical memory refers to actual hardware, while virtual memory is a technique to simulate additional memory.', TRUE),
+  (246, 'Physical memory refers to disk storage, while virtual memory refers to RAM.', FALSE),
+  (246, 'Physical memory is the sum of virtual memory and cache memory.', FALSE);
+
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (247, 'It divides memory into fixed-size pages and uses page tables to map them to physical memory.', TRUE),
+  (247, 'It uses variable-sized memory blocks to allocate processes.', FALSE),
+  (247, 'It allocates a fixed amount of memory for each process regardless of size.', FALSE);
+
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (248, 'When memory is continuously swapped between disk and RAM', FALSE),
+  (248, 'When the memory allocation is based on the priority of processes', FALSE),
+  (248, 'When memory that is no longer needed is not properly released, causing a program to consume more memory over time.', TRUE);
+
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (249, 'It stores data in sequential memory blocks based on their addresses.', FALSE),
+  (249, 'It stores mappings of virtual addresses to physical addresses in memory.', TRUE),
+  (249, 'It maps virtual memory to secondary storage locations for faster access.', FALSE);
+
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (250, 'Through allocation strategies like First Fit, Best Fit, and Worst Fit.', TRUE),
+  (250, 'By using a fixed memory allocation size for all processes.', FALSE),
+  (250, 'Through dynamic swapping of memory based on process priority.', FALSE);
+
+
+
+---10 questions (id 251-260) Operating systems /Memory management /level Medium answers (id 751-780)
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+ (251, 'It is responsible for allocating CPU time to each process.', FALSE),
+  (251, 'It maps virtual addresses to physical addresses for memory access.', TRUE),
+  (251, 'It stores the virtual memory configuration for the user.', FALSE);
+
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (252, 'Contiguous allocation divides memory into small chunks, while non-contiguous allocation uses one continuous block.', FALSE),
+  (252, 'Contiguous allocation places processes in adjacent memory locations, while non-contiguous allocation allows processes to be scattered across memory.', TRUE),
+  (252, 'Contiguous allocation involves using multiple hard drives, while non-contiguous uses a single drive.', FALSE);
+
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (253, 'By physically encrypting all memory regions to prevent unauthorized access.', FALSE),
+  (253, 'By using protection mechanisms like access control lists and virtual memory protections.', TRUE),
+  (253, 'By creating memory zones that are inaccessible to processes that are not authorized.', FALSE);
+
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (254, 'It stores all data in a contiguous block, eliminating fragmentation.', FALSE),
+  (254, 'It dynamically allocates memory blocks of different sizes to processes.', FALSE),
+  (254, 'It divides memory into fixed-size pages and maintains a mapping table to translate virtual addresses to physical addresses.', TRUE);
+
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (255, 'A segmentation fault occurs when a process tries to access restricted or invalid memory.', TRUE),
+  (255, 'A segmentation fault occurs when the operating system cannot allocate enough memory for a process.', FALSE),
+  (255, 'A segmentation fault is caused by processes exceeding their CPU time allocation.', FALSE);
+
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (256, 'A hard page fault occurs when the page is not in memory and needs to be retrieved from disk, while a soft page fault occurs when the page is in memory but not mapped.', TRUE),
+  (256, 'A hard page fault occurs when there is insufficient RAM, and a soft page fault occurs when the page is temporarily swapped to the disk.', FALSE),
+  (256, 'A hard page fault occurs when a page is already in memory but is accessed incorrectly, and a soft page fault happens when the page is still in the cache.', FALSE);
+
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (257, 'Thrashing happens when processes are unable to access CPU time and are left idle.', FALSE),
+  (257, 'Thrashing happens when a system runs out of storage space for files.', FALSE),
+  (257, 'Thrashing happens when the system spends more time swapping data in and out of memory than executing processes.', TRUE);
+
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (258, 'Demand paging loads pages only when they are needed, reducing memory usage.', TRUE),
+  (258, 'Demand paging loads all pages into memory when a program starts.', FALSE),
+  (258, 'Demand paging eliminates memory fragmentation by using contiguous memory allocation.', FALSE);
+
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (259, 'It involves permanently removing old data from memory to increase processing speed.', FALSE),
+  (259, 'It involves transferring processes from physical memory to disk storage to free up space for other processes.', TRUE),
+  (259, 'It only occurs when physical memory is completely full and no processes are currently running.', FALSE);
+
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (260, 'Operating systems detect memory leaks by checking process execution time.', FALSE),
+  (260, 'Operating systems detect memory leaks through monitoring tools and by analyzing memory usage patterns over time.', TRUE),
+  (260, 'Operating systems detect memory leaks by periodically clearing unused memory spaces.', FALSE);
+
+
+---10 questions (id 261-270) Operating systems /Memory management /level Hard answers (id 781-810)
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (261, 'Memory-mapped I/O is used to manage virtual memory in operating systems.', FALSE),
+  (261, 'Memory-mapped I/O is a technique used to prevent memory fragmentation.', FALSE),
+  (261, 'Memory-mapped I/O maps device registers and buffers directly into the memory space, allowing the CPU to communicate with devices more efficiently.', TRUE);
+
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (262, 'Memory management in multi-core systems is challenging due to cache coherence and the need to synchronize memory access between cores.', TRUE),
+  (262, 'Memory management in multi-core systems is easier due to the uniformity of memory.', FALSE),
+  (262, 'Multi-core systems use single-core memory management strategies, which simplifies their operation.', FALSE);
+
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (263, 'Large memory addresses are not supported by the operating system; they are handled by the hardware only.', FALSE),
+  (263, '64-bit processors do not need to handle large memory addresses as they can access a small amount of RAM only.', FALSE),
+  (263, 'The operating system uses techniques like segmentation and paging to handle large memory addresses, especially with 64-bit processors.', TRUE);
+
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (264, 'A 64-bit memory addressing scheme allows the system to address more than 4GB of memory, improving performance and enabling the handling of large datasets.', TRUE),
+  (264, 'A 64-bit memory addressing scheme decreases the system’s memory access speed.', FALSE),
+  (264, 'A 64-bit memory addressing scheme only increases the number of processes that can run simultaneously.', FALSE);
+
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (265, 'Virtual memory improves memory performance by directly accessing storage devices.', FALSE),
+  (265, 'Virtual memory improves memory access performance by providing the illusion of more memory than is physically available through swapping and paging techniques.', TRUE),
+  (265, 'Virtual memory reduces the need for disk storage by eliminating the need for swapping.', FALSE);
+
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (266, 'Through hardware protection mechanisms like memory segmentation and access control policies enforced by the operating system.', TRUE),
+  (266, 'By using encryption techniques to protect memory contents.', FALSE),
+  (266, 'By isolating memory used by processes from physical memory.', FALSE);
+
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (267, 'Insufficient memory causes the operating system to reduce the number of active processes.', FALSE),
+  (267, 'Insufficient memory results in faster CPU execution and better system performance.', FALSE),
+  (267, 'Insufficient memory leads to excessive swapping, system slowdown, and in extreme cases, system crashes or freezing.', TRUE);
+
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (268, 'Real-time operating systems require deterministic memory allocation to ensure critical processes are always provided the necessary memory resources.', TRUE),
+  (268, 'Real-time operating systems do not require any specific memory allocation schemes.', FALSE),
+  (268, 'Real-time operating systems use virtual memory to guarantee timely memory access for processes.', FALSE);
+
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (269, 'Memory allocation strategies are based on the size of the CPU cache rather than the memory.', FALSE),
+  (269, 'Some strategies include First Fit, Best Fit, and Worst Fit, which determine how memory blocks are allocated to processes.', TRUE),
+  (269, 'Memory allocation strategies rely solely on the process priority and execution time.', FALSE);
+
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (270, 'Memory compaction breaks memory into smaller, fixed-size blocks for faster access.', FALSE),
+  (270, 'Memory compaction is a method used to reduce memory usage by deleting unused memory sections.', FALSE),
+  (270, 'Memory compaction involves rearranging fragmented memory to create larger contiguous blocks of free memory.', TRUE);
+
+---10 questions (271-280) Operating systems /Process management /level Easy answers (id 811-840)
+---10 questions (281-290) Operating systems /Process management /level Medium answers (id 841-870)
+---10 questions (291-300) Operating systems /Process management /level Hard answers (id 871-900)
+
+---10 questions(301-310) Operating systems /File management /level Easy answers (id 901-930)
+---10 questions (311-320) Operating systems /File management /level Medium answers (id 931-960)
+---10 questions (321-330) Operating systems /File management /level Hard answers (id 961-990)
+    
 
 
 

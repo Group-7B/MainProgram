@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:learning_app/screens/profile_screen.dart';
+import 'package:learning_app/screens/reward_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -10,6 +11,23 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
+
+  Future<int> fetchMarks() async {
+    await Future.delayed(const Duration(seconds: 2));
+    return 0; // Example marks
+  }
+
+  String getReward(int marks) {
+    if (marks >= 90) {
+      return 'Gold';
+    } else if (marks >= 75) {
+      return 'Silver';
+    } else if (marks >= 50) {
+      return 'Bronze';
+    } else {
+      return 'No Reward';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +103,8 @@ class _HomeScreenState extends State<HomeScreen> {
           _buildContinueLearning(),
           const SizedBox(height: 24),
           _buildRecentActivities(),
+          const SizedBox(height: 24),
+          _buildRewardSection(),
         ],
       ),
     );
@@ -123,6 +143,76 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildRewardSection() {
+    return FutureBuilder<int>(
+      future: fetchMarks(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return const Center(child: Text('Error fetching marks'));
+        } else {
+          final marks = snapshot.data!;
+          final reward = getReward(marks);
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Your Reward',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              ),
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.amber.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Marks: $marks',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Reward: $reward',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: reward == 'Gold'
+                            ? Colors.amber
+                            : reward == 'Silver'
+                                ? Colors.grey
+                                : reward == 'Bronze'
+                                    ? Colors.brown
+                                    : Colors.red,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => RewardScreen(marks: marks),
+                          ),
+                        );
+                      },
+                      child: const Text('View Reward Details'),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        }
+      },
     );
   }
 }

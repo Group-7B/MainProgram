@@ -675,14 +675,99 @@ VALUES
 --tested and working
 
 --topic_id=10
---10 questions Operating systems /Process management /level Easy    (id 271-280)
+--10 questions Operating systems /Process management /level Easy   (id 271-280)
+INSERT INTO questions (topic_id, question_text, points, question_level) 
+VALUES
+  (10, 'What is a process in an operating system?', 1, 'Easy'),
+  (10, 'Which system call is used to create a new process in Unix?', 1, 'Easy'),
+  (10, 'What is the Process Control Block (PCB)?', 1, 'Easy'),
+  (10, 'Which state indicates a process is waiting for an event?', 1, 'Easy'),
+  (10, 'What is the parent process?', 1, 'Easy'),
+  (10, 'Which of the following is not a process state?', 1, 'Easy'),
+  (10, 'What does the "init" process do in Unix systems?', 1, 'Easy'),
+  (10, 'What is the purpose of the "exec" system call?', 1, 'Easy'),
+  (10, 'Which of the following is a valid process state?', 1, 'Easy'),
+  (10, 'What is the purpose of process scheduling?', 1, 'Easy'); ---tested and working
+
+
+
 --10 questions Operating systems /Process management /level Medium  (id 281-290)
+INSERT INTO questions (topic_id, question_text, points, question_level) 
+VALUES
+  (10, 'What is context switching in process management?', 2, 'Medium'),
+  (10, 'Which scheduling algorithm is preemptive?', 2, 'Medium'),
+  (10, 'What is the purpose of a semaphore?', 2, 'Medium'),
+  (10, 'What is a zombie process?', 2, 'Medium'),
+  (10, 'Which of the following is a non-preemptive scheduling algorithm?', 2, 'Medium'),
+  (10, 'What is inter-process communication (IPC)?', 2, 'Medium'),
+  (10, 'What is the main disadvantage of the First-Come, First-Served scheduling algorithm?', 2, 'Medium'),
+  (10, 'What is the purpose of the "wait()" system call?', 2, 'Medium'),
+  (10, 'Which of the following is true about multithreading?', 2, 'Medium'),
+  (10, 'What is the difference between user-level and kernel-level threads?', 2, 'Medium');---tested and working
+
+
 --10 questions Operating systems /Process management /level Hard  (id 291-300)
+INSERT INTO questions (topic_id, question_text, points, question_level) 
+VALUES
+  (10, 'What is the purpose of the "nice" command in Unix?', 3, 'Hard'),
+  (10, 'What is a race condition in process management?', 3, 'Hard'),
+  (10, 'What is the main goal of the Banker`s Algorithm?', 3, 'Hard'),
+  (10, 'What is the difference between a mutex and a semaphore?', 3, 'Hard'),
+  (10, 'What is the purpose of the "kill" command in Unix?', 3, 'Hard'),
+  (10, 'What is the difference between a thread and a process?', 3, 'Hard'),
+  (10, 'What is the purpose of the "ps" command in Unix?', 3, 'Hard'),
+  (10, 'What is the difference between cooperative and preemptive multitasking?', 3, 'Hard'),
+  (10, 'What is the purpose of the "top" command in Unix?', 3, 'Hard'),
+  (10, 'What is the difference between a hard and soft real-time system?', 3, 'Hard'); ---tested and working 
+
+
 
 --topic_id=11
 --10 questions Operating systems /File management /level Easy     (id 301-310)
+
+INSERT INTO questions (topic_id, question_text, points, question_level) 
+VALUES
+  (11, 'What is a file in an operating system?', 1, 'Easy'),
+  (11, 'Which of the following is a file attribute?', 1, 'Easy'),
+  (11, 'What is the purpose of a directory?', 1, 'Easy'),
+  (11, 'Which of the following is a common file system?', 1, 'Easy'),
+  (11, 'What does the file extension ".txt" usually represent?', 1, 'Easy'),
+  (11, 'What is the function of the open() system call?', 1, 'Easy'),
+  (11, 'Which operation is used to permanently remove a file?', 1, 'Easy'),
+  (11, 'What is the difference between absolute and relative file paths?', 1, 'Easy'),
+  (11, 'What is a file descriptor?', 1, 'Easy'),
+  (11, 'Which component manages access permissions for files?', 1, 'Easy'); --tested and working
+
+
 --10 questions Operating systems /File management /level Medium (id 311-320)
+INSERT INTO questions (topic_id, question_text, points, question_level) 
+VALUES
+  (11, 'What is the function of an inode in a file system?', 2, 'Medium'),
+  (11, 'Which file allocation method links blocks together using pointers?', 2, 'Medium'),
+  (11, 'What is the purpose of a file access control list (ACL)?', 2, 'Medium'),
+  (11, 'How does the FAT file system maintain file locations?', 2, 'Medium'),
+  (11, 'Which file operation allows reading a specific position in a file?', 2, 'Medium'),
+  (11, 'What is the difference between hard links and symbolic links?', 2, 'Medium'),
+  (11, 'Which command in UNIX is used to change file permissions?', 2, 'Medium'),
+  (11, 'How does journaling help in file systems?', 2, 'Medium'),
+  (11, 'What is file fragmentation?', 2, 'Medium'),
+  (11, 'Which system call is used to create a new file in UNIX?', 2, 'Medium'); --tested and working
+
+
 --10 questions Operating systems /File management /level Hard (id 321-330)
+INSERT INTO questions (topic_id, question_text, points, question_level) 
+VALUES
+  (11, 'What is the primary advantage of indexed file allocation?', 3, 'Hard'),
+  (11, 'How does an operating system handle file system mounting?', 3, 'Hard'),
+  (11, 'What is the role of the VFS (Virtual File System)?', 3, 'Hard'),
+  (11, 'Describe the process of lazy writing in file systems.', 3, 'Hard'),
+  (11, 'What causes file system corruption?', 3, 'Hard'),
+  (11, 'What is copy-on-write in file systems?', 3, 'Hard'),
+  (11, 'Explain the concept of multi-level indexing in file allocation.', 3, 'Hard'),
+  (11, 'How does the OS detect and recover from file system inconsistencies?', 3, 'Hard'),
+  (11, 'What is the difference between synchronous and asynchronous file writes?', 3, 'Hard'),
+  (11, 'Why are log-structured file systems used in SSDs?', 3, 'Hard'); --tested and working
+
 
 
  ---CREATE table for quiz_questions
@@ -1003,7 +1088,7 @@ VALUES
       (27, 267),  (27, 268),  
       (27, 269),  (27, 270);-- tested and working 17/03
 
-    /*  --Process management Quiz 1/ 271-280 not yet created
+      --Process management Quiz 1/ 271-280 tested
     INSERT INTO quiz_questions(
         quiz_id, question_id)
     VALUES
@@ -1013,7 +1098,7 @@ VALUES
       (28, 277),  (28, 278),  
       (28, 279),  (28, 280);
 
-      --Process management Quiz 2 / 281-290 not yet created
+      --Process management Quiz 2 / 281-290 tested
     INSERT INTO quiz_questions(
         quiz_id, question_id)
     VALUES
@@ -1023,7 +1108,7 @@ VALUES
       (29, 287),  (29, 288),  
       (29, 289),  (29, 290);
 
- --Process management Quiz 3 / 291-300 not yet created
+ --Process management Quiz 3 / 291-300 tested
     INSERT INTO quiz_questions(
         quiz_id, question_id)
     VALUES
@@ -1035,7 +1120,7 @@ VALUES
 
 
 
--- File management Quiz 1 / 301-310 not yet created
+-- File management Quiz 1 / 301-310 tested
     INSERT INTO quiz_questions(
         quiz_id, question_id)
     VALUES
@@ -1045,7 +1130,7 @@ VALUES
       (31, 307),  (31, 308),  
       (31, 309),  (31, 310);
 
--- File management Quiz 2 / 311-320 not yet created
+-- File management Quiz 2 / 311-320 tested
     INSERT INTO quiz_questions(
         quiz_id, question_id)
     VALUES
@@ -1055,7 +1140,7 @@ VALUES
       (32, 317),  (32, 318),  
       (32, 319),  (32, 320);
 
---File management Quiz 3 / 321-330 not yet created
+--File management Quiz 3 / 321-330 tested
     INSERT INTO quiz_questions(
         quiz_id, question_id)
     VALUES
@@ -1080,7 +1165,7 @@ INSERT INTO quiz_questions(
 (34, 50),  (34, 61),  
 (34, 66),  (34, 70),  
 (34, 75), (34, 82),  
-(34, 89);  
+(34, 89);  -- tested and working 
 
       
 
@@ -1096,7 +1181,7 @@ VALUES
 (35, 132),  (35, 137),  
 (35, 141),  (35, 144),  
 (35, 147),  (35, 118),  
-(35, 110);  
+(35, 110);      -- tested and working
 
 --- physics exam quiz_id 36 contain mixed questions from all topics
 ---topic_6-mechanics / question_id 151-180, topic_7-thermodynamics / question_id 181-210, topic_8-electromagnetism / question_id 211-240,
@@ -1110,7 +1195,7 @@ VALUES
 (36, 198),(36, 209),
 (36, 215),(36, 221),
 (36, 228),(36, 234),
-(36, 239);
+(36, 239);  -- tested and working
 
 --- operating systems exam contain mixed questions from all topics
 ---topic_9-memory management / question_id 241-270, topic_10-process management / question_id 271-300, topic_11-file management / question_id 301-330
@@ -1125,10 +1210,7 @@ VALUES
 (37, 305),(37, 312),
 (37, 318),(37, 324),
 (37, 330);
-      
-      
-      
-      */
+-- tested and working
 
 ---CREATE table for answers tested
 CREATE TABLE
@@ -2349,12 +2431,276 @@ VALUES
   (270, 'Memory compaction involves rearranging fragmented memory to create larger contiguous blocks of free memory.', TRUE);
 
 ---10 questions (271-280) Operating systems /Process management /level Easy answers (id 811-840)
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (271, 'A program in execution', TRUE),
+  (271, 'A type of memory', FALSE),
+  (271, 'A hardware component', FALSE),
+
+  (272, 'fork()', TRUE),
+  (272, 'create()', FALSE),
+  (272, 'start()', FALSE),
+
+  (273, 'A data structure containing process information', TRUE),
+  (273, 'A type of memory allocation', FALSE),
+  (273, 'A scheduling algorithm', FALSE),
+
+  (274, 'Waiting', TRUE),
+  (274, 'Running', FALSE),
+  (274, 'Terminated', FALSE),
+
+  (275, 'The process that creates another process', TRUE),
+  (275, 'A process that has no child processes', FALSE),
+  (275, 'A process that is terminated', FALSE),
+
+  (276, 'Sleeping', FALSE),
+  (276, 'Running', FALSE),
+  (276, 'Executing', TRUE),
+
+  (277, 'It is the first process started by the kernel', TRUE),
+  (277, 'It handles user authentication', FALSE),
+  (277, 'It manages network connections', FALSE),
+
+  (278, 'Replaces the current process image with a new one', TRUE),
+  (278, 'Terminates the current process', FALSE),
+  (278, 'Creates a new thread', FALSE),
+
+  (279, 'Blocked', TRUE),
+  (279, 'Sleeping', FALSE),
+  (279, 'Idle', FALSE),
+
+  (280, 'To determine which process runs next', TRUE),
+  (280, 'To allocate memory to processes', FALSE),
+  (280, 'To manage file systems', FALSE); -- tested and working
+
+
+
+
 ---10 questions (281-290) Operating systems /Process management /level Medium answers (id 841-870)
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (281, 'Switching the CPU from one process to another', TRUE),
+  (281, 'Switching from user mode to kernel mode', FALSE),
+  (281, 'Changing memory allocation', FALSE),
+
+  (282, 'Round Robin', TRUE),
+  (282, 'First-Come, First-Served', FALSE),
+  (282, 'Shortest Job Next', FALSE),
+
+  (283, 'To control access to shared resources', TRUE),
+  (283, 'To schedule processes', FALSE),
+  (283, 'To manage memory allocation', FALSE),
+
+  (284, 'A process that has completed execution but still has an entry in the process table', TRUE),
+  (284, 'A process that is waiting for I/O', FALSE),
+  (284, 'A process that is in a deadlock', FALSE),
+
+  (285, 'First-Come, First-Served', TRUE),
+  (285, 'Round Robin', FALSE),
+  (285, 'Shortest Remaining Time First', FALSE),
+
+  (286, 'Mechanism for processes to communicate and synchronize', TRUE),
+  (286, 'Method for memory allocation', FALSE),
+  (286, 'Technique for CPU scheduling', FALSE),
+
+  (287, 'It can cause the convoy effect', TRUE),
+  (287, 'It is complex to implement', FALSE),
+  (287, 'It requires special hardware', FALSE),
+
+  (288, 'To make the parent process wait until the child process finishes', TRUE),
+  (288, 'To terminate the parent process', FALSE),
+  (288, 'To create a new process', FALSE),
+
+  (289, 'It allows multiple threads within a process to run concurrently', TRUE),
+  (289, 'It prevents concurrent execution', FALSE),
+  (289, 'It is only used in single-core systems', FALSE),
+
+  (290, 'User-level threads are managed by user-level libraries, while kernel-level threads are managed by the OS kernel', TRUE),
+  (290, 'User-level threads are faster than kernel-level threads', FALSE),
+  (290, 'Kernel-level threads cannot run on multiple processors', FALSE); -- tested and working
+
+
+
 ---10 questions (291-300) Operating systems /Process management /level Hard answers (id 871-900)
 
+INSERT INTO answers (question_id, answer_text, is_correct)
+VALUES
+  (291, 'To set the priority of a process', TRUE),
+  (291, 'To terminate a process', FALSE),
+  (291, 'To create a new process', FALSE),
+
+  (292, 'A situation where multiple processes access shared data concurrently, leading to inconsistent results', TRUE),
+  (292, 'A condition where a process is stuck in an infinite loop', FALSE),
+  (292, 'A scenario where a process waits indefinitely for a resource', FALSE),
+
+  (293, 'To avoid deadlock by ensuring safe resource allocation', TRUE),
+  (293, 'To schedule processes in a round-robin manner', FALSE),
+  (293, 'To manage memory allocation', FALSE),
+
+  (294, 'A mutex is a locking mechanism for mutual exclusion, while a semaphore is a signaling mechanism', TRUE),
+  (294, 'A mutex can be used by multiple processes simultaneously', FALSE),
+  (294, 'A semaphore is only used for memory management', FALSE),
+
+  (295, 'To send signals to processes, typically to terminate them', TRUE),
+  (295, 'To create new processes', FALSE),
+  (295, 'To change the priority of a process', FALSE),
+
+  (296, 'A thread is a lightweight process that shares resources with other threads in the same process', TRUE),
+  (296, 'A process is a part of a thread', FALSE),
+  (296, 'Threads cannot run concurrently', FALSE),
+
+  (297, 'To display information about active processes', TRUE),
+  (297, 'To change the priority of a process', FALSE),
+  (297, 'To terminate a process', FALSE),
+
+  (298, 'In cooperative multitasking, processes voluntarily yield control; in preemptive multitasking, the OS forcibly takes control', TRUE),
+  (298, 'Cooperative multitasking is used in modern operating systems', FALSE),
+  (298, 'Preemptive multitasking does not allow multiple processes to run concurrently', FALSE),
+
+  (299, 'To display real-time information about system processes and resource usage', TRUE),
+  (299, 'To terminate processes', FALSE),
+  (299, 'To change file permissions', FALSE),
+
+  (300, 'Hard real-time systems have strict timing constraints; soft real-time systems have more relaxed constraints', TRUE),
+  (300, 'Soft real-time systems are used in critical applications', FALSE),
+  (300, 'Hard real-time systems can tolerate delays', FALSE);
+
+
+
+
 ---10 questions(301-310) Operating systems /File management /level Easy answers (id 901-930)
+INSERT INTO answers (question_id, answer_text, is_correct) 
+VALUES
+  (301, 'A named collection of data stored on disk', TRUE),
+  (301, 'A memory register used for I/O', FALSE),
+  (301, 'A function call in C', FALSE),
+
+  (302, 'File size', TRUE),
+  (302, 'CPU speed', FALSE),
+  (302, 'RAM type', FALSE),
+
+  (303, 'To organize files for easy access and management', TRUE),
+  (303, 'To execute programs in the background', FALSE),
+  (303, 'To monitor CPU usage', FALSE),
+
+  (304, 'NTFS', TRUE),
+  (304, 'HTML', FALSE),
+  (304, 'HTTP', FALSE),
+
+  (305, 'A plain text file', TRUE),
+  (305, 'An image file', FALSE),
+  (305, 'A system executable', FALSE),
+
+  (306, 'To open a file and return its file descriptor', TRUE),
+  (306, 'To close a file', FALSE),
+  (306, 'To move a file to another directory', FALSE),
+
+  (307, 'Delete', TRUE),
+  (307, 'Copy', FALSE),
+  (307, 'Open', FALSE),
+
+  (308, 'Absolute paths start from root, relative paths start from current directory', TRUE),
+  (308, 'Relative paths are only used in Windows', FALSE),
+  (308, 'There is no difference', FALSE),
+
+  (309, 'An integer that uniquely identifies an open file in a process', TRUE),
+  (309, 'The size of a file', FALSE),
+  (309, 'The type of a file', FALSE),
+
+  (310, 'The operating system', TRUE),
+  (310, 'The monitor', FALSE),
+  (310, 'The application software', FALSE); -- tested and working
+
 ---10 questions (311-320) Operating systems /File management /level Medium answers (id 931-960)
+
+INSERT INTO answers (question_id, answer_text, is_correct) 
+VALUES
+  (311, 'It stores metadata about a file', TRUE),
+  (311, 'It compresses file contents', FALSE),
+  (311, 'It executes user programs', FALSE),
+
+  (312, 'Linked allocation', TRUE),
+  (312, 'Contiguous allocation', FALSE),
+  (312, 'Indexed allocation', FALSE),
+
+  (313, 'To define who can access a file and with what permissions', TRUE),
+  (313, 'To store file contents', FALSE),
+  (313, 'To encrypt files', FALSE),
+
+  (314, 'Using a File Allocation Table', TRUE),
+  (314, 'Using an inode table', FALSE),
+  (314, 'By writing to RAM', FALSE),
+
+  (315, 'Seek operation', TRUE),
+  (315, 'Open operation', FALSE),
+  (315, 'Write operation', FALSE),
+
+  (316, 'Hard links point directly to file data; symbolic links point to file name', TRUE),
+  (316, 'Symbolic links are larger than hard links', FALSE),
+  (316, 'Hard links are temporary', FALSE),
+
+  (317, 'chmod', TRUE),
+  (317, 'ls', FALSE),
+  (317, 'cat', FALSE),
+
+  (318, 'By recording file changes before applying them', TRUE),
+  (318, 'By disabling user access', FALSE),
+  (318, 'By creating backup copies', FALSE),
+
+  (319, 'When file blocks are scattered across the disk', TRUE),
+  (319, 'When multiple users edit a file', FALSE),
+  (319, 'When a file is copied twice', FALSE),
+
+  (320, 'creat()', TRUE),
+  (320, 'open()', FALSE),
+  (320, 'write()', FALSE); -- tested and working
+
+
 ---10 questions (321-330) Operating systems /File management /level Hard answers (id 961-990)
+
+INSERT INTO answers (question_id, answer_text, is_correct) 
+VALUES
+  (321, 'Fast random access with minimal fragmentation', TRUE),
+  (321, 'Low memory overhead', FALSE),
+  (321, 'Unlimited file size', FALSE),
+
+  (322, 'It attaches a file system to a directory structure', TRUE),
+  (322, 'It copies all files to memory', FALSE),
+  (322, 'It renames files on disk', FALSE),
+
+  (323, 'It provides a uniform interface to different file systems', TRUE),
+  (323, 'It compresses files', FALSE),
+  (323, 'It formats disks', FALSE),
+
+  (324, 'Delays writing dirty blocks to disk to improve efficiency', TRUE),
+  (324, 'Writes data in reverse order', FALSE),
+  (324, 'Removes unused files', FALSE),
+
+  (325, 'Improper shutdowns or hardware failures', TRUE),
+  (325, 'Too many files in a folder', FALSE),
+  (325, 'Slow CPU speed', FALSE),
+
+  (326, 'It delays actual data copy until modification', TRUE),
+  (326, 'It copies all files when opened', FALSE),
+  (326, 'It writes data directly to disk', FALSE),
+
+  (327, 'Uses multiple levels of index blocks to address large files', TRUE),
+  (327, 'Duplicates file data in memory', FALSE),
+  (327, 'Deletes files automatically', FALSE),
+
+  (328, 'By scanning with tools like fsck and restoring logs', TRUE),
+  (328, 'By reformatting the disk', FALSE),
+  (328, 'By restarting the system', FALSE),
+
+  (329, 'Synchronous writes wait for disk operation to complete; asynchronous writes don’t', TRUE),
+  (329, 'Both write data in the same way', FALSE),
+  (329, 'Asynchronous writes are slower', FALSE),
+
+  (330, 'Because they reduce write amplification and improve wear leveling', TRUE),
+  (330, 'They are cheaper to implement', FALSE),
+  (330, 'They increase power usage', FALSE); -- tested and working
+    
+
     
 
 

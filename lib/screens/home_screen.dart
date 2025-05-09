@@ -12,9 +12,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
 
-  Future<int> fetchMarks() async {
+  Future<String> fetchLevel() async {
     await Future.delayed(const Duration(seconds: 2));
-    return 0; // Example marks
+    return 'Level 0'; // Example marks
   }
 
   String getReward(int marks) {
@@ -104,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: 24),
           _buildRecentActivities(),
           const SizedBox(height: 24),
-          _buildRewardSection(),
+          _buildLevelSection(),
         ],
       ),
     );
@@ -146,67 +146,38 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildRewardSection() {
-    return FutureBuilder<int>(
-      future: fetchMarks(),
+  Widget _buildLevelSection() {
+    return FutureBuilder<String>(
+      future: fetchLevel(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
-          return const Center(child: Text('Error fetching marks'));
+          return const Center(child: Text('Error fetching level'));
         } else {
-          final marks = snapshot.data!;
-          final reward = getReward(marks);
+          final level = snapshot.data!;
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Your Reward',
+                'Your Level',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 16),
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.amber.withOpacity(0.1),
+                  color: Colors.blue.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Marks: $marks',
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Reward: $reward',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: reward == 'Gold'
-                            ? Colors.amber
-                            : reward == 'Silver'
-                                ? Colors.grey
-                                : reward == 'Bronze'
-                                    ? Colors.brown
-                                    : Colors.red,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => RewardScreen(marks: marks),
-                          ),
-                        );
-                      },
-                      child: const Text('View Reward Details'),
-                    ),
-                  ],
+                child: Text(
+                  level,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue,
+                  ),
                 ),
               ),
             ],

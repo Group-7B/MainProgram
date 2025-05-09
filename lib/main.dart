@@ -6,7 +6,6 @@ import 'package:learning_app/screens/quiz_screen.dart';
 import 'package:learning_app/screens/subject_screen.dart';
 import 'package:learning_app/theme/app_theme.dart';
 import 'package:learning_app/screens/setting_screen.dart';
-import 'package:learning_app/screens/reward_screen.dart';
 
 void main() {
   runApp(const LearningApp());
@@ -30,7 +29,6 @@ class LearningApp extends StatelessWidget {
         '/quiz': (context) => const QuizScreen(),
         '/profile': (context) => const SettingsScreen(),
         '/setting': (context) => const SettingsScreen(),
-        '/reward': (context) => RewardScreen(marks: 0),
       },
     );
   }

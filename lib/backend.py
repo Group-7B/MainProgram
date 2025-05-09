@@ -4,8 +4,13 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from psycopg2 import pool 
 from urllib.parse import urlparse, parse_qs
 import json
+import schedule
+import time
+import threading
 
-connection_pool = pool.SimpleConnectionPool(
+leaderboardFile = "leaderboard.json"
+
+connection_pool = pool.SimpleConnectionPool( 
     1,100,
     host=db_config['hostname'],
     dbname=db_config['database'],
@@ -28,7 +33,7 @@ def fetchSubjects():
         conn.commit()
         conn.close()
         
-        return [{"subject_id": row[0], "subject_name": row[1]} for row in rows] # array of the subjects fetched from the database
+        subjects = [{"subject_id": row[0], "subject_name": row[1]} for row in rows] # array of the subjects fetched from the database
         #return json.dump([dict(ix)  for ix in rows])
     except Exception as error:
         print(error)
@@ -195,6 +200,49 @@ def fetchQuestionsAndAnswers2(quiz_id):
             connection_pool.putconn(conn)
     return questions_and_answers
 
+
+def fetchLeaderboard():
+    conn = None
+    cur = None
+    leaderboard = []
+    try:
+        conn = connection_pool.getconn()
+        cur = conn.cursor()
+
+        # Fetch leaderboard data from the database
+        sqlcommand = '''SELECT u.user_name, sp.total_points
+                        FROM users u
+                        JOIN student_progress sp ON u.user_id = sp.user_id
+                        ORDER BY sp.total_points DESC;'''
+        cur.execute(sqlcommand)
+        rows = cur.fetchall()
+
+        # Convert rows to a list of dictionaries
+        leaderboard = [{"name": row[0], "score": row[1]} for row in rows]
+        
+        json_file = open("leaderboard.json","x")
+        
+        # Write the leaderboard data to a JSON file
+        with open("leaderboard.json", "w", encoding="utf-8") as json_file:
+            json.dump(leaderboard, json_file, ensure_ascii=False, indent=4)
+        print("Leaderboard data written to leaderboard.json")
+
+    except Exception as error:
+        print("Error fetching leaderboard:", error)
+    finally:
+        if cur is not None:
+            cur.close()
+        if conn is not None:
+            connection_pool.putconn(conn)
+
+    return leaderboard
+
+def run_scheduler():
+    while True:
+        schedule.run_pending()
+        time.sleep(300)
+
+
 def createAccount(user_name, user_last_name, user_email, user_password):
     conn = None
     cur = None
@@ -215,6 +263,12 @@ def createAccount(user_name, user_last_name, user_email, user_password):
         )
         
         conn.commit()
+        
+        #cur.execute('SELECT user_id, total_points, user_level FROM student_progress;')
+        
+        #rows = cur.fetchall()
+        
+        #pointsAndLevel = []
         
         print(f"User created with ID {user_id} and progress initialized.")
         return {"user_id": user_id, "message": "Account created successfully."}
@@ -249,6 +303,28 @@ def loginUser(email,password):
             cur.close()
         if conn:
             connection_pool.putconn(conn)
+            
+def userLevel(user_id):
+    conn = None
+    cur = None
+    try:
+        conn = connection_pool.getconn()
+        cur = conn.cursor()
+        cur.execute('SELECT user_level FROM student_progress WHERE user_id = %s;',(user_id,))
+        level = cur.fetchone()
+        
+        if level:
+            return {"success": True, "user_level": level[0]}
+        else:
+            return {"success": False, "user_level":"This user does not exist"}
+    except Exception as error:
+        print("There is an error while fetching the user's level:",error)
+    finally:
+        if cur is not None:
+            cur.close()
+        if conn is not None:
+            connection_pool.putconn(conn)
+        
 
 
     
@@ -347,6 +423,36 @@ class S (BaseHTTPRequestHandler):
                 self.send_response(400)  # Bad Request
                 self.end_headers()
                 self.wfile.write(b'{"error": "quiz_id is required"}')
+        elif parsed_path.path == '/userLevel':
+            query_params = parse_qs(parsed_path.query)
+            user_id = query_params.get('user_id',[None])[0]
+            if user_id is not None:
+                try:
+                    user_id = int(user_id)
+                    result = userLevel(user_id)
+                    
+                    self.send_response(200)
+                    self.send_header('Access-Control-Allow-Origin','*')
+                    self.send_header('Content-Type','application/json')
+                    self.end_headers()
+                    self.wfile.write(json.dumps(result, indent = 2).encode('utf-8'))
+                except ValueError:
+                    self.send_response(400)
+                    self.end_headers()
+                    self.wfile.write(b'{"error":"Unknown user_id}')
+            else:
+                self.send_response(400)
+                self.end_headers()
+                self.wfile.write(b'{"error":"user_id is required"}')
+                
+        #elif parsed_path.path == '/leaderboard':
+            #leaderboard = fetchLeaderboard()
+            #self.send_response(200)
+            #self.send_header('Allow-Control-Allow-Origin','*')
+            #self.send_header('Content-Type','application/json')
+            #self.end_headers()
+            #self.wfile.write(json.dumps(leaderboard,indent = 2).encode('utf-8'))
+            
             
         else:
             self.send_response(404)  # Not Found for other paths (can't find the endpoint; invalid endpoint)
@@ -372,15 +478,10 @@ class S (BaseHTTPRequestHandler):
             data = json.loads(post_data)
             print(data)
             
-            #user_name = data.get('user_name')
-            #user_last_name = data.get('user_last_name')
-            #user_email = data.get('user_email')
-            #user_password = data.get('user_password')
-            user_name = data.get("firstName")
-            user_last_name = data.get("lastName")
-            user_email = data.get("email")
-            user_password = data.get("password")
-           
+            user_name = data.get('user_name')
+            user_last_name = data.get('user_last_name')
+            user_email = data.get('user_email')
+            user_password = data.get('user_password')       
             
             result = createAccount(user_name,user_last_name,user_email,user_password)
             if result.get("error")=="Failed to create account":

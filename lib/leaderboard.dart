@@ -35,7 +35,7 @@ class _LeaderboardState extends State<Leaderboard> {
   Future<List<LeaderboardEntry>> _loadLeaderboard() async {
     try {
       final String jsonString =
-          await rootBundle.loadString('assets/data/leaderboard_data.json');
+          await rootBundle.loadString('leaderboard_data.json');
       final List<dynamic> jsonList = jsonDecode(jsonString);
 
       List<LeaderboardEntry> entries = jsonList

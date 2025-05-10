@@ -1,4 +1,3 @@
-import psycopg2
 from config import db_config
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from psycopg2 import pool 
@@ -7,6 +6,7 @@ import json
 import schedule
 import time
 import threading
+import math
 
 leaderboardFile = "leaderboard.json"
 
@@ -34,7 +34,6 @@ def fetchSubjects():
         conn.close()
         
         return [{"subject_id": row[0], "subject_name": row[1]} for row in rows] # array of the subjects fetched from the database
-        #return json.dump([dict(ix)  for ix in rows])
     except Exception as error:
         print(error)
     finally: 
@@ -54,7 +53,6 @@ def fetchTopics(subject_id):
         cur = conn.cursor() #added topic_id below
         cur.execute('SELECT topic_id, topic_name FROM topics WHERE subject_id = %s', (subject_id,))
         rows = cur.fetchall()
-        #topics = [row[0] for row in rows]
         topics = [{"topic_id": row[0], "topic_name": row[1]} for row in rows]
     except Exception as error:
         print(error)
@@ -86,29 +84,7 @@ def generateQuiz(subject_id,topic_id):
             connection_pool.putconn(conn)
     return quiz
 
-'''def fetchQuestionsAndAnswers(quiz_id):
-    conn = None
-    cur = None
-    questionsNAnswers = []
-    
-    try:
-        conn = connection_pool.getconn()
-        cur = conn.cursor()
-        #cur.execute('SELECT * FROM question_answer_view')
-        cur.execute('SELECT question_text, points, question_level, answer_text, quiz_name, topic_id '
-                    'FROM question_answers_view WHERE quiz_id = %s', (quiz_id,))
-        rows = cur.fetchall()
         
-        for row in rows:
-            print(row)
-    except Exception as error:
-        print("Error querying the view", error)
-    finally:
-        if cur is not None:
-            cur.close()
-        if conn is not None:
-            connection_pool.putconn(conn) '''
-            
             
 def fetchQuestionsAndAnswers(quiz_id):
     conn = None
@@ -160,47 +136,7 @@ def fetchQuestionsAndAnswers(quiz_id):
         if conn is not None:
             connection_pool.putconn(conn)
     return question_and_answers
-        
-
-def fetchQuestionsAndAnswers2(quiz_id):
-    conn = None
-    cur = None
-    questions_and_answers = []
-    try:
-        conn = connection_pool.getconn()
-        cur = conn.cursor()
-        # Query the view for the given quiz_id
-        cur.execute('SELECT question_text, points, question_level, answer_text, quiz_name, topic_id '
-                    'FROM question_answers_view WHERE quiz_id = %s', (quiz_id,))
-        rows = cur.fetchall()
-
-        # Group answers by question
-        question_map = {}
-        for row in rows:
-            question_text = row[0]
-            if question_text not in question_map:
-                question_map[question_text] = {
-                    "question_text": question_text,
-                    "points": row[1],
-                    "question_level": row[2],
-                    "answers": []
-                }
-            question_map[question_text]["answers"].append({
-                "answer_text": row[3]
-            })
-
-        # Convert the map to a list
-        questions_and_answers = list(question_map.values())
-    except Exception as error:
-        print("Error querying the view:", error)
-    finally:
-        if cur is not None:
-            cur.close()
-        if conn is not None:
-            connection_pool.putconn(conn)
-    return questions_and_answers
-
-
+    
 def fetchLeaderboard():
     conn = None
     cur = None
@@ -208,7 +144,6 @@ def fetchLeaderboard():
     try:
         conn = connection_pool.getconn()
         cur = conn.cursor()
-
         # Fetch leaderboard data from the database
         sqlcommand = '''SELECT u.user_name, sp.total_points
                         FROM users u
@@ -277,6 +212,71 @@ def createAccount(user_name, user_last_name, user_email, user_password):
         if conn is not None:
             connection_pool.putconn(conn)
 
+def getProgress(user_id):
+    conn = None
+    cur = None
+    try:
+        conn = connection_pool.getconn()
+        cur = conn.cursor()
+        cur.execute('SELECT total_points, user_level FROM student_progress WHERE user_id = %s;', (user_id,))
+        progress = cur.fetchone()
+        if progress:
+            return {"total_points": progress[0], "user_level": progress[1]}
+        else:
+            return None
+    except Exception as error:
+        print(f"Error fetching user progress for user_id {user_id}: {error}")
+        return None
+    finally:
+        if cur:
+            cur.close()
+        if conn:
+            connection_pool.putconn(conn)
+
+def updateLevel (user_id, score):
+    conn = None
+    cur = None
+    try:
+        conn = connection_pool.getconn()
+        cur = conn.cursor()
+
+        cur.execute('SELECT total_points, user_level FROM student_progress WHERE user_id = %s FOR UPDATE;', (user_id,))
+        current_progress = cur.fetchone()
+        if not current_progress:
+            return {"success": False, "message": "User progress not found."}
+
+        current_total_points, current_user_level = current_progress
+        
+        new_total_points = current_total_points + score
+        
+        new_user_level = new_total_points // 100 
+        
+        level_increased = new_user_level > current_user_level
+
+        cur.execute(
+            'UPDATE student_progress SET total_points = %s, user_level = %s WHERE user_id = %s;',
+            (new_total_points, new_user_level, user_id)
+        )
+        conn.commit()
+        
+        return {
+            "success": True, 
+            "message": "Score and level updated successfully.",
+            "new_total_points": new_total_points,
+            "new_user_level": new_user_level,
+            "level_increased": level_increased
+        }
+    except Exception as error:
+        if conn:
+            conn.rollback()
+        print(f"Error updating user score and level for user_id {user_id}: {error}")
+        return {"success": False, "message": "Failed to update score and level."}
+    finally:
+        if cur:
+            cur.close()
+        if conn:
+            connection_pool.putconn(conn)
+
 def loginUser(email,password):
     conn = None
     cur = None
@@ -298,9 +298,28 @@ def loginUser(email,password):
         if conn:
             connection_pool.putconn(conn)
 
-
-    
+def userLevel(user_id):
+    conn = None
+    cur = None
+    try:
+        conn = connection_pool.getconn()
+        cur = conn.cursor()
+        cur.execute('SELECT user_level FROM student_progress WHERE user_id = %s;',(user_id,))
+        level = cur.fetchone()
         
+        if level:
+            return {"success": True, "user_level": level[0]}
+        else:
+            return {"success": False, "user_level":"This user does not exist"}
+    except Exception as error:
+        print("There is an error while fetching the user's level:",error)
+    finally:
+        if cur is not None:
+            cur.close()
+        if conn is not None:
+            connection_pool.putconn(conn)
+        
+    
 class S (BaseHTTPRequestHandler):
     
     def do_OPTIONS(self):
@@ -310,6 +329,13 @@ class S (BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')  # Allowed methods
         self.send_header('Access-Control-Allow-Headers', 'Content-Type, Origin, Accept, X-Requested-With')  # Allowed headers
         self.end_headers()
+
+    def send_json_response(self, status_code, content_dict):
+        self.send_response(status_code)
+        self.send_header('Access-Control-Allow-Origin', '*') # Or your specific origin
+        self.send_header('Content-type', 'application/json')
+        self.end_headers()
+        self.wfile.write(json.dumps(content_dict).encode('utf-8'))
     
     def do_GET(self):
         parsed_path = urlparse(self.path)
@@ -319,7 +345,6 @@ class S (BaseHTTPRequestHandler):
             self.send_header('Access-Control-Allow-Origin', '*')  # Allow all origins
             self.send_header('Content-type','application/json')
             self.end_headers()
-            #self.wfile.write(b'<html><body>test</body></html>')
             self.wfile.write(json.dumps(subjects, indent = 2).encode('utf-8'))
         elif parsed_path.path == '/topics':
             query_params = parse_qs(parsed_path.query)
@@ -395,13 +420,42 @@ class S (BaseHTTPRequestHandler):
                 self.send_response(400)  # Bad Request
                 self.end_headers()
                 self.wfile.write(b'{"error": "quiz_id is required"}')
-        elif parsed_path.path == '/leaderboard':
-            leaderboard = fetchLeaderboard()
-            self.send_response(200)
-            self.send_header('Allow-Control-Allow-Origin','*')
-            self.send_header('Content-Type','application/json')
-            self.end_headers()
-            self.wfile.write(json.dumps(leaderboard,indent = 2).encode('utf-8'))
+        elif parsed_path.path == '/user_progress': # Renamed from /userLevel for clarity
+            user_id_str = query_params.get('user_id', [None])[0]
+            if user_id_str:
+                try:
+                    user_id = int(user_id_str)
+                    progress = getProgress(user_id)
+                    if progress:
+                        send_json_response(200, progress)
+                    else:
+                        send_json_response(404, {"error": "User progress not found"})
+                except ValueError:
+                    send_json_response(400, {"error": "Invalid user_id format"})
+            else:
+                send_json_response(400, {"error": "user_id is required"})
+        elif parsed_path.path == '/userLevel':
+            query_params = parse_qs(parsed_path.query)
+            user_id = query_params.get('user_id',[None])[0]
+            if user_id is not None:
+                try:
+                    user_id = int(user_id)
+                    result = userLevel(user_id)
+                    
+                    self.send_response(200)
+                    self.send_header('Access-Control-Allow-Origin','*')
+                    self.send_header('Content-Type','application/json')
+                    self.end_headers()
+                    self.wfile.write(json.dumps(result, indent = 2).encode('utf-8'))
+                except ValueError:
+                    self.send_response(400)
+                    self.end_headers()
+                    self.wfile.write(b'{"error":"Unknown user_id}')
+            else:
+                self.send_response(400)
+                self.end_headers()
+                self.wfile.write(b'{"error":"user_id is required"}')
+                
             
         else:
             self.send_response(404)  # Not Found for other paths (can't find the endpoint; invalid endpoint)
@@ -409,14 +463,6 @@ class S (BaseHTTPRequestHandler):
             self.wfile.write(b'{"error": "Endpoint not found"}')
         
         
-    def do_POST(self):
-        #parsed_path = urlparse(self.path)
-        #if parsed_path.path == '/create_account':
-        self.send_response(200)
-        self.send_header('Access-Control-Allow-Origin', '*')  # Allow all origins
-        self.send_header('Location','http://localhost:8000/subjects')
-        self.end_headers()
-        self.wfile.write(b'<html><body>test</body></html>')
        
             
     def do_POST(self):
@@ -427,15 +473,10 @@ class S (BaseHTTPRequestHandler):
             data = json.loads(post_data)
             print(data)
             
-            #user_name = data.get('user_name')
-            #user_last_name = data.get('user_last_name')
-            #user_email = data.get('user_email')
-            #user_password = data.get('user_password')
-            user_name = data.get("firstName")
-            user_last_name = data.get("lastName")
-            user_email = data.get("email")
-            user_password = data.get("password")
-           
+            user_name = data.get('user_name')
+            user_last_name = data.get('user_last_name')
+            user_email = data.get('user_email')
+            user_password = data.get('user_password')       
             
             result = createAccount(user_name,user_last_name,user_email,user_password)
             if result.get("error")=="Failed to create account":
@@ -448,9 +489,7 @@ class S (BaseHTTPRequestHandler):
             else:
                 self.send_response(200) #Bad request
                 self.send_header('Access-Control-Allow-Origin','*')
-                #self.send_header('Location','http://localhost:8000/subjects')
                 self.end_headers()
-                #self.wfile.write(b'<html><body>test</body></html>')
                 self.wfile.write(json.dumps({"Success":"Account created"}).encode('utf-8'))
         
         if self.path == '/login':

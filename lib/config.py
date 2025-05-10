@@ -1,6 +1,6 @@
 db_config = {
     'hostname' : 'localhost',
-    'database' : 'my_database',
+    'database' : '7b',
     'username' : 'postgres',
     'password' : 'Group7B',
     'port' : 5432

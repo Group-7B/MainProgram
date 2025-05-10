@@ -174,63 +174,54 @@ CREATE TABLE
 INSERT INTO
   quizzes(subject_id, topic_id, quiz_name, quiz_type, quiz_level)
 VALUES
-  (1, 1, 'Algebra Quiz 1', 'quiz', 'Easy'),  --quiz_id=1
-  (1, 1, 'Algebra Quiz 2', 'quiz', 'Medium'),--- quiz_id=2
-  (1, 1, 'Algebra Quiz 3', 'quiz', 'Hard'),---quiz_id=3
-  (1, 2, 'Ratio and Proportion Quiz 1', 'quiz', 'Easy'),-- quiz_id=4
-  (1, 2, 'Ratio and Proportion Quiz 2', 'quiz', 'Medium'),--- quiz_id=5
-  (1, 2, 'Ratio and Proportion Quiz 3', 'quiz', 'Hard'),---quiz_id=6
-  (1, 3, 'Percentage Quiz 1', 'quiz', 'Easy'),--- quiz_id =7
-  (1, 3, 'Percentage Quiz 2', 'quiz', 'Medium'),--- quiz_id=8
-  (1, 3, 'Percentage Quiz 3', 'quiz', 'Hard'),--- quiz_id=9
+  (1, 1, 'Algebra Quiz 1', 'quiz', 'Easy'),  
+  (1, 1, 'Algebra Quiz 2', 'quiz', 'Medium'),
+  (1, 1, 'Algebra Quiz 3', 'quiz', 'Hard'),
+  (1, 2, 'Ratio and Proportion Quiz 1', 'quiz', 'Easy'),
+  (1, 2, 'Ratio and Proportion Quiz 2', 'quiz', 'Medium'),
+  (1, 2, 'Ratio and Proportion Quiz 3', 'quiz', 'Hard'),
+  (1, 3, 'Percentage Quiz 1', 'quiz', 'Easy'),
+  (1, 3, 'Percentage Quiz 2', 'quiz', 'Medium'),
+  (1, 3, 'Percentage Quiz 3', 'quiz', 'Hard'),
 
- 
+  --Math mock exam contain mixed questions from all topics
+(1,NULL,'Math exam', 'MOCK Exam', 'Medium'),
 
-  (2, 4, 'Vocabulary Quiz 1', 'quiz', 'Easy'),-- quiz_id =10
-  (2, 4, 'Vocabulary Quiz 2', 'quiz', 'Medium'),---quiz_id=11
-  (2, 4, 'Vocabulary Quiz 3', 'quiz', 'Hard'),--- quiz_id=12
-  (2, 5, 'Grammar Quiz 1', 'quiz', 'Easy'), --- quiz_id=13
-  (2, 5, 'Grammar Quiz 2', 'quiz', 'Medium'),---quiz_id = 14
-  (2, 5, 'Grammar Quiz 3', 'quiz', 'Hard'),--- quiz_id =15
+  (2, 4, 'Vocabulary Quiz 1', 'quiz', 'Easy'),
+  (2, 4, 'Vocabulary Quiz 2', 'quiz', 'Medium'),
+  (2, 4, 'Vocabulary Quiz 3', 'quiz', 'Hard'),
+  (2, 5, 'Grammar Quiz 1', 'quiz', 'Easy'),
+  (2, 5, 'Grammar Quiz 2', 'quiz', 'Medium'),
+  (2, 5, 'Grammar Quiz 3', 'quiz', 'Hard'),
   
- 
+  --English mock exam contain mixed questions from all topics
+  (2,NULL,'English exam','MOCK Exam', 'Medium'),
   
-  (3, 6, 'Mechanics Quiz 1', 'quiz', 'Easy'),--- quiz_id =16
-  (3, 6, 'Mechanics Quiz 2', 'quiz', 'Medium'),--- quiz_id =17 
-  (3, 6, 'Mechanics Quiz 3', 'quiz', 'Hard'), ---quiz_id=18
-  (3, 7, 'Thermodynamics Quiz 1', 'quiz', 'Easy'), --- quiz_id =19
-  (3, 7, 'Thermodynamics Quiz 2', 'quiz', 'Medium'),--- quiz_id=20
-  (3, 7, 'Thermodynamics Quiz 3', 'quiz', 'Hard'),--- quiz_id=21
-  (3, 8, 'Electromagnetism Quiz 1', 'quiz', 'Easy'),--- quiz_id =22
-  (3, 8, 'Electromagnetism Quiz 2', 'quiz', 'Medium'),--- quiz_id =23
-  (3, 8, 'Electromagnetism Quiz 3', 'quiz', 'Hard'),--- quiz_id=24
+  (3, 6, 'Mechanics Quiz 1', 'quiz', 'Easy'),
+  (3, 6, 'Mechanics Quiz 2', 'quiz', 'Medium'),
+  (3, 6, 'Mechanics Quiz 3', 'quiz', 'Hard'),
+  (3, 7, 'Thermodynamics Quiz 1', 'quiz', 'Easy'),
+  (3, 7, 'Thermodynamics Quiz 2', 'quiz', 'Medium'),
+  (3, 7, 'Thermodynamics Quiz 3', 'quiz', 'Hard'),
+  (3, 8, 'Electromagnetism Quiz 1', 'quiz', 'Easy'),
+  (3, 8, 'Electromagnetism Quiz 2', 'quiz', 'Medium'),
+  (3, 8, 'Electromagnetism Quiz 3', 'quiz', 'Hard'),
 
-   
+    --Physics mock exam contain mixed questions from all topics
+    (3,NULL,'Physics exam','MOCK Exam', 'Medium'),
 
-  (4, 9, 'Memory management Quiz 1', 'quiz', 'Easy'),--- quiz_id =25  
-  (4, 9, 'Memory management Quiz 2', 'quiz', 'Medium'), --- quiz_id =26 
-  (4, 9, 'Memory management Quiz 3', 'quiz', 'Hard'), --- quiz_id =27 
-  (4, 10, 'Process management Quiz 1', 'quiz', 'Easy'),--- quiz_id =28
-  (4, 10, 'Process management Quiz 2', 'quiz', 'Medium'), --- quiz_id=29
-  (4, 10, 'Process management Quiz 3', 'quiz', 'Hard'),--- quiz_id =30
-  (4, 11, 'File management Quiz 1', 'quiz', 'Easy'),--- quiz_id =31
-  (4, 11, 'File management Quiz 2', 'quiz', 'Medium'),--- quiz_id =32
-  (4, 11, 'File management Quiz 3', 'quiz', 'Hard'),--- quiz_id =33
+  (4, 9, 'Memory management Quiz 1', 'quiz', 'Easy'),
+  (4, 9, 'Memory management Quiz 2', 'quiz', 'Medium'),
+  (4, 9, 'Memory management Quiz 3', 'quiz', 'Hard'),
+  (4, 10, 'Process management Quiz 1', 'quiz', 'Easy'),
+  (4, 10, 'Process management Quiz 2', 'quiz', 'Medium'),
+  (4, 10, 'Process management Quiz 3', 'quiz', 'Hard'),
+  (4, 11, 'File management Quiz 1', 'quiz', 'Easy'),
+  (4, 11, 'File management Quiz 2', 'quiz', 'Medium'),
+  (4, 11, 'File management Quiz 3', 'quiz', 'Hard'),
 
--- quiz_id 1-33 are quizzes
-
-
-
- --Math mock exam contain mixed questions from all topics
-(1,NULL,'Math exam', 'MOCK Exam', 'Medium'),--- quiz_id 34
- --English mock exam contain mixed questions from all topics
-  (2,NULL,'English exam','MOCK Exam', 'Medium'), --- quiz_id 35
-   --Physics mock exam contain mixed questions from all topics
-    (3,NULL,'Physics exam','MOCK Exam', 'Medium'),--- quiz_id 36
   --Operating systems mock exam contain mixed questions from all topics
-  (4,NULL,'Operating systems exam','MOCK Exam', 'Medium');  --- quiz_id 37
--- quiz_id 34,35,36,37 are mock exams
-
+  (4,NULL,'Operating systems exam','MOCK Exam', 'Medium');  -- tested and work
 
 
 
@@ -369,7 +360,7 @@ INSERT INTO questions (topic_id, question_text, points, question_level) VALUES
 (3, 'A product is marked up by 35% and then discounted by 15%. What is the net percentage change from the original price?', 3, 'Hard'),
 (3, 'A car worth £24,000 depreciates by 18% in the first year and 12% in the second year. What is its value after two years?', 3, 'Hard'); --tested and working
 
-
+-- mock exam will be dynamic generated
 --20 questions MOCK Exam /Medium 
 
 --10 questions English /Vocabulary /level Easy (id 91-100)
@@ -456,7 +447,8 @@ INSERT INTO questions (topic_id, question_text, points, question_level) VALUES
 (5, 'What is the synonym of "Surreptitious"?', 3, 'Hard');  --tested and working
 
 
-
+--mock exam will be dynamic generated
+---20 questions  english /MOCK Exam /Medium 
 
 --10 questions Physics /Mechanics /level Easy (id 151-160)
 --10 questions Physics /Mechanics /level Medium (id 161-170)
@@ -469,8 +461,7 @@ INSERT INTO questions (topic_id, question_text, points, question_level) VALUES
 --10 questions Physics /Electromagnetism /level Hard  (id 231-240)
 
 
-
-
+---20 questions Physics /MOCK Exam /Medium 
 
 
 --10 questions  Operating systems /Memory management /level Easy  (id 241-250)
@@ -484,6 +475,7 @@ INSERT INTO questions (topic_id, question_text, points, question_level) VALUES
 --10 questions Operating systems /File management /level Hard (id 321-330)
 
 
+---20 questions Operating systems /MOCK Exam /Medium 
 
 
 
@@ -599,7 +591,7 @@ VALUES
   (9, 89),  (9, 90);-- tested and working
 
 
-
+--- Math exam
  ---Vocabulary Quiz 1
  INSERT INTO
   quiz_questions(
@@ -666,7 +658,7 @@ VALUES
   (15, 147),  (15, 148),  
   (15, 149),  (15, 150);-- tested and working 17/03
 
-
+---English exam
  --Mechanics Quiz 1
  --Mechanics Quiz 2
 -- Mechanics Quiz 3
@@ -676,7 +668,7 @@ VALUES
  --Electromagnetism Quiz 1
  --Electromagnetism Quiz 2
  --Electromagnetism Quiz 3
- 
+ --Physics exam
 -- Memory management Quiz 1
 -- Memory management Quiz 2
  --Memory management Quiz 3
@@ -686,14 +678,6 @@ VALUES
 -- File management Quiz 1
 -- File management Quiz 2
 --File management Quiz 3
-
-
-
---- we need a function to mix the questions for the mock exams
-
---- Math exam
----English exam
---Physics exam
  --Operating systems exam
 
 
@@ -1064,7 +1048,7 @@ INSERT INTO answers (question_id, answer_text, is_correct) VALUES
 (90, '£16,800', FALSE); --90 tested and working
 
         
-
+---20 questions MOCK Exam /Medium answers  dynamic generation
 
 ---10 questions (id 91-100) English /Vocabulary /level Easy answers (id 271-300)
 INSERT INTO answers (question_id, answer_text, is_correct) VALUES
@@ -1343,8 +1327,8 @@ INSERT INTO answers (question_id, answer_text, is_correct) VALUES
 (150, 'Obvious', FALSE),
 (150, 'Loud', FALSE);-- tested and working
     
+---20 questions  english /MOCK Exam /Medium answers 
 
---- start from here 
 ---10 questions (id 151-160)  Physics /Mechanics /level Easy answers    
 ---10 questions (id 161-170) Physics /Mechanics /level Medium answers    
 ---10 questions (id 171-180) Physics /Mechanics /level Hard answers  
@@ -1355,7 +1339,8 @@ INSERT INTO answers (question_id, answer_text, is_correct) VALUES
 ---10 questions (id 221-230) Physics /Electromagnetism /level Medium answers  
 ---10 questions (id 231-240) Physics /Electromagnetism /level Hard answers 
 
-
+    
+---20 questions Physics /MOCK Exam /Medium answers 
 
 
 ---10 questions (id 241-250) Operating systems /Memory management /level Easy answers  
@@ -1367,14 +1352,8 @@ INSERT INTO answers (question_id, answer_text, is_correct) VALUES
 ---10 questions(301-310) Operating systems /File management /level Easy answers 
 ---10 questions (311-320) Operating systems /File management /level Medium answers 
 ---10 questions (321-330) Operating systems /File management /level Hard answers 
+    
 
-
-
-
----dynamic generation
----20 questions Math MOCK Exam /Medium answers  
----20 questions  english /MOCK Exam /Medium answers    
----20 questions Physics /MOCK Exam /Medium answers 
 ---20 questions Operating systems /MOCK Exam /Medium answers 
 
 
@@ -1384,86 +1363,41 @@ INSERT INTO answers (question_id, answer_text, is_correct) VALUES
 
 
 
--- Reward system/leaderboard system
 
-CREATE TABLE user_attempts (
-    attempt_id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    question_id INT NOT NULL,
-    answer_id INT NOT NULL,
-    is_correct BOOLEAN NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
-    FOREIGN KEY (question_id) REFERENCES questions(question_id),
-    FOREIGN KEY (answer_id) REFERENCES answers(answer_id)
+
+
+/*
+CREATE TABLE Student_progress(
+    student_progress_id INT PRIMARY KEY,
+    user_id INT,
+    quizz_id INT,
+    progress_score INT,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id),
+    FOREIGN KEY (quizz_id) REFERENCES quizzes(quizz_id)
 );
 
-CREATE TABLE student_progress (
-    progress_id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    total_points INT DEFAULT 0,
-    user_level INT DEFAULT 0,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
-);
+*/
 
--- Update points when a correct answer is given
-CREATE OR REPLACE FUNCTION update_student_progress()
-RETURNS TRIGGER AS $$
-BEGIN
-    UPDATE student_progress
-    SET total_points = total_points + 5, 
-        user_level = (total_points + 5) / 100
-    WHERE user_id = NEW.user_id;
-    
-    -- Ensure user_level is an integer by using FLOOR()
-    UPDATE student_progress
-    SET user_level = FLOOR(total_points / 100)
-    WHERE user_id = NEW.user_id;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-
--- Trigger to call the function whenever a correct answer is recorded in user_attempts
-DROP TRIGGER IF EXISTS trigger_update_student_progress ON answers;
-
-CREATE OR REPLACE FUNCTION update_student_progress()
-RETURNS TRIGGER AS $$
-BEGIN
-    UPDATE student_progress
-    SET total_points = total_points + 1, 
-        user_level = (total_points + 1) / 100
-    WHERE user_id = NEW.user_id;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER trigger_update_student_progress
-AFTER INSERT ON user_attempts
-FOR EACH ROW
-WHEN (NEW.is_correct = TRUE)
-EXECUTE FUNCTION update_student_progress();
-
-
--- testing
--- INSERT INTO users (user_name, user_last_name, user_email, user_password, join_date)
--- VALUES ('John', 'Doe', 'john.doe@example.com', 'password123', NOW()) RETURNING user_id;
-
--- INSERT INTO student_progress (user_id, total_points, user_level) 
--- VALUES (1, 0, 0); 
-
---when a new user logs into app, a insert needs to be made into these tables, we can keep points and level 0 for every new user insert. 
-
--- INSERT INTO user_attempts (user_id, question_id, answer_id, is_correct)
--- VALUES (1, 1, 3, TRUE);
--- INSERT INTO user_attempts (user_id, question_id, answer_id, is_correct)
--- VALUES (1, 2, 3, TRUE);
--- INSERT INTO user_attempts (user_id, question_id, answer_id, is_correct)
--- VALUES (1, 3, 3, TRUE);
-
--- After user attempts a question in a quiz/mock test. The user inputs are recorded (inserted) into user_attempts.
--- So that the update_student_progress function can check from the database whether the user answer is TRUE or FALSE
--- Then the function calculates the total_points/level into student_progress
+CREATE VIEW question_answers_view AS
+SELECT
+    qq.quiz_id,
+    q.question_id,
+    q.question_text,
+    q.points,
+    q.question_level,
+    a.answer_id,
+    a.answer_text,
+    a.is_correct,
+    qz.quiz_name,
+    q.topic_id
+FROM
+    quiz_questions qq
+JOIN
+    questions q ON qq.question_id = q.question_id
+JOIN
+    answers a ON q.question_id = a.question_id
+JOIN
+    quizzes qz ON qq.quiz_id = qz.quiz_id;
 
 
 

@@ -4,12 +4,13 @@ publish_to: 'none'
 version: 0.1.0
 
 environment:
-  sdk: ^3.7.0
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
   http: ^0.13.3
+  path_provider: ^2.0.0
 
 dev_dependencies:
   flutter_test:
@@ -18,3 +19,9 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - lib/leaderboard.json
+    - assets/bronzemedal.png
+    - assets/silvermedal.png
+    - assets/goldmedal.png

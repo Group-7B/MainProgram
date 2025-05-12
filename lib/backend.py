@@ -1,6 +1,7 @@
 from config import db_config
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from psycopg2 import pool 
+from psycopg2 import pool
+from psycopg2 import errors as psycopg2_errors
 from urllib.parse import urlparse, parse_qs
 import json
 import schedule
@@ -9,6 +10,7 @@ import threading
 import math
 
 leaderboardFile = "leaderboard.json"
+
 
 connection_pool = pool.SimpleConnectionPool(
     1,100,
@@ -172,6 +174,68 @@ def fetchLeaderboard():
 
     return leaderboard
 
+def fetchProfile(user_id):
+    conn = None
+    cur = None
+    profileInfo = None
+    try:
+        conn = connection_pool.getconn()
+        cur = conn.cursor()
+        sqlcommand = '''SELECT u.user_name, u.user_email, sp.total_points
+                        FROM users u
+                        JOIN student_progress sp ON u.user_id = sp.user_id
+                        WHERE u.user_id = %s;'''
+        cur.execute(sqlcommand, (user_id,))
+
+        row = cur.fetchone()
+
+        if row is None:
+            profileInfo = None
+        elif isinstance(row, (list, tuple)):
+            if len(row) >= 3:
+                try:
+                    profileInfo = {"name": row[0], "email": row[1], "score": row[2]}
+                except IndexError as idx_err:
+                     print(f"!!! IndexError processing row elements for user_id {user_id}: {idx_err}. Row data was: {row}")
+                     profileInfo = None
+                except TypeError as te:
+                     print(f"!!! TypeError processing elements within the row tuple/list for user_id {user_id}: {te}. Row data was: {row}")
+                     profileInfo = None
+            else:
+                print(f"!!! Error [fetchProfile {user_id}]: Unexpected data format. Expected tuple/list of length 3+, got length {len(row)}: {row}")
+                profileInfo = None
+        else:
+             print(f"!!! Critical Error [fetchProfile {user_id}]: Unexpected row data type received. Expected tuple/list or None, got {type(row)}: {row}")
+             profileInfo = None
+
+    except psycopg2_errors.Error as db_error:
+        print(f"SQLSTATE: {db_error.pgcode}") 
+        profileInfo = None
+        if conn: conn.rollback()
+    except IndexError as index_error:
+        print(f"!!! Index Error processing row for user_id {user_id}: {index_error}. Row data was: {row}")
+        profileInfo = None
+    except Exception as error:
+        print(f"!!! Unexpected Error fetching/processing profile for user_id {user_id}: {error} (Type: {type(error)})")
+        profileInfo = None
+        if conn and not isinstance(error, psycopg2_errors.Error):
+             try:
+                 conn.rollback()
+             except Exception as rb_error:
+                 print(f"--- WARN [fetchProfile {user_id}]: Error during rollback: {rb_error} ---")
+    finally:
+        if cur is not None:
+            print(f"--- DEBUG [fetchProfile {user_id}]: Closing cursor ---")
+            cur.close()
+        if conn is not None:
+            print(f"--- DEBUG [fetchProfile {user_id}]: Putting connection back to pool ---")
+            connection_pool.putconn(conn)
+        print(f"--- Finished fetching profile for user_id: {user_id}. Returning: {profileInfo} ---")
+
+    return profileInfo
+
+
+
 def run_scheduler():
     while True:
         schedule.run_pending()
@@ -194,7 +258,7 @@ def createAccount(user_name, user_last_name, user_email, user_password):
         cur.execute(
             'INSERT INTO student_progress (user_id, total_points, user_level) '
             'VALUES (%s, %s, %s);',
-            (user_id, 0, 0)  # Default total_points and user_level are 0
+            (user_id, 0, 0) 
         )
         
         conn.commit()
@@ -338,11 +402,20 @@ class S (BaseHTTPRequestHandler):
         self.wfile.write(json.dumps(content_dict).encode('utf-8'))
     
     def do_GET(self):
-        parsed_path = urlparse(self.path)
+        try:
+            parsed_path = urlparse(self.path)
+            query_params = parse_qs(parsed_path.query)
+            path = parsed_path.path 
+            print(f"GET request received for path: {path}, query: {query_params}")
+        except Exception as parse_error:
+             print(f"Error parsing request path/query: {parse_error}")
+             self.send_json_response(400, {"error": "Bad request URL format"})
+             return
+        
         if self.path == '/subjects':
             subjects = fetchSubjects()
             self.send_response(200)
-            self.send_header('Access-Control-Allow-Origin', '*')  # Allow all origins
+            self.send_header('Access-Control-Allow-Origin', '*') 
             self.send_header('Content-type','application/json')
             self.end_headers()
             self.wfile.write(json.dumps(subjects, indent = 2).encode('utf-8'))
@@ -354,51 +427,42 @@ class S (BaseHTTPRequestHandler):
                     subject_id = int(subject_id)  
                     topics = fetchTopics(subject_id)  
                     self.send_response(200)
-                    self.send_header('Access-Control-Allow-Origin', '*')  # Allow all origins
-                    self.send_header('Content-type', 'application/json')  # JSON response
+                    self.send_header('Access-Control-Allow-Origin', '*') 
+                    self.send_header('Content-type', 'application/json')
                     self.end_headers()
                     self.wfile.write(json.dumps(topics, indent=2).encode('utf-8'))
                 except ValueError:
-                    self.send_response(400)  # Bad Request if subject_id is not a valid integer
+                    self.send_response(400)
                     self.end_headers()
                     self.wfile.write(b'{"error": "Invalid subject_id"}')
             else:
-                self.send_response(400)  # Bad Request if subject_id is missing
+                self.send_response(400)
                 self.end_headers()
                 self.wfile.write(b'{"error": "subject_id is required"}')
         elif parsed_path.path == '/quiz':
-            # Parse query parameters
             query_params = parse_qs(parsed_path.query)
             subject_id = query_params.get('subject_id', [None])[0]
             topic_id = query_params.get('topic_id', [None])[0]
 
             if subject_id is not None and topic_id is not None:
                 try:
-                    # Convert subject_id and topic_id to integers
                     subject_id = int(subject_id)
                     topic_id = int(topic_id)
-
-                    # Fetch quizzes for the given subject_id and topic_id
                     quiz = generateQuiz(subject_id, topic_id)
-
-                    # Send response
                     self.send_response(200)
-                    self.send_header('Access-Control-Allow-Origin', '*')  # Allow all origins
-                    self.send_header('Content-Type', 'application/json')  # JSON response
+                    self.send_header('Access-Control-Allow-Origin', '*')
+                    self.send_header('Content-Type', 'application/json')
                     self.end_headers()
                     self.wfile.write(json.dumps(quiz, indent=2).encode('utf-8'))
                 except ValueError:
-                    # Handle invalid subject_id or topic_id
-                    self.send_response(400)  # Bad Request
+                    self.send_response(400)
                     self.end_headers()
                     self.wfile.write(b'{"error": "Invalid subject_id or topic_id"}')
             else:
-                # Handle missing subject_id or topic_id
-                self.send_response(400)  # Bad Request
+                self.send_response(400)
                 self.end_headers()
                 self.wfile.write(b'{"error": "subject_id and topic_id are required"}')
         elif parsed_path.path == '/quiz_questions':
-            # Parse query parameters
             query_params = parse_qs(parsed_path.query)
             quiz_id = query_params.get('quiz_id', [None])[0]
             if quiz_id is not None:
@@ -419,14 +483,13 @@ class S (BaseHTTPRequestHandler):
                 self.send_response(400)  
                 self.end_headers()
                 self.wfile.write(b'{"error": "quiz_id is required"}')
-        elif parsed_path.path == '/leaderboard': # New endpoint to serve the leaderboard
+        elif parsed_path.path == '/leaderboard':
             try:
                 with open(leaderboardFile, 'r', encoding='utf-8') as f:
                     leaderboard_data = json.load(f)
                 self.send_json_response(200, leaderboard_data)
             except FileNotFoundError:
                 print(f"'{leaderboardFile}' not found. Generating a new one.")
-                # Attempt to generate it if it's missing, though it should be created by fetchLeaderboard()
                 fetchLeaderboard() 
                 try:
                     with open(leaderboardFile, 'r', encoding='utf-8') as f:
@@ -439,6 +502,26 @@ class S (BaseHTTPRequestHandler):
                 print(f"Error serving leaderboard data: {e}")
                 self.send_json_response(500, {"error": "Could not retrieve leaderboard data"})
             return
+        elif parsed_path.path == '/profile':
+            user_id_str = query_params.get('user_id', [None])[0]
+            print(f"--- DEBUG [do_GET]: Matched /profile path. User ID string: '{user_id_str}' ---")
+            if user_id_str:
+                try:
+                    user_id = int(user_id_str)
+                    profile_data = fetchProfile(user_id)
+                    if profile_data:
+                        self.send_json_response(200, profile_data)
+                    else:
+                        self.send_json_response(404, {"error": "User profile not found"})
+
+                except ValueError:
+                    self.send_json_response(400, {"error": "Invalid user_id format"})
+                except Exception as e:
+                    print(f"Error serving profile data for user_id {user_id_str}: {e}")
+                    self.send_json_response(500, {"error": "Could not retrieve profile data"})
+            else:
+                self.send_json_response(400, {"error": "user_id query parameter is required"})
+
         elif parsed_path.path == '/userLevel':
             query_params = parse_qs(parsed_path.query)
             user_id = query_params.get('user_id',[None])[0]
@@ -523,7 +606,6 @@ class S (BaseHTTPRequestHandler):
             data = json.loads(post_data)
             email = data.get('email')
             password = data.get('password')
-            #user = loginUser(email,password)
             result = loginUser(email,password)
             print(result)
             self.send_response(200)

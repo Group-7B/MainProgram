@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'leaderboard.dart';
+import 'profile_screen.dart';
 
 int? userId;
 
@@ -498,6 +499,17 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => Leaderboard()),
+              );
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.person, color: Colors.white),
+            tooltip: 'Profile',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ProfileScreen(userId: userId!)),
               );
             },
           ),

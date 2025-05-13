@@ -244,6 +244,9 @@ def run_scheduler():
 
 
 def createAccount(user_name, user_last_name, user_email, user_password):
+    if user_name == None or user_last_name == None or user_email == None or user_password == None:
+        raise Exception("All fields are mandatory. Please fill in.")
+    
     conn = None
     cur = None
     try:
@@ -263,12 +266,6 @@ def createAccount(user_name, user_last_name, user_email, user_password):
         )
         
         conn.commit()
-        
-        #cur.execute('SELECT user_id, total_points, user_level FROM student_progress;')
-        
-        #rows = cur.fetchall()
-        
-        #pointsAndLevel = []
         
         print(f"User created with ID {user_id} and progress initialized.")
         return {"user_id": user_id, "message": "Account created successfully."}

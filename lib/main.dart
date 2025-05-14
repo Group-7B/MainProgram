@@ -46,6 +46,7 @@ class LearningApp extends StatelessWidget {
   }
 }
 
+// first page login, this is so it is prompted upon loading the site
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -54,19 +55,20 @@ class LoginPage extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<LoginPage> {
+  // variables to store inputted data
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String _errorMessage = '';
   String _successMessage = '';
-
+// function to send entered data to the database so account can be created
   Future<void> _createAccount() async {
     final String name = _nameController.text.trim();
     final String lastName = _lastNameController.text.trim();
     final String email = _emailController.text.trim();
     final String password = _passwordController.text.trim();
-
+    //preventing the user from missing a field, would cause issues in the program if data is missing
     if (name.isEmpty || lastName.isEmpty || email.isEmpty || password.isEmpty) {
       setState(() {
         _errorMessage = 'All fields are required.';
@@ -74,7 +76,7 @@ class _SignUpScreenState extends State<LoginPage> {
       });
       return;
     }
-
+    //connect to database to send data off
     try {
       final response = await http.post(
         Uri.parse('http://localhost:8000/create_account'),
@@ -86,13 +88,14 @@ class _SignUpScreenState extends State<LoginPage> {
           'user_password': password,
         }),
       );
-
+      //if data is all correct it is sent to the database and account is created successfully
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         setState(() {
           _successMessage = data['message'] ?? 'Account created successfully!';
           _errorMessage = '';
         });
+        // if there is an error located, the program lets the user know and wont send data to the database
       } else {
         final data = json.decode(response.body);
         setState(() {
@@ -109,6 +112,7 @@ class _SignUpScreenState extends State<LoginPage> {
     }
   }
 
+// sign up page UI
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -218,6 +222,7 @@ class _SignUpScreenState extends State<LoginPage> {
   }
 }
 
+// login page, activeated upon button press in sing in page
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
   @override
@@ -230,25 +235,28 @@ class _SignInPageState extends State<SignInPage> {
   String _errorMessage = '';
 
   Future<void> _login() async {
+    //variables for inputted data to be saved to
     final String email = _emailController.text.trim();
     final String password = _passwordController.text.trim();
-
+    // preventing a field from being empty
     if (email.isEmpty || password.isEmpty) {
       setState(() {
         _errorMessage = 'Email and password are required.';
       });
       return;
     }
-
+    //connect to the database
     try {
       final response = await http.post(
         Uri.parse('http://localhost:8000/login'),
         headers: {'Content-Type': 'application/json'},
+        //send data to database
         body: json.encode({'email': email, 'password': password}),
       );
-
+      //is data is sent successfully
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
+        //checking to see if the details match
         if (data['success'] == true) {
           userId = data["user_id"];
           print("UserID of logged user: $userId");
@@ -256,11 +264,13 @@ class _SignInPageState extends State<SignInPage> {
             context,
             MaterialPageRoute(builder: (context) => HomeScreen()),
           );
+          //if details dont match, through erroe allow for re entry
         } else {
           setState(() {
             _errorMessage = data['message'] ?? 'Invalid email or password.';
           });
         }
+        //error checking
       } else {
         final data = json.decode(response.body);
         setState(() {
@@ -275,6 +285,7 @@ class _SignInPageState extends State<SignInPage> {
     }
   }
 
+// log in body
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -368,12 +379,14 @@ class _SignInPageState extends State<SignInPage> {
   }
 }
 
+// Home page (subject page)
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // variables to store displayed information from the database
   List<Map<String, dynamic>> subjects = [];
   bool isLoading = true;
   int? userLevel;
@@ -386,11 +399,13 @@ class _HomeScreenState extends State<HomeScreen> {
     fetchUserLevel();
   }
 
+  // fetching subjects from database to display
   Future<void> fetchSubjects() async {
+    // using the subjects function in the doGet backend
     var url = Uri.parse('http://localhost:8000/subjects');
     try {
       final response = await http.get(url).timeout(const Duration(seconds: 10));
-
+      // store results to a map so they can be loaded
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
         setState(() {
@@ -401,12 +416,14 @@ class _HomeScreenState extends State<HomeScreen> {
               .toList();
           isLoading = false;
         });
+        // if error is found, display backend reason
       } else {
         print('Failed to load subjects. Status code: ${response.statusCode}');
         setState(() {
           isLoading = false;
         });
       }
+      // exception handling
     } catch (e) {
       print('Error fetching subjects: $e');
       setState(() {
@@ -415,7 +432,9 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  // fetch user level data to display
   Future<void> fetchUserLevel() async {
+    // if no user id, through error in console, dont display any information
     if (userId == null) {
       print("User ID is null, cannot fetch level.");
       if (mounted) {
@@ -426,13 +445,14 @@ class _HomeScreenState extends State<HomeScreen> {
       }
       return;
     }
+    // if user id is found run the userlevel function in the backend
     try {
       final response = await http
           .get(
             Uri.parse('http://localhost:8000/userLevel?user_id=$userId'),
           )
           .timeout(const Duration(seconds: 10));
-
+      // if data is collected, store data to display
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         if (mounted) {
@@ -440,6 +460,7 @@ class _HomeScreenState extends State<HomeScreen> {
             if (data['success'] == true) {
               userLevel = data['user_level'] as int;
             } else {
+              // error handling if a level isnt found
               print(
                   'Failed to get user level from backend: ${data['user_level']}');
               userLevel = null;
@@ -447,6 +468,7 @@ class _HomeScreenState extends State<HomeScreen> {
             loadinglevel = false;
           });
         }
+        // unable to find user level handling
       } else {
         print('Failed to load user level. Status code: ${response.statusCode}');
         if (mounted) {
@@ -456,6 +478,7 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         }
       }
+      // exception handling
     } catch (e) {
       print('Error fetching user level: $e');
       if (mounted) {
@@ -467,9 +490,11 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+// Subjects page content
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // appbar contains the subjects text, user level, leaderboard + profile buttons
       appBar: AppBar(
         title: Text('Subjects', style: TextStyle(color: Colors.white)),
         backgroundColor: const Color.fromARGB(255, 23, 118, 13),
@@ -486,28 +511,33 @@ class _HomeScreenState extends State<HomeScreen> {
                         strokeWidth: 2.0,
                       ),
                     )
+                  //displaying the level in the text, display N/A id not found
                   : Text(
                       userLevel != null ? 'Level: $userLevel' : 'Level: N/A',
                       style: TextStyle(color: Colors.white, fontSize: 16),
                     ),
             ),
           ),
+          //leaderboard button
           IconButton(
             icon: Icon(Icons.leaderboard, color: Colors.white),
             tooltip: 'Leaderboard',
             onPressed: () {
               Navigator.push(
                 context,
+                // go to leaderboard page
                 MaterialPageRoute(builder: (context) => Leaderboard()),
               );
             },
           ),
+          //profile page button
           IconButton(
             icon: Icon(Icons.person, color: Colors.white),
             tooltip: 'Profile',
             onPressed: () {
               Navigator.push(
                 context,
+                //load profile page and send the users user id to the page so the data can be loaded
                 MaterialPageRoute(
                     builder: (context) => ProfileScreen(userId: userId!)),
               );
@@ -515,11 +545,13 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
+      // displaying subjects buttons
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : subjects.isEmpty
               ? Center(
                   child: Text('No subjects found. Please try again later.'))
+              //list builder to generate buttons based on data in the map
               : ListView.builder(
                   itemCount: subjects.length,
                   padding: EdgeInsets.all(8.0),
@@ -528,11 +560,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     return Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 6.0, horizontal: 8.0),
+                      //button which has and loads the subject
                       child: ElevatedButton(
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
+                              //button command will load a button that will send the user to the course detaisl page that correstponds with the subject
                               builder: (context) => CourseDetailScreen(
                                 courseName: subject['subject_name'] ??
                                     'Unnamed Subject',
@@ -558,15 +592,17 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
+// course details screen
 class CourseDetailScreen extends StatelessWidget {
   final String courseName;
   final int subjectId;
 
   CourseDetailScreen({
+    // variables to store data used to load and fetch course information
     required this.courseName,
     required this.subjectId,
   });
-
+  //fetch topic data from backend function using the subject id
   Future<List<Map<String, dynamic>>> fetchTopics(int subjectId) async {
     try {
       final response = await http
@@ -574,32 +610,36 @@ class CourseDetailScreen extends StatelessWidget {
             Uri.parse('http://localhost:8000/topics?subject_id=$subjectId'),
           )
           .timeout(const Duration(seconds: 10));
-
+      // if subject id is valid, fetch course data associated with that subject id
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
         return data
             .map<Map<String, dynamic>>((topic) => topic as Map<String, dynamic>)
             .toList();
+        //incase of error through a error
       } else {
         throw Exception(
             'Failed to load topics. Status code: ${response.statusCode}');
       }
+      // exception handling
     } catch (e) {
       print('Error fetching topics for subject $subjectId: $e');
       throw Exception('Error fetching topics: $e');
     }
   }
 
+  //course details page
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(courseName, style: TextStyle(color: Colors.white)),
         backgroundColor: const Color.fromARGB(255, 23, 118, 13),
-      ),
+      ), // dynamically load the data from the map information
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: fetchTopics(subjectId),
         builder: (context, snapshot) {
+          //if no data is found through error
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
@@ -613,6 +653,7 @@ class CourseDetailScreen extends StatelessWidget {
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return Center(child: Text("No topics found for this subject."));
           } else {
+            //if data dound use list builder to generate buttons depending on what data is in the map
             final topics = snapshot.data!;
             return ListView.builder(
               itemCount: topics.length,
@@ -627,6 +668,7 @@ class CourseDetailScreen extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
+                          // loads quizes based on relavant course id information
                           builder: (context) => QuizListScreen(
                             topicName: topic['topic_name'] ?? 'Unnamed Topic',
                             subjectID: subjectId,
@@ -654,19 +696,23 @@ class CourseDetailScreen extends StatelessWidget {
   }
 }
 
+// quiz screen
 class QuizListScreen extends StatelessWidget {
+  // variables that store the data sent from the course screen
   final String topicName;
   final int subjectID;
   final int topicID;
 
   QuizListScreen({
+    //data is required in order to load quizzes
     required this.topicName,
     required this.subjectID,
     required this.topicID,
   });
-
+  //fetch the quiz
   Future<List<Map<String, dynamic>>> fetchQuizzesForTopic(
       int subjectID, int topicID) async {
+    //run the backend function to find the quiz data
     try {
       final response = await http
           .get(
@@ -674,7 +720,7 @@ class QuizListScreen extends StatelessWidget {
                 'http://localhost:8000/quiz?subject_id=$subjectID&topic_id=$topicID'),
           )
           .timeout(const Duration(seconds: 15));
-
+      // if data is found, send data to a map that will be used to generate the quiz options
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
         print('Quiz data for topic $topicID: $data');
@@ -682,15 +728,18 @@ class QuizListScreen extends StatelessWidget {
             .map<Map<String, dynamic>>((quiz) => quiz as Map<String, dynamic>)
             .toList();
       } else {
+        //if no data found throw error
         throw Exception(
             'Failed to load quizzes. Status code: ${response.statusCode}');
       }
+      // exception handling
     } catch (e) {
       print('Error fetching quizzes for topic $topicID: $e');
       throw Exception('Error fetching quizzes: $e');
     }
   }
 
+  // quiz page
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -702,6 +751,7 @@ class QuizListScreen extends StatelessWidget {
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: fetchQuizzesForTopic(subjectID, topicID),
         builder: (context, snapshot) {
+          // if no quiz data found throw error on screen
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
@@ -715,6 +765,7 @@ class QuizListScreen extends StatelessWidget {
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return Center(child: Text("No quizzes found for this topic."));
           } else {
+            // if quizes found display data into buttons genreated via list builder
             final quizzes = snapshot.data!;
             return ListView.builder(
               itemCount: quizzes.length,
@@ -728,6 +779,7 @@ class QuizListScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
+                        // button sends you to the relavent quiz
                         MaterialPageRoute(
                           builder: (context) => TakingQuiz(
                             quizID: quiz['quiz_id'],
@@ -755,101 +807,128 @@ class QuizListScreen extends StatelessWidget {
   }
 }
 
+// taking quiz page
 class TakingQuiz extends StatefulWidget {
+  // variables needed from quiz page button press
   final int quizID;
   final String quizName;
-
+  // data is required in order to load the quiz
   TakingQuiz({required this.quizID, required this.quizName});
 
   @override
   TakingQuizState createState() => TakingQuizState();
 }
 
+// state stores the page as dat is laoded dynamically
 class TakingQuizState extends State<TakingQuiz> {
+  //page controller to update the page upon button press,
   final PageController pageController = PageController();
+  //variables used to store all relaviant quiz data
   int _currentPage = 0;
   Map<int, int?> selectedAnswerId = {};
   late Future<List<Map<String, dynamic>>> futureQuestions;
   Map<String, dynamic> updatedScore = {};
-
+  // initialise the quiz data to laod the page
   @override
   void initState() {
     super.initState();
     futureQuestions = loadQuizData();
   }
 
+  // get the quiz data, put into file to load to cache
   Future<File> getLocalFile(String filename) async {
     final directory = await getApplicationDocumentsDirectory();
     return File('${directory.path}/$filename');
   }
 
+  // saving data to cache to be laoded dynamically, this is more efficient then loading from a file
   Future<void> saveQuizDataToCache(List<Map<String, dynamic>> data) async {
+    //return nothing so error will be displayed if no data found
     if (data.isEmpty) return;
+    //exception handler
     try {
+      //get the file the quiz data was stored into
       final file = await getLocalFile('quiz_${widget.quizID}.json');
       await file.writeAsString(json.encode(data));
       print('Quiz ${widget.quizID} data saved to cache.');
+      //exception handler
     } catch (e) {
       print('Error saving quiz data to cache: $e');
     }
   }
 
+  // loading data from the cache
   Future<List<Map<String, dynamic>>> loadQuizDataFromCache() async {
     try {
+      //get the file data
       final file = await getLocalFile('quiz_${widget.quizID}.json');
       if (await file.exists()) {
+        //store file data in variable
         final contents = await file.readAsString();
+        // if data in the variable, load the data
         if (contents.isNotEmpty) {
           final List<dynamic> jsonData = json.decode(contents);
           print('Quiz ${widget.quizID} data loaded from cache.');
+          // store data in a map
           return jsonData
               .map<Map<String, dynamic>>((item) => item as Map<String, dynamic>)
               .toList();
         }
       }
+      //exception handling
     } catch (e) {
       print('Error loading quiz data from cache: $e');
     }
     return [];
   }
 
+  // fetch the questions from database using backend function
   Future<List<Map<String, dynamic>>> fetchQuestionsFromApi() async {
     try {
+      //run backend function
       final response = await http
           .get(
             Uri.parse(
                 'http://localhost:8000/quiz_questions?quiz_id=${widget.quizID}'),
           )
           .timeout(const Duration(seconds: 30));
-
+      // if data found, load data into map
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
         final questions = data
             .map<Map<String, dynamic>>(
                 (question) => question as Map<String, dynamic>)
             .toList();
+        // save the map data to the cache
         await saveQuizDataToCache(questions);
         return questions;
+        //exception handling
       } else {
         throw Exception(
             'Failed to load questions and answers. Status: ${response.statusCode}');
       }
+      //exception handling
     } catch (e) {
       print('Error fetching questions from API for quiz ${widget.quizID}: $e');
       throw Exception('API Error: $e');
     }
   }
 
+  //load quiz data
   Future<List<Map<String, dynamic>>> loadQuizData() async {
+    // first load data from cache
     List<Map<String, dynamic>> cachedData = await loadQuizDataFromCache();
     if (cachedData.isNotEmpty) {
       return cachedData;
     }
+    //then run the function to collect data
     return fetchQuestionsFromApi();
   }
 
+  // results dialong bog
   void showResultsDialog(int correctAnswers, int totalQuestions,
       List<Map<String, dynamic>> detailedResults) {
+    //use the showDialog function to collect
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -869,6 +948,7 @@ class TakingQuizState extends State<TakingQuiz> {
                     style:
                         TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 ...detailedResults.map((result) {
+                  // displaying collected data from show dialog
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4.0),
                     child: Text(
@@ -897,19 +977,22 @@ class TakingQuizState extends State<TakingQuiz> {
     );
   }
 
+  //update the users score based on correct questions
   Future<void> updateTheScore(int currentUserId, int scoreAchieved) async {
     try {
+      //run backend function
       final response = await http
           .post(
             Uri.parse('http://localhost:8000/update_score'),
             headers: {'Content-Type': 'application/json'},
+            //send the score and user id to backend
             body: json.encode({
               'user_id': currentUserId,
               'score_achieved': scoreAchieved,
             }),
           )
           .timeout(const Duration(seconds: 15));
-
+      // if data can be saved then announce the score has been updated in the backend
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         print("Score update response: $data");
@@ -921,6 +1004,7 @@ class TakingQuizState extends State<TakingQuiz> {
           );
         }
         updatedScore = data;
+        //couldnt save data to user id
       } else {
         final data = json.decode(response.body);
         print("Failed to update score: ${response.body}");
@@ -935,6 +1019,7 @@ class TakingQuizState extends State<TakingQuiz> {
           'message': data['error'] ?? 'Failed to update score'
         };
       }
+      //exception handling
     } catch (e) {
       print("Error updating score: $e");
       if (mounted) {
@@ -949,7 +1034,9 @@ class TakingQuizState extends State<TakingQuiz> {
     }
   }
 
+  // submt attempts
   void submitAndCheckAnswers(List<Map<String, dynamic>> questions) async {
+    //cannot submit attempts if no user id
     if (userId == null) {
       print("User ID is null. Cannot submit attempts.");
       if (mounted) {
@@ -959,21 +1046,21 @@ class TakingQuizState extends State<TakingQuiz> {
       }
       return;
     }
-
+    // variables needed to store data
     int correctAnswersCount = 0;
     List<Map<String, dynamic>> attempts = [];
     List<Map<String, dynamic>> resultsForDialog = [];
-
+    // for every question in the possible questions
     for (var question in questions) {
       final questionId = question['question_id'] as int;
       final List<dynamic> answersList = question['answers'] as List<dynamic>;
-
+      //variables to store the selected and correct answers
       int? selectedUserAnswerId = selectedAnswerId[questionId];
       String? userAnswerText;
       String? correctAnswerText;
       int? correctAnswerId;
       bool isUserCorrect = false;
-
+      // check if an answer is correct
       for (var answer in answersList) {
         if (answer['is_correct'] == true) {
           correctAnswerId = answer['answer_id'] as int;
@@ -997,6 +1084,7 @@ class TakingQuizState extends State<TakingQuiz> {
           'is_correct': isUserCorrect,
         });
       }
+      // send results to dialog box
       resultsForDialog.add({
         'question_text': question['question_text'],
         'user_answer_text': userAnswerText,
@@ -1004,7 +1092,7 @@ class TakingQuizState extends State<TakingQuiz> {
         'is_correct': isUserCorrect,
       });
     }
-
+    // run backend function to submit attempts
     if (userId != null && attempts.isNotEmpty) {
       try {
         final response = await http
@@ -1025,6 +1113,7 @@ class TakingQuizState extends State<TakingQuiz> {
                     "Error submitting results to server. Status: ${response.statusCode}")));
           }
         }
+        //exception handling
       } catch (e) {
         print("Error submitting attempts to backend: $e");
         if (mounted) {
@@ -1033,8 +1122,10 @@ class TakingQuizState extends State<TakingQuiz> {
                   Text("Network error submitting results: ${e.toString()}")));
         }
       }
+      // if no user logged in, dont bother sending to backend as itll break
     } else if (userId == null) {
       print("User not logged in, skipping backend submission.");
+      // if no atempts found, exception handle
     } else if (attempts.isEmpty) {
       print(
           "No answers selected for any question, skipping backend submission.");
@@ -1050,6 +1141,7 @@ class TakingQuizState extends State<TakingQuiz> {
     }
   }
 
+  // display screen
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1124,7 +1216,9 @@ class TakingQuizState extends State<TakingQuiz> {
   }
 }
 
+// questions page
 class QuestionPage extends StatelessWidget {
+  // variables needed to store data
   final Map<String, dynamic> question;
   final int? selectedAnswerId;
   final Function(int) onAnswerSelected;
@@ -1132,7 +1226,7 @@ class QuestionPage extends StatelessWidget {
   final int totalQuestions;
   final VoidCallback onNext;
   final VoidCallback onPrevious;
-
+  // all data is required
   QuestionPage({
     required this.question,
     required this.selectedAnswerId,
@@ -1142,7 +1236,7 @@ class QuestionPage extends StatelessWidget {
     required this.onNext,
     required this.onPrevious,
   });
-
+  //questions screen
   @override
   Widget build(BuildContext context) {
     final List<dynamic> answers = question['answers'] as List<dynamic>;
@@ -1245,8 +1339,10 @@ extension on int? {
   }
 }
 
+// fetch quiz
 Future<List<Map<String, dynamic>>> fetchQuiz(int subjectID, int topicID) async {
   try {
+    //run backend function
     final response = await http.get(
       Uri.parse(
         'http://localhost:8000/quiz?subject_id=$subjectID&topic_id=$topicID',
@@ -1255,12 +1351,14 @@ Future<List<Map<String, dynamic>>> fetchQuiz(int subjectID, int topicID) async {
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
       print('Quiz data (from fetchQuiz): $data');
+      //store fetched data
       return data
           .map<Map<String, dynamic>>((quiz) => quiz as Map<String, dynamic>)
           .toList();
     } else {
       throw Exception('Failed to load quiz (from fetchQuiz)');
     }
+    //exceptino handling
   } catch (e) {
     print('Error (from fetchQuiz): $e');
     return [];

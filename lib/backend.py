@@ -20,7 +20,7 @@ connection_pool = pool.SimpleConnectionPool(
     password=db_config['password'],
     port=db_config['port']
 )
-
+# fetching subjects function, called in the S class to be used by frontend
 def fetchSubjects():
     conn = None
     cur = None
@@ -45,7 +45,7 @@ def fetchSubjects():
             connection_pool.putconn(conn)
     
     return subjects
-
+#fetch topucs function, called in the S class to be used by frontend
 def fetchTopics(subject_id):
     conn = None
     cur = None
@@ -64,7 +64,7 @@ def fetchTopics(subject_id):
         if conn is not None:
             connection_pool.putconn(conn)
     return topics
-
+#generate quiz function, called in the S class to be used by frontend
 def generateQuiz(subject_id,topic_id):
     conn = None
     cur = None
@@ -87,7 +87,7 @@ def generateQuiz(subject_id,topic_id):
     return quiz
 
         
-            
+# function for fetching the quiz data, called in the S class to be used by frontend
 def fetchQuestionsAndAnswers(quiz_id):
     conn = None
     cur = None
@@ -138,7 +138,7 @@ def fetchQuestionsAndAnswers(quiz_id):
         if conn is not None:
             connection_pool.putconn(conn)
     return question_and_answers
-    
+#fetch leaderbaord function, called in the S class to be used by frontend
 def fetchLeaderboard():
     conn = None
     cur = None
@@ -173,7 +173,7 @@ def fetchLeaderboard():
             connection_pool.putconn(conn)
 
     return leaderboard
-
+#fetch prifle function called in the S class to be used by frontend
 def fetchProfile(user_id):
     conn = None
     cur = None
@@ -241,7 +241,7 @@ def run_scheduler():
         schedule.run_pending()
         time.sleep(300)
 
-
+#crete account function called in the S class to be used by frontend
 def createAccount(user_name, user_last_name, user_email, user_password):
     conn = None
     cur = None

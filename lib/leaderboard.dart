@@ -4,11 +4,14 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'dart:io';
 import 'dart:convert';
 
+//class to store each invdividual who is on leaderbaord, each account is treated as na object for displaying the data
 class LeaderboardEntry {
+  // variables for needed data
   final String name;
   final int score;
 
   LeaderboardEntry({required this.name, required this.score});
+  // storing users data in the object for displaying
   factory LeaderboardEntry.fromJson(Map<String, dynamic> json) {
     return LeaderboardEntry(
       name: json['name'] ?? 'Unknown',
@@ -17,26 +20,31 @@ class LeaderboardEntry {
   }
 }
 
+// webpage
 class Leaderboard extends StatefulWidget {
   const Leaderboard({super.key});
   State<Leaderboard> createState() => LeaderboardState();
 }
 
+// state of the class as it laods dynamically
 class LeaderboardState extends State<Leaderboard> {
   late Future<List<LeaderboardEntry>> leaderboardData;
 
   @override
   void initState() {
     super.initState();
+    //get the first leaderboard data upon first boot
     leaderboardData = loadLeaderboard();
   }
 
+  // function to fetch the data from backedn and store into json. less efficient but allows for weekly updates
   Future<List<LeaderboardEntry>> loadLeaderboard() async {
+    //run backend function
     final Uri leaderboardUrl = Uri.parse('http://localhost:8000/leaderboard');
     try {
       final response =
           await http.get(leaderboardUrl).timeout(const Duration(seconds: 10));
-
+      // if data is found store data into the class, first as a lsit hten insert the list into the class
       if (response.statusCode == 200) {
         final List<dynamic> jsonList = jsonDecode(response.body);
 
@@ -46,17 +54,21 @@ class LeaderboardState extends State<Leaderboard> {
             .toList();
         entries.sort((a, b) => b.score.compareTo(a.score));
         return entries;
+        //if unable to load leaderboard
       } else {
         print(
-            'Failed to load leaderboard. Status: ${response.statusCode}, Body: ${response.body}');
+            'No data to generate leaderbaord. Status: ${response.statusCode}, Body: ${response.body}');
         return [];
       }
+      //exception handling
     } catch (e) {
-      print('Error loading leaderboard data from server: $e');
+      print(
+          'Server timeout. Unable to fetch leaderboard. Please try again: $e');
       return [];
     }
   }
 
+  // webpage
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,6 +77,7 @@ class LeaderboardState extends State<Leaderboard> {
         backgroundColor: const Color.fromARGB(255, 23, 118, 13),
       ),
       body: Center(
+        // display each object as a class object
         child: FutureBuilder<List<LeaderboardEntry>>(
           future: leaderboardData,
           builder: (context, snapshot) {
@@ -78,7 +91,7 @@ class LeaderboardState extends State<Leaderboard> {
               if (leaderboardEntries.isEmpty) {
                 return const Center(child: Text('No leaderboard data found.'));
               }
-
+              // if data is found, do a list builder for how many items are in the class map
               return ListView.builder(
                 itemCount: leaderboardEntries.length,
                 itemBuilder: (context, index) {
@@ -99,6 +112,7 @@ class LeaderboardState extends State<Leaderboard> {
                       style: rankTextStyle,
                       textAlign: TextAlign.center,
                     );
+                    // display gold medal for first
                   } else if (index == 0) {
                     positionWidget = Image.asset(
                       'assets/goldmedal.png',
@@ -108,6 +122,7 @@ class LeaderboardState extends State<Leaderboard> {
                       errorBuilder: (context, error, stackTrace) =>
                           Text('🥇', style: fallbackEmojiStyle),
                     );
+                    // display silver medal for second
                   } else if (index == 1) {
                     positionWidget = Image.asset(
                       'assets/silvermedal.png',
@@ -117,6 +132,7 @@ class LeaderboardState extends State<Leaderboard> {
                       errorBuilder: (context, error, stackTrace) =>
                           Text('🥈', style: fallbackEmojiStyle),
                     );
+                    //display bronze medal for third
                   } else {
                     positionWidget = Image.asset(
                       'assets/bronzemedal.png',
@@ -127,6 +143,7 @@ class LeaderboardState extends State<Leaderboard> {
                           Text('🥉', style: fallbackEmojiStyle),
                     );
                   }
+                  // container to display the users positionn, name and score
                   return Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16.0, vertical: 12.0),

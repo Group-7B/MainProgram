@@ -9,6 +9,7 @@ class ProfileEntry {
   final String email;
   final int score;
 
+// data type to store the profile information into
   ProfileEntry({required this.name, required this.email, required this.score});
   factory ProfileEntry.fromJson(Map<String, dynamic> json) {
     return ProfileEntry(
@@ -19,6 +20,7 @@ class ProfileEntry {
   }
 }
 
+//screen to display data
 class ProfileScreen extends StatefulWidget {
   final int userId;
   const ProfileScreen({required this.userId, super.key});
@@ -26,6 +28,7 @@ class ProfileScreen extends StatefulWidget {
   State<ProfileScreen> createState() => ProfileState();
 }
 
+// state stores page information, allows for updates to happen has it is generated
 class ProfileState extends State<ProfileScreen> {
   late Future<ProfileEntry> profileData;
   @override
@@ -34,7 +37,9 @@ class ProfileState extends State<ProfileScreen> {
     profileData = loadProfile(widget.userId);
   }
 
+// function to fetch profile data via the users user id
   Future<ProfileEntry> loadProfile(int userId) async {
+    // connecting to database through http
     final Uri profileUrl =
         Uri.parse('http://localhost:8000/profile?user_id=$userId');
     print('Fetching profile from: $profileUrl');
@@ -42,12 +47,15 @@ class ProfileState extends State<ProfileScreen> {
       final response =
           await http.get(profileUrl).timeout(const Duration(seconds: 10));
       print('Response status: ${response.statusCode}');
+      // if data is found, save it
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
         return ProfileEntry.fromJson(jsonResponse);
+        //if user id isnt found, through error
       } else if (response.statusCode == 404) {
         print('Profile not found for user ID: $userId');
         throw Exception('Profile not found');
+        //any other error that can happen through http
       } else {
         print('Failed to load profile. Status: ${response.statusCode}');
         throw Exception(
@@ -69,9 +77,11 @@ class ProfileState extends State<ProfileScreen> {
         ),
         backgroundColor: const Color.fromARGB(255, 23, 118, 13),
       ),
+      // body is the profile entry class so data can be used
       body: FutureBuilder<ProfileEntry>(
         future: profileData,
         builder: (context, snapshot) {
+          // if data isnto found, display an error message
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
@@ -85,6 +95,7 @@ class ProfileState extends State<ProfileScreen> {
                 ),
               ),
             );
+            // if data is found then generate the site
           } else if (snapshot.hasData) {
             final profile = snapshot.data!;
             return SingleChildScrollView(
@@ -128,6 +139,7 @@ class ProfileState extends State<ProfileScreen> {
     );
   }
 
+// widget used outsite to allow for the fetched data to be inputted, program wont load if this code was in the scaffold
   Widget ProfileItem(IconData icon, String text) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),

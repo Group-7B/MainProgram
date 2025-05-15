@@ -30,3 +30,29 @@ ORDER BY qu.quiz_name, q.question_id;
  Algebra Quiz 1 | Mathematics  | Algebra    | quiz      | Easy       |           9 | Solve for x: x/2 = 6                                  | 8 false, 3 false, 12 true
  Algebra Quiz 1 | Mathematics  | Algebra    | quiz      | Easy       |          10 | What is the value of 3(x + 2) = 12?                   | 4 false, 2 true, 3 false
 (10 rows)  */
+
+
+
+
+select q.question_id,quizzes.quiz_name, qq.quiz_id, a.answer_id, quizzes.quiz_type, quizzes.quiz_level, a.answer_text, a.is_correct
+from questions q
+join quiz_questions qq on q.question_id = qq.question_id
+join answers a on q.question_id = a.question_id
+join quizzes on qq.quiz_id = quizzes.quiz_id
+where qq.quiz_id= 36
+order by q.question_id;
+
+
+/* question_id |  quiz_name   | quiz_id | answer_id | quiz_type | quiz_level |                            answer_text                             | is_correct
+-------------+--------------+---------+-----------+-----------+------------+--------------------------------------------------------------------+------------
+         153 | Physics exam |      36 |       457 | MOCK Exam | Medium     | 2 m/s²                                                             | t
+         153 | Physics exam |      36 |       458 | MOCK Exam | Medium     | 5 m/s²                                                             | f
+         153 | Physics exam |      36 |       459 | MOCK Exam | Medium     | 10 m/s²                                                            | f
+         159 | Physics exam |      36 |       475 | MOCK Exam | Medium     | The speed of an object                                             | f
+         159 | Physics exam |      36 |       476 | MOCK Exam | Medium     | The energy required to stop an object                              | f
+         159 | Physics exam |      36 |       477 | MOCK Exam | Medium     | The product of mass and velocity                                   | t
+         165 | Physics exam |      36 |       493 | MOCK Exam | Medium     | 10 m                                                               | f
+         165 | Physics exam |      36 |       494 | MOCK Exam | Medium     | 40 m                                                               | f
+         165 | Physics exam |      36 |       495 | MOCK Exam | Medium     | 20 m                                                               | t
+         172 | Physics exam |      36 |       514 | MOCK Exam | Medium     | 10 kg·m/s                                                          | f
+         172 | Physics exam |      36 |       515 | MOCK Exam | Medium     | -20 kg·m/s                                                         | f*/

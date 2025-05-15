@@ -9,8 +9,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  http: ^0.13.3
+  http: ^1.4.0
   path_provider: ^2.0.0
+  google_generative_ai: ^0.4.7
 
 dev_dependencies:
   flutter_test:

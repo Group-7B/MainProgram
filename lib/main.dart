@@ -1,10 +1,10 @@
 import 'dart:core';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
 import 'leaderboard.dart';
 import 'profile_screen.dart';
 
@@ -391,6 +391,11 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isLoading = true;
   int? userLevel;
   bool loadinglevel = true;
+  //Gemini integration
+  final TextEditingController geminiController = TextEditingController();
+  String responseAI = '';
+  bool geminiLoading = false;
+  String apiKey = 'AIzaSyBPk-DoWpDkUCsZO9zaabCtBeZHMn-rsxA';
 
   @override
   void initState() {
@@ -490,6 +495,111 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  //GEMINI INTEGRATION
+  void geminiDialog() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return LayoutBuilder(builder: (context, constraints) {
+                //Alert box to use gemini
+                return AlertDialog(
+                  title: const Text('Gemini 2.0 Flash'),
+                  content: SizedBox(
+                    width: constraints.maxWidth * 0.9,
+                    height: constraints.maxHeight * 0.7,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextField(
+                          controller: geminiController,
+                          decoration: const InputDecoration(
+                            hintText: 'Ask Gemini',
+                          ),
+                          maxLines: null,
+                        ),
+                        //spacer
+                        const SizedBox(height: 20),
+                        if (geminiLoading) const CircularProgressIndicator(),
+                        if (responseAI.isNotEmpty)
+                          Expanded(
+                            child: SingleChildScrollView(
+                              // Scrollbar incase text is too big
+                              child: Scrollbar(
+                                thumbVisibility: true,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Text(
+                                    'Gemini Response:\n$responseAI',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          geminiController.clear();
+                          setState(() {
+                            responseAI = '';
+                          });
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('Cancel')),
+                    //prompt button
+                    ElevatedButton(
+                      onPressed: () async {
+                        if (geminiLoading) return;
+                        setState(() {
+                          geminiLoading = true;
+                          responseAI = '';
+                        });
+                        final prompt = geminiController.text;
+                        if (prompt.isEmpty) {
+                          setState(() {
+                            responseAI = 'How can I help you?';
+                            geminiLoading = false;
+                          });
+                          return;
+                        }
+                        //exception handler
+                        try {
+                          //initialise model
+                          final generativeModel = GenerativeModel(
+                              model: 'gemini-2.0-flash', apiKey: apiKey);
+                          final content = [Content.text(prompt)];
+                          final response =
+                              await generativeModel.generateContent(content);
+                          setState(() {
+                            responseAI =
+                                response.text ?? 'Gemini is not responding';
+                            geminiLoading = false;
+                          });
+                          //incase of unexpected error
+                        } catch (e) {
+                          setState(() {
+                            responseAI = 'Error: $e';
+                            geminiLoading = false;
+                          });
+                        }
+                      },
+                      child: Text('Ask'),
+                    ),
+                  ],
+                );
+              });
+            },
+          );
+        });
+  }
+
 // Subjects page content
   @override
   Widget build(BuildContext context) {
@@ -499,6 +609,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text('Subjects', style: TextStyle(color: Colors.white)),
         backgroundColor: const Color.fromARGB(255, 23, 118, 13),
         actions: <Widget>[
+          //Level display
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
             child: Center(
@@ -517,6 +628,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: TextStyle(color: Colors.white, fontSize: 16),
                     ),
             ),
+          ),
+          //Gemini Button
+          IconButton(
+            icon: const Icon(Icons.star, color: Colors.white),
+            tooltip: 'Ask Gemini',
+            onPressed: geminiDialog,
           ),
           //leaderboard button
           IconButton(

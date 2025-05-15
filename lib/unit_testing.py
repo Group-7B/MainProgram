@@ -422,6 +422,185 @@ class TestFetchProfile(unittest.TestCase):
         result = backend.fetchProfile(user_id)
         self.assertIsNone(result)
 
+class TestUpdateLevel(unittest.TestCase):
+
+    def setUp(self):
+        self.mock_conn = MagicMock()
+        self.mock_cur = MagicMock()
+        self.mock_getconn_patcher = patch('backend.connection_pool.getconn', return_value=self.mock_conn)
+        self.mock_putconn_patcher = patch('backend.connection_pool.putconn')
+        self.mock_conn.cursor.return_value = self.mock_cur
+        self.mock_getconn = self.mock_getconn_patcher.start()
+        self.mock_putconn = self.mock_putconn_patcher.start()
+        self.mock_conn.commit = MagicMock()  # Mock commit
+        self.mock_conn.rollback = MagicMock() # Mock rollback
+
+    def tearDown(self):
+        self.mock_getconn_patcher.stop()
+        self.mock_putconn_patcher.stop()
+
+    def test_update_level_no_level_increase(self):
+        """
+        Test updating score without a level increase.
+        """
+        user_id = 1
+        score_achieved = 50
+        current_progress_db = (10, 0) 
+        self.mock_cur.fetchone.return_value = current_progress_db
+
+        expected_new_total_points = 10 + 50 # 60
+        expected_new_user_level = 60 // 100 # 0
+        
+        result = backend.updateLevel(user_id, score_achieved)
+
+        self.mock_cur.execute.assert_any_call(
+            'SELECT total_points, user_level FROM student_progress WHERE user_id = %s FOR UPDATE;', (user_id,)
+        )
+        self.mock_cur.execute.assert_any_call(
+            'UPDATE student_progress SET total_points = %s, user_level = %s WHERE user_id = %s;',
+            (expected_new_total_points, expected_new_user_level, user_id)
+        )
+        self.mock_conn.commit.assert_called_once()
+        self.assertEqual(result, {
+            "success": True,
+            "message": "Score and level updated successfully.",
+            "new_total_points": expected_new_total_points,
+            "new_user_level": expected_new_user_level,
+            "level_increased": False
+        })
+        self.mock_cur.close.assert_called_once()
+        self.mock_putconn.assert_called_once_with(self.mock_conn)
+
+    def test_update_level_with_level_increase(self):
+        """
+        Test updating score with a level increase.
+        """
+        user_id = 2
+        score_achieved = 70
+        current_progress_db = (80, 0)
+        self.mock_cur.fetchone.return_value = current_progress_db
+
+        expected_new_total_points = 80 + 70
+        expected_new_user_level = 150 // 100
+        
+        result = backend.updateLevel(user_id, score_achieved)
+
+        self.assertEqual(result, {
+            "success": True,
+            "message": "Score and level updated successfully.",
+            "new_total_points": expected_new_total_points,
+            "new_user_level": expected_new_user_level,
+            "level_increased": True
+        })
+        self.mock_conn.commit.assert_called_once()
+
+
+    def test_update_level_user_not_found(self):
+        """
+        Test updating level for a user whose progress is not found.
+        """
+        self.mock_cur.fetchone.return_value = None
+
+        user_id = 999
+        score_achieved = 10
+        
+        result = backend.updateLevel(user_id, score_achieved)
+
+        self.assertEqual(result, {"success": False, "message": "User progress not found."})
+        self.mock_conn.commit.assert_not_called()
+
+
+    def test_update_level_db_error_on_fetch(self):
+        """
+        Test update level when fetching current progress fails.
+        """
+        self.mock_cur.execute.side_effect = Exception("Fetch DB Error")
+
+        user_id = 1
+        score_achieved = 10
+        
+        result = backend.updateLevel(user_id, score_achieved)
+
+        self.assertEqual(result, {"success": False, "message": "Failed to update score and level."})
+        self.mock_conn.rollback.assert_called_once()
+
+    def test_update_level_db_error_on_update(self):
+        """
+        Test update level when updating progress in DB fails.
+        """
+        user_id = 1
+        score_achieved = 10
+        current_progress_db = (10, 0)
+        self.mock_cur.execute.side_effect = [None, Exception("Update DB Error")] 
+        self.mock_cur.fetchone.return_value = current_progress_db
+        
+        result = backend.updateLevel(user_id, score_achieved)
+
+        self.assertEqual(result, {"success": False, "message": "Failed to update score and level."})
+        self.mock_conn.rollback.assert_called_once()
+
+
+class TestUserLevel(unittest.TestCase):
+
+    def setUp(self):
+        self.mock_conn = MagicMock()
+        self.mock_cur = MagicMock()
+        self.mock_getconn_patcher = patch('backend.connection_pool.getconn', return_value=self.mock_conn)
+        self.mock_putconn_patcher = patch('backend.connection_pool.putconn')
+        self.mock_conn.cursor.return_value = self.mock_cur
+        self.mock_getconn = self.mock_getconn_patcher.start()
+        self.mock_putconn = self.mock_putconn_patcher.start()
+
+    def tearDown(self):
+        self.mock_getconn_patcher.stop()
+        self.mock_putconn_patcher.stop()
+
+    def test_user_level_success(self):
+        """
+        Test successfully fetching a user's level.
+        """
+        user_id = 1
+        db_level = (2,)
+        self.mock_cur.fetchone.return_value = db_level
+
+        expected_response = {"success": True, "user_level": 2}
+        result = backend.userLevel(user_id)
+
+        self.mock_cur.execute.assert_called_once_with(
+            'SELECT user_level FROM student_progress WHERE user_id = %s;', (user_id,)
+        )
+        self.assertEqual(result, expected_response)
+        self.mock_cur.close.assert_called_once()
+        self.mock_putconn.assert_called_once_with(self.mock_conn)
+
+    def test_user_level_not_found(self):
+        """
+        Test fetching level for a user that does not exist.
+        """
+        self.mock_cur.fetchone.return_value = None
+
+        user_id = 999
+        expected_response = {"success": False, "user_level": "This user does not exist"}
+        result = backend.userLevel(user_id)
+        
+        self.assertEqual(result, expected_response)
+
+    @patch('builtins.print')
+    @patch('backend.connection_pool.getconn')
+    def test_user_level_db_error(self, mock_getconn, mock_print):
+        """
+        Test fetching user level when a database error occurs.
+        """
+        mock_conn = MagicMock()
+        mock_cur = MagicMock()
+        mock_getconn.return_value = mock_conn
+        mock_conn.cursor.return_value = mock_cur
+        mock_cur.side_effect = Exception("DB Error on cursor")
+
+        user_id = 1
+        result = backend.userLevel(user_id)
+        mock_print.assert_called_once_with("There is an error while fetching the user's level:", "DB Error on cursor")
+        self.assertEqual(result, {"success": False, "user_level": None})
 
 if __name__ == "__main__":
     unittest.main(argv=['first-arg-is-ignored'], exit=False)

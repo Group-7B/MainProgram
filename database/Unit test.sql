@@ -76,3 +76,10 @@ BEGIN
         RAISE NOTICE '✓ total_points unchanged at % on incorrect attempt', tp;
     END IF;
 END $$;
+
+
+-- NOTICE:  Test 1: Insert correct attempt and check progress
+-- NOTICE:  ✓ total_points incremented to 11
+-- NOTICE:  ✓ user_level correctly updated to 0.12
+-- NOTICE:  Test 2: Insert incorrect attempt and verify no update
+-- NOTICE:  ✓ total_points unchanged at 11 on incorrect attempt

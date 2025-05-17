@@ -157,7 +157,7 @@ def fetchLeaderboard():
         # Convert rows to a list of dictionaries
         leaderboard = [{"name": row[0], "score": row[1]} for row in rows]
         
-        json_file = open("leaderboard.json")
+        #json_file = open("leaderboard.json")
         
         # Write the leaderboard data to a JSON file
         with open("leaderboard.json", "w", encoding="utf-8") as json_file:

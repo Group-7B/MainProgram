@@ -2,277 +2,449 @@ import unittest
 from unittest.mock import patch, MagicMock, mock_open, ANY
 import json
 import backend
+from backend import fetchSubjects, fetchTopics, generateQuiz, createAccount, loginUser, fetchQuestionsAndAnswers
+
 
 class TestFetchSubjects(unittest.TestCase):
-    
     def setUp(self):
-        self.mockSubjects = [
-            {"subject_id": 1, "subject_name": "Mathematics"},
-            {"subject_id": 2, "subject_name": "English"},
-            {"subject_id": 3, "subject_name": "Physics"},
-            {"subject_id": 4, "subject_name": "Operating systems"}, 
+        self.rows = [
+            (1, "Mathematics"),
+            (2, "English"),
+            (3, "Physics"),
+            (4, "Operating systems"),
         ]
-        
-        
-        self.mockSubjectsErrorCase = [
-            {"subject_id": 1, "subject_name":"Mathematics"},
-            {"subject_id":2,"subject_name":"English"}
-            ]
-        
-        self.mockSubjectsErrorCase2 = []
-        
-        self.patcher = patch('backend.fetchSubjects', return_value = self.mockSubjects)
-        self.patcher.start()
-        
-    def testFetchSubjects(self):
-        expectedSubjects = [
+
+        self.expectedSubjects = [
             {"subject_id": 1, "subject_name": "Mathematics"},
             {"subject_id": 2, "subject_name": "English"},
             {"subject_id": 3, "subject_name": "Physics"},
             {"subject_id": 4, "subject_name": "Operating systems"},
         ]
-        
-        self.assertEqual(backend.fetchSubjects(),expectedSubjects)
-        self.assertTrue(len(backend.fetchSubjects())>0, "The returned list is empty")
-        self.assertGreater(len(backend.fetchSubjects()),0,"The returned list is empty")
-        
-        for subject in backend.fetchSubjects():
-            self.assertIsInstance(subject["subject_id"],int)
-            self.assertIsInstance(subject["subject_name"],str)
-    
-    def testFetchSubjectsErrorCase(self):
-        nullCheck = []
-        with patch('backend.fetchSubjects',return_value = self.mockSubjectsErrorCase):
-            expectedSubjects2 = [
-                {"subject_id": 1, "subject_name": "Mathematics"},
-                {"subject_id": 2, "subject_name": "English"},
-                {"subject_id": 3, "subject_name": "Physics"},
-                {"subject_id": 4, "subject_name": "Operating systems"},
-            ]
-            
-            self.assertNotEqual(backend.fetchSubjects(),expectedSubjects2)
-            
-            #self.assertEqual(backend.fetchSubjects(),[],"The returned list is not empty")
-            #self.assertTrue(len(backend.fetchSubjects()) == 0, "The returned list is not empty")
-    
-    def testEmptyList(self):
-        with patch('backend.fetchSubjects',return_value = self.mockSubjectsErrorCase2):
-            nullCheck = []
-            
-            self.assertEqual(backend.fetchSubjects(),nullCheck,"The returned list is empty. Failed to fetch subjects data from database.")
-        
-        
+
+        self.mock_conn = MagicMock()
+        self.mock_cursor = MagicMock()
+        self.mock_conn.cursor.return_value = self.mock_cursor
+        self.mock_cursor.fetchall.return_value = self.rows
+
+        self.patcher_getconn = patch("backend.connection_pool.getconn", return_value=self.mock_conn)
+        self.patcher_putconn = patch("backend.connection_pool.putconn")
+        self.mock_getconn = self.patcher_getconn.start()
+        self.mock_putconn = self.patcher_putconn.start()
+
     def tearDown(self):
-        self.patcher.stop()
-        
-        
-#############################
-# TOPICS UNIT TEST BELOW:
-##################################        
+        self.patcher_getconn.stop()
+        self.patcher_putconn.stop()
+
+    def testFetchSubjectsSuccess(self):
+        result = fetchSubjects()
+        #self.mock_cursor.execute.assert_called_once_with('SELECT subject_id, subject_name FROM subjects')       
+        self.mock_putconn.assert_called_once_with(self.mock_conn)
+        self.assertEqual(result, self.expectedSubjects) #FIRST TEST 
+
+    def testFetchSubjectsEmptyArray(self):
+        self.mock_cursor.fetchall.return_value = []
+        result = fetchSubjects()
+        self.mock_putconn.assert_called_once_with(self.mock_conn)
+        self.assertEqual(result, []) #SECOND TEST
+
+    def testFetchSubjectsDatabaseError(self):
+        self.mock_conn.cursor.side_effect = Exception("Database error")
+        result = fetchSubjects()
+        self.mock_putconn.assert_called_once_with(self.mock_conn)
+        self.assertEqual(result, []) #THIRD TEST
+
 
 class TestFetchTopics(unittest.TestCase):
     def setUp(self):
-        self.mockTopics = [
-                {"topic_id": 1, "topic_name": "Algebra", "subject_id": 1},
-                {"topic_id": 2, "topic_name": "Ratio and Proportions","subject_id": 1},
-                {"topic_id": 3, "topic_name": "Percentage", "subject_id": 1},
-                {"topic_id": 4, "topic_name": "Vocabulary","subject_id": 2},
-                {"topic_id": 5, "topic_name": "Grammar","subject_id": 2},
-                {"topic_id": 6, "topic_name": "Mechanics","subject_id": 3},
-                {"topic_id": 7, "topic_name": "Thermodynamics","subject_id": 3},
-                {"topic_id": 8, "topic_name": "Electromagnetism","subject_id": 3},
-                {"topic_id": 9, "topic_name": "Memory management","subject_id": 4},
-                {"topic_id": 10, "topic_name": "Process management","subject_id": 4},
-                {"topic_id": 11, "topic_name": "File management","subject_id": 4},
+        
+        self.rows = [
+            (1, 1, "Algebra"),
+            (1, 2, "Ratio and Proportion"),
+            (1, 3, "Persentage"),
+            (2, 4, "Vocabulary"),
+            (2, 5, "Grammar"),
+            (3, 6, "Mechanics"),
+            (3, 7, "Thermodynamics"),
+            (3, 8, "Electromagnetism"),
+            (4, 9, "Memory management"),
+            (4, 10, "Process management"),
+            (4, 11, "File management"),
+        ]
+
+        self.expectedTopicsBySubject = {
+            1: [
+                {"topic_id": 1, "topic_name": "Algebra"},
+                {"topic_id": 2, "topic_name": "Ratio and Proportion"},
+                {"topic_id": 3, "topic_name": "Persentage"},
+            ],
+            2: [
+                {"topic_id": 4, "topic_name": "Vocabulary"},
+                {"topic_id": 5, "topic_name": "Grammar"},
+            ],
+            3: [
+                {"topic_id": 6, "topic_name": "Mechanics"},
+                {"topic_id": 7, "topic_name": "Thermodynamics"},
+                {"topic_id": 8, "topic_name": "Electromagnetism"},
+            ],
+            4: [
+                {"topic_id": 9, "topic_name": "Memory management"},
+                {"topic_id": 10, "topic_name": "Process management"},
+                {"topic_id": 11, "topic_name": "File management"},
+            ],
+        }
+
+        self.mock_conn = MagicMock()
+        self.mock_cursor = MagicMock()
+        self.mock_conn.cursor.return_value = self.mock_cursor
+
+        self.patcher_getconn = patch("backend.connection_pool.getconn", return_value=self.mock_conn)
+        self.patcher_putconn = patch("backend.connection_pool.putconn")
+        self.mock_getconn = self.patcher_getconn.start()
+        self.mock_putconn = self.patcher_putconn.start()
+
+    def tearDown(self):
+        self.patcher_getconn.stop()
+        self.patcher_putconn.stop()
+        
+        
+    def testFetchTopics(self):
+        for subject_id, expectedTopics in self.expectedTopicsBySubject.items():
+            self.mock_cursor.fetchall.return_value = [(topic_id, topic_name) for sub_id, topic_id, topic_name in self.rows if sub_id == subject_id]
+            result = fetchTopics(subject_id)
+            expectedTopicsWithSubjectId = [
+                {"topic_id": topic["topic_id"], "topic_name": topic["topic_name"]}
+                for topic in expectedTopics
             ]
-        
-        #self.patcher = patch('backend.fetchTopics',return_value = self.mock_topics)
-        #self.mock_fetchTopics = self.patcher.start()
-        
-        
-        def mockFetchTopics(subject_id):
-            return [topic for topic in self.mockTopics if topic["subject_id"] == subject_id]
-        
-        self.patcher = patch('backend.fetchTopics',side_effect = mockFetchTopics)
-        self.mockFetchTopics = self.patcher.start()
-        
-        
-        
-##################################################################################################################################################################################################################################################
-        #self.mock_conn = MagicMock() #Replace the 2 objects conn and cur to mock the database connection
-        #self.mock_cur = MagicMock()
-        
-        #self.mock_conn.cur.return_value = self.mock_cur
-        #self.mock_cur.fetchall.return_value = self.mock_topics
-        
-        #self.getconn_patcher = patch('backend.connection_pool.getconn', return_value = self.mock_conn)
-        #self.mock_getconn = self.getconn_patcher.start()
-        
-        #self.putconn_patcher = patch('backend.connection_pool.putconn')
-        #self.mock_putconn = self.putconn_patcher.start()
-    
-    def testFetchTopics(self):        
-        #topics = fetchTopics(subject_id=self.foreignKey())
-        nullCheck = []
-        
-        for subject_id in range(0,5):        
-            expectedTopics = [topic for topic in self.mockTopics if topic["subject_id"] == subject_id]
-        
-        topics = backend.fetchTopics(subject_id=subject_id)
-        
-        self.assertEqual(topics,expectedTopics)
-        
-        for topic in topics:
-            self.assertIsInstance(topic["topic_id"], int)
-            self.assertIsInstance(topic["topic_name"], str)
-            self.assertEqual(topic["subject_id"], subject_id)
+            self.mock_putconn.assert_called_with(self.mock_conn)
+            self.assertEqual(result, expectedTopicsWithSubjectId)
+
+    '''def testFetchTopics(self):
+        for subject_id, expectedTopics in self.expectedTopicsBySubject.items():
+            self.mock_cursor.fetchall.return_value = [
+                (sub_id, topic_id, topic_name)
+                for sub_id, topic_id, topic_name in self.rows
+                if sub_id == subject_id
+            ]
+
+            result = fetchTopics(subject_id)
+
+            self.mock_putconn.assert_called_with(self.mock_conn)
+
+            self.assertEqual(result, expectedTopics)'''
+
+    def testFetchTopicsEmptyArray(self):
+        self.mock_cursor.fetchall.return_value = []
+        for subject_id in self.expectedTopicsBySubject.keys():
+            result = fetchTopics(subject_id)
+            self.mock_putconn.assert_called_with(self.mock_conn)
+            self.assertEqual(result, [])
+
+    def testFetchTopicsSuccessCase(self):
+        for subject_id, expectedTopics in self.expectedTopicsBySubject.items():
+            self.mock_cursor.fetchall.return_value = [(topic_id, topic_name) for sub_id, topic_id, topic_name in self.rows if sub_id == subject_id]
+            result = fetchTopics(subject_id)
+            self.mock_putconn.assert_called_with(self.mock_conn)
+            #self.mock_cursor.execute.assert_called_once_with('SELECT topic_id, topic_name FROM topics WHERE subject_id = %s', (subject_id,))
+            self.assertEqual(result, expectedTopics)
             
-#####################################################################################################################################################################################################################################################################################
-        #self.assertEqual(topics,expected_topics)
-        #for topic in topics:
-            #self.assertIsInstance(topic["topic_id"],int)
-        
-    
-    def tearUp(self):
-        self.patcher.stop()
-        #self.getconn_patcher.stop() #Stop the patch
-        #self.putconn_patcher.stop() #Stop the patch
-        
-    
-class TestGenerateQuizzes(unittest.TestCase):
+
+'''class TestFetchQuizzes(unittest.TestCase):
     def setUp(self):
-        # IN FORMAT OF QUIZ_ID, QUIZ_NAME, TOPIC_ID AND TOPIC_NAME
+        self.mockQuizzes = [
+            #(subject_id, topic_id,quiz_id,quiz_name)
+            (1,1,1,"Algebra Quiz 1"),
+            (1,1,2,"Algebra Quiz 2"),
+            (1,1,3,""),
+            (1,2,4,""),
+            (1,2,5,""),
+            (1,2,6,""),
+            (1,3,7,""),
+            (1,3,8,""),
+            (1,4,9,""),
+            
+            
+        ]'''
+
+class TestRegister(unittest.TestCase):
+    
+    def setUp(self):
+        self.mock_register = [{"user_id":12, "message": "Account created successfully"}]
+        self.default_level = [{"user_level": 0, "total_points":0}]
+        
+        
+        self.mock_conn = MagicMock()
+        self.mock_cursor = MagicMock()
+        self.mock_conn.cursor.return_value = self.mock_cursor
+
+        self.patcher_getconn = patch("backend.connection_pool.getconn", return_value=self.mock_conn)
+        self.patcher_putconn = patch("backend.connection_pool.putconn")
+        self.mock_getconn = self.patcher_getconn.start()
+        self.mock_putconn = self.patcher_putconn.start()
+    
+    
+    def testSuccessCase(self):
+        self.mock_cursor.fetchone.return_value = [12]
+        self.mock_cursor.execute.side_effect = [None,None]
+        
+        result = createAccount(user_name="dummy", user_last_name="Test", user_email="dummyTest@outlook.com", user_password="123")
+        if self.assertIsNotNone(result):
+            self.assertEqual(result,self.mock_register)
+            self.mock_putconn.assert_called_once_with(self.mock_conn)
+            self.userLevelAndPoints = [{"user_level": 0,"total_points":0}]
+            self.assertEqual(self.default_level,self.userLevelAndPoints)
+            
+            self.mock_cursor.execute.assert_any_calls('INSERT INTO student_progress (user_id, total_points, user_level) VALUES (%s, %s, %s);', (12, 0, 0))
+    
+    
+    def testErrorCase(self):
+        self.mock_cursor.execute.side_effect = Exception("Database Error")
+        
+        result = createAccount(user_name="dummy", user_last_name="Test", user_email="dummyTest@outlook.com", user_password="123")
+        
+        self.assertEqual(result, {"error": "Failed to create account."})
+        
+    def tearUp(self):
+        self.patcher_getconn.stop()
+        self.patcher_putconn.stop()
+        
+    
+    
+
+'''class TestLogin(unittest.TestCase):
+    def setUp(self):
+        # Patch the loginUser function to allow the actual function to execute
+        self.patcher = patch('backend.loginUser', side_effect=backend.loginUser)
+        self.mock_loginUser = self.patcher.start()
+    
+    def testUserLogin(self):
+        # Test a valid login case
+        result = backend.loginUser('T@gmail.com', '123')
+        self.assertEqual(result, {"success": True, "user_id": 6})
+        
+    def testErrorCase(self):
+        # Test login with None for email and password
+        results = backend.loginUser(None, None)
+        self.assertEqual(results, {"success": False, "message": "Invalid email or password"})
+        
+    def tearDown(self):
+        self.patcher.stop()'''
+        
+'''class TestLoginMocked(unittest.TestCase):
+    def setUp(self):
+        # Mock the database connection and cursor
+        self.mock_conn = MagicMock()
+        self.mock_cursor = MagicMock()
+        self.mock_conn.cursor.return_value = self.mock_cursor
+
+        # Mock the database response for loginUser
+        self.mock_cursor.fetchone.return_value = [6]  # Mock user_id as 1
+
+        # Patch the connection pool
+        self.patcher_getconn = patch("backend.connection_pool.getconn", return_value=self.mock_conn)
+        self.patcher_putconn = patch("backend.connection_pool.putconn")
+        self.mock_getconn = self.patcher_getconn.start()
+        self.mock_putconn = self.patcher_putconn.start()
+
+    def tearDown(self):
+        self.patcher_getconn.stop()
+        self.patcher_putconn.stop()
+
+    def testUserLogin(self):
+        # Test a valid login case
+        result = backend.loginUser('T@gmail.com', '123')
+        self.assertEqual(result, {"success": True, "user_id": 6})'''
+    
+
+class TestLogin(unittest.TestCase):
+    def setUp(self):
+        self.mock_conn = MagicMock()
+        self.mock_cursor = MagicMock()
+        self.mock_conn.cursor.return_value = self.mock_cursor
+
+        self.patcher_getconn = patch("backend.connection_pool.getconn", return_value=self.mock_conn)
+        self.patcher_putconn = patch("backend.connection_pool.putconn")
+        self.mock_getconn = self.patcher_getconn.start()
+        self.mock_putconn = self.patcher_putconn.start()
+
+    def tearDown(self):
+        self.patcher_getconn.stop()
+        self.patcher_putconn.stop()
+        
+    def testUserLoginValid(self):
+        self.mock_cursor.fetchone.return_value = [6]  # Mock user_id as 6
+
+        result = backend.loginUser('T@gmail.com', '123')
+
+        self.assertEqual(result, {"success": True, "user_id": 6})
+
+
+    def testUserLoginErrorCase(self):
+        self.mock_cursor.fetchone.return_value = None  # No user found
+
+        result = backend.loginUser(None, None)
+
+        self.assertEqual(result, {"success": False, "message": "Invalid email or password"})
+
+        self.mock_cursor.execute.assert_called_once_with(
+            'SELECT user_id FROM users WHERE user_email = %s AND user_password = %s',
+            (None, None)
+        )
+
+        self.mock_cursor.reset_mock()
+        
+        result = backend.loginUser('wrong_email@gmail.com', 'wrong_password')
+
+        self.assertEqual(result, {"success": False, "message": "Invalid email or password"})
+
+
+
+class TestFetchQuizzes(unittest.TestCase):
+    def setUp(self):
         self.mock_quizzes = [
             {"quiz_id": 1, "quiz_name": "Algebra Quiz 1"},
             {"quiz_id": 2, "quiz_name": "Algebra Quiz 2"},
-            {"quiz_id": 3, "quiz_name": 'Algebra Quiz 3'},
+            {"quiz_id": 3, "quiz_name": "Algebra Quiz 3"},
             {"quiz_id": 4, "quiz_name": "Ratio and Proportion Quiz 1"},
             {"quiz_id": 5, "quiz_name": "Ratio and Proportion Quiz 2"},
             {"quiz_id": 6, "quiz_name": "Ratio and Proportion Quiz 3"},
-            {"quiz_id": 7, "quiz_name": "Percentage Quiz 1"},
-            {"quiz_id": 8, "quiz_name": "Percentage Quiz 2"},
-            {"quiz_id": 9, "quiz_name": "Percentage Quiz 3"},
-            {"quiz_id": 10, "quiz_name": "Vocabulary Quiz 1"},
-            {"quiz_id": 11, "quiz_name": "Vocabulary Quiz 2"},
-            {"quiz_id": 12, "quiz_name": "Vocabulary Quiz 3"},
-            {"quiz_id": 13, "quiz_name": "Grammar Quiz 1"},
-            {"quiz_id": 14, "quiz_name": "Grammar Quiz 2"},
-            {"quiz_id": 15, "quiz_name": "Grammar Quiz 3"},
-            {"quiz_id": 16, "quiz_name": "Mechanics Quiz 1"},
-            {"quiz_id": 17, "quiz_name": "Mechanics Quiz 2"},
-            {"quiz_id": 18, "quiz_name": "Mechanics Quiz 3"},
-            {"quiz_id": 19, "quiz_name": "Thermodynamics quiz 1"},
-            {"quiz_id": 20, "quiz_name": "Thermodynamics quiz 2"},
-            {"quiz_id": 21, "quiz_name": "Thermodynamics quiz 3"},
-            {"quiz_id": 22, "quiz_name": "Electromagnetism quiz 1"},
-            {"quiz_id": 23, "quiz_name": "Electromagnetism quiz 2"},
-            {"quiz_id": 24, "quiz_name": "Electromagnetism quiz 3"},
-            {"quiz_id": 25, "quiz_name": "Memory Management Quiz 1"},
-            {"quiz_id": 26, "quiz_name": "Memory Management Quiz 2"},
-            {"quiz_id": 27, "quiz_name": "Memory Management Quiz 3"},
-            {"quiz_id": 28, "quiz_name": "Process Management Quiz 1"},
-            {"quiz_id": 29, "quiz_name": "Process Management Quiz 2"},
-            {"quiz_id": 30, "quiz_name": "Process Management Quiz 3"},
-            {"quiz_id": 31, "quiz_name": "File Management quiz 1"},
-            {"quiz_id": 32, "quiz_name": "File Management quiz 2"},
-            {"quiz_id": 33, "quiz_name": "File Management Quiz 3"},
-            
-            ]
-        self.patcher = patch('backend.generateQuiz', return_value = self.mock_quizzes)
-        self.mock_generateQuizzes = self.patcher.start()
-        
-    def testGenerateQuizzes(self):
-        
-        nullCheck = []
-        
-        expectedQuizzes = [
-            {"quiz_id": 1, "quiz_name": "Algebra Quiz 1"},
-            {"quiz_id": 2, "quiz_name": "Algebra Quiz 2"},
-            {"quiz_id": 3, "quiz_name": 'Algebra Quiz 3'},
-            {"quiz_id": 4, "quiz_name": "Ratio and Proportion Quiz 1"},
-            {"quiz_id": 5, "quiz_name": "Ratio and Proportion Quiz 2"},
-            {"quiz_id": 6, "quiz_name": "Ratio and Proportion Quiz 3"},
-            {"quiz_id": 7, "quiz_name": "Percentage Quiz 1"},
-            {"quiz_id": 8, "quiz_name": "Percentage Quiz 2"},
-            {"quiz_id": 9, "quiz_name": "Percentage Quiz 3"},
-            {"quiz_id": 10, "quiz_name": "Vocabulary Quiz 1"},
-            {"quiz_id": 11, "quiz_name": "Vocabulary Quiz 2"},
-            {"quiz_id": 12, "quiz_name": "Vocabulary Quiz 3"},
-            {"quiz_id": 13, "quiz_name": "Grammar Quiz 1"},
-            {"quiz_id": 14, "quiz_name": "Grammar Quiz 2"},
-            {"quiz_id": 15, "quiz_name": "Grammar Quiz 3"},
-            {"quiz_id": 16, "quiz_name": "Mechanics Quiz 1"},
-            {"quiz_id": 17, "quiz_name": "Mechanics Quiz 2"},
-            {"quiz_id": 18, "quiz_name": "Mechanics Quiz 3"},
-            {"quiz_id": 19, "quiz_name": "Thermodynamics quiz 1"},
-            {"quiz_id": 20, "quiz_name": "Thermodynamics quiz 2"},
-            {"quiz_id": 21, "quiz_name": "Thermodynamics quiz 3"},
-            {"quiz_id": 22, "quiz_name": "Electromagnetism quiz 1"},
-            {"quiz_id": 23, "quiz_name": "Electromagnetism quiz 2"},
-            {"quiz_id": 24, "quiz_name": "Electromagnetism quiz 3"},
-            {"quiz_id": 25, "quiz_name": "Memory Management Quiz 1"},
-            {"quiz_id": 26, "quiz_name": "Memory Management Quiz 2"},
-            {"quiz_id": 27, "quiz_name": "Memory Management Quiz 3"},
-            {"quiz_id": 28, "quiz_name": "Process Management Quiz 1"},
-            {"quiz_id": 29, "quiz_name": "Process Management Quiz 2"},
-            {"quiz_id": 30, "quiz_name": "Process Management Quiz 3"},
-            {"quiz_id": 31, "quiz_name": "File Management quiz 1"},
-            {"quiz_id": 32, "quiz_name": "File Management quiz 2"},
-            {"quiz_id": 33, "quiz_name": "File Management Quiz 3"},
-            ]
-        
-        quizzes = backend.generateQuiz()
-        
-        self.assertEqual(quizzes,expectedQuizzes)
-        
-        for quiz in backend.generateQuiz:
-            self.assertIn("quiz_id",quiz)
-            self.assertIn("quiz_name",quiz)
-            self.assertIsInstance(quizzes["quiz_id"], int)
-            self.assertIsInstance(quizzes["quiz_name"], str)
-            
-        
-    def tearUp(self):
-        self.patcher.stop()
-        
-class TestLogin(unittest.TestCase):
-    def setUp(self):
-        self.mock_login = {"success":True,"user_id":1} # we are expecting the login of a user's account which has a unique user_id to either be successful or unsuccessful.
-        
-        #self.mock_login = [{"user_email":"T@gmail.com","password": "123" },]
-        self.patcher = patch('backend.loginUser',return_value = self.mock_login)
-        self.patcher.start()
-    
-    def testUserLogin(self):
-        #dummyLogins = [{"user_email":"T@gmail.com", "password": "123"},]
-        result = backend.loginUser('T@gmail.com','123')
-        self.assertEqual(result,self.mock_login)
-        
-    def tearUp(self):
+        ]
+
+        self.patcher = patch('backend.generateQuiz', return_value=self.mock_quizzes)
+        self.mock_generateQuiz = self.patcher.start()
+
+    def tearDown(self):
         self.patcher.stop()
 
-class TestRegister(unittest.TestCase):
+    def testGenerateQuizSuccess(self):
+        quizzes = backend.generateQuiz()
+
+        self.assertEqual(quizzes, self.mock_quizzes)
+        
+        for quiz in quizzes:
+            self.assertIn("quiz_id", quiz)
+            self.assertIn("quiz_name", quiz)
+            self.assertIsInstance(quiz["quiz_id"], int)
+            self.assertIsInstance(quiz["quiz_name"], str)
+
+    def testGenerateQuizEmpty(self):
+       
+        self.mock_generateQuiz.return_value = []
+
+      
+        quizzes = backend.generateQuiz()
+
+        self.assertEqual(quizzes, [])
+
+    def testGenerateQuizNullValues(self):
+        self.mock_generateQuiz.return_value = [
+            {"quiz_id": None, "quiz_name": None},
+            {"quiz_id": 2, "quiz_name": "Algebra Quiz 1"},
+        ]
+
+        quizzes = backend.generateQuiz()
+        
+        
+        self.assertEqual(quizzes, [
+            {"quiz_id": None, "quiz_name": None},
+            {"quiz_id": 2, "quiz_name": "Algebra Quiz 1"},
+        ])
+
+        for quiz in quizzes:
+            self.assertIn("quiz_id", quiz)
+            self.assertIn("quiz_name", quiz)
+            self.assertIsInstance(quiz["quiz_id"], (int, type(None)))
+            self.assertIsInstance(quiz["quiz_name"], (str, type(None)))
+
+
+class TestFetchQuestionsAndAnswers(unittest.TestCase):
     def setUp(self):
-        self.mock_register = [{"user_id":12, "message": "Account created successfully"}]
-        
-        self.patcher = patch('backend.createAccount',return_value = self.mock_register)
-        self.patcher.start()
-        
-        
-    def testCreateAccount(self):
-        #successCase = [{"user_id":12,"message": "Account created successfully"}]
-        self.userLevelPointsCheck = [{}] # TEST TO CHECK IF USER_LEVEL AND TOTAL_POINTS IN STUDENT_PROGRESS TABLE IS BOTH BY DEFAULT 0 UPON CREATION OF A NEW ACCOUNT
-        
-        createAccount = backend.createAccount(user_name="dummy", user_last_name="Test", email="dummyTest@outlook.com", password="123")
-        
-        self.assertEqual(createAccount,self.mock_register)
-        x = self.assertEqual(createAccount,self.mock_register)
-        if x == True:
-            print("Account successfully created")
-        
-        
-    def tearUp(self):
+        # Mock data for questions and answers
+        self.mockQuestionsAndAnswers = [
+            {
+                "question_id": 1,
+                "question_text": "What is 2+2?",
+                "answers": [
+                    {"answer_id": 1, "answer_text": "4"},
+                    {"answer_id": 2, "answer_text": "3"},
+                    {"answer_id": 3, "answer_text": "5"},
+                ],
+            },
+            {
+                "question_id": 2,
+                "question_text": "What is the capital of France?",
+                "answers": [
+                    {"answer_id": 4, "answer_text": "Paris"},
+                    {"answer_id": 5, "answer_text": "London"},
+                ],
+            },
+        ]
+
+        # Mock data for an empty response
+        self.mockEmptyQuestionsAndAnswers = []
+
+        # Patch the `fetchQuestionsAndAnswers` function
+        self.patcher = patch('backend.fetchQuestionsAndAnswers', return_value=self.mockQuestionsAndAnswers)
+        self.mockFetchQuestionsAndAnswers = self.patcher.start()
+
+    def testFetchQuestionsAndAnswers(self):
+        # Expected data
+        expectedQuestionsAndAnswers = [
+            {
+                "question_id": 1,
+                "question_text": "What is 2+2?",
+                "answers": [
+                    {"answer_id": 1, "answer_text": "4"},
+                    {"answer_id": 2, "answer_text": "3"},
+                    {"answer_id": 3, "answer_text": "5"},
+                ],
+            },
+            {
+                "question_id": 2,
+                "question_text": "What is the capital of France?",
+                "answers": [
+                    {"answer_id": 4, "answer_text": "Paris"},
+                    {"answer_id": 5, "answer_text": "London"},
+                ],
+            },
+        ]
+
+        # Call the function
+        questionsAndAnswers = backend.fetchQuestionsAndAnswers(quiz_id=1)
+
+        # Assert the result matches the expected data
+        self.assertEqual(questionsAndAnswers, expectedQuestionsAndAnswers)
+
+        # Assert that the returned list is not empty
+        self.assertTrue(len(questionsAndAnswers) > 0, "The returned list is empty")
+
+        # Validate the structure of each question and its answers
+        for question in questionsAndAnswers:
+            self.assertIn("question_id", question)
+            self.assertIn("question_text", question)
+            self.assertIn("answers", question)
+            self.assertIsInstance(question["question_id"], int)
+            self.assertIsInstance(question["question_text"], str)
+            self.assertIsInstance(question["answers"], list)
+
+            for answer in question["answers"]:
+                self.assertIn("answer_id", answer)
+                self.assertIn("answer_text", answer)
+                self.assertIsInstance(answer["answer_id"], int)
+                self.assertIsInstance(answer["answer_text"], str)
+
+    def testFetchQuestionsAndAnswersEmpty(self):
+        # Patch the function to return an empty list
+        with patch('backend.fetchQuestionsAndAnswers', return_value=self.mockEmptyQuestionsAndAnswers):
+            questionsAndAnswers = backend.fetchQuestionsAndAnswers(quiz_id=1)
+
+            # Assert the result is an empty list
+            self.assertEqual(questionsAndAnswers, [])
+            self.assertTrue(len(questionsAndAnswers) == 0, "The returned list is not empty")
+
+    def tearDown(self):
+        # Stop the patcher
         self.patcher.stop()
+
 
 class TestFetchLeaderboard(unittest.TestCase):
 

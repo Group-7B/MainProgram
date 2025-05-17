@@ -377,6 +377,7 @@ def userLevel(user_id):
             return {"success": False, "user_level":"This user does not exist"}
     except Exception as error:
         print("There is an error while fetching the user's level:",error)
+        return {"success": False, "user_level": None}
     finally:
         if cur is not None:
             cur.close()

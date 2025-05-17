@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import patch, MagicMock, mock_open
+from unittest.mock import patch, MagicMock, mock_open, ANY
 import json
 import backend
 
@@ -356,7 +356,7 @@ class TestFetchLeaderboard(unittest.TestCase):
         result = backend.fetchLeaderboard()
 
         self.assertEqual(result, expected_leaderboard)
-        mock_print.assert_called_once_with("Error fetching leaderboard:", OSError("Failed to write file"))
+        mock_print.assert_called_once_with("Error fetching leaderboard:", "Failed to write file")
 
 
 class TestFetchProfile(unittest.TestCase):
@@ -595,11 +595,14 @@ class TestUserLevel(unittest.TestCase):
         mock_cur = MagicMock()
         mock_getconn.return_value = mock_conn
         mock_conn.cursor.return_value = mock_cur
-        mock_cur.side_effect = Exception("DB Error on cursor")
+        mock_cur.execute.side_effect = Exception("DB Error on cursor")
 
         user_id = 1
         result = backend.userLevel(user_id)
-        mock_print.assert_called_once_with("There is an error while fetching the user's level:", "DB Error on cursor")
+        mock_print.assert_called_once_with("There is an error while fetching the user's level:", ANY)
+        actual_call_args = mock_print.call_args[0]
+        self.assertIsInstance(actual_call_args[1], Exception)
+        self.assertEqual(str(actual_call_args[1]), "DB Error on cursor")    
         self.assertEqual(result, {"success": False, "user_level": None})
 
 if __name__ == "__main__":

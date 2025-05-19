@@ -16,7 +16,7 @@ How To Install:
 2) Install Python
 3) Install PostgreSQL
 4) Pip install all required Python libaries required for this project:
-- Psycopg2 `pip install pyscopg2-binary`
+- Psycopg2 `pip install pyscopg2-binary` or `pip install psycopg2`
 - Schedule  `pip install schedule`
 
 

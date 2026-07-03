@@ -1,5 +1,6 @@
-# learning_app
+# Quiz_app
 
+A quiz application designed to help students revise subjects e.g. maths, computer science, biology and etc through interactive quizzes, providing an accessible, engaging, and effective learning experience.
 
 Requirements for this learning app:
 -------------------------------------

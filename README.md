@@ -1,4 +1,4 @@
-# Quiz_app
+# Quiz Application
 
 A quiz application designed to help students revise subjects e.g. maths, computer science, biology and etc through interactive quizzes, providing an accessible, engaging, and effective learning experience.
 
